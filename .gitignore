@@ -1,0 +1,14 @@
+# Dependências
+node_modules/
+.DS_Store
+
+# Astro builds e cache
+dist/
+.astro/
+
+# Sanity local builds
+.sanity/
+
+# Arquivos de ambiente locais (tokens, chaves, etc.)
+.env
+.env.*
