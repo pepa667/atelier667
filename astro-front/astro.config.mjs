@@ -1,7 +1,8 @@
+// @ts-check
 import { defineConfig } from "astro/config";
-import tailwindcss from "@astrojs/tailwind";
 import react from "@astrojs/react";
 
+// No Astro 6, o Tailwind v4 roda direto pelo PostCSS nativo do Vite, sem precisar de integration!
 export default defineConfig({
-  integrations: [tailwindcss(), react()],
+  integrations: [react()],
 });
