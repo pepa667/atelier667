@@ -1,3 +1,53 @@
 @import "tailwindcss";
 
+@theme {
+  --font-serif: "Bodoni Moda", serif;
+  --font-sans: "Roboto Slab", serif;
+
+  --color-primary-50: var(--color-lime-50);
+  --color-primary-100: var(--color-lime-100);
+  --color-primary-200: var(--color-lime-200);
+  --color-primary-300: var(--color-lime-300);
+  --color-primary-400: var(--color-lime-400);
+  --color-primary-500: var(--color-lime-500);
+  --color-primary-600: var(--color-lime-600);
+  --color-primary-700: var(--color-lime-700);
+  --color-primary-800: var(--color-lime-800);
+  --color-primary-900: var(--color-lime-900);
+  --color-primary-950: var(--color-lime-950);
+
+  /* Optional: Set a fallback default base value for just "bg-primary" */
+  --color-primary: var(--color-lime-400);
+}
+
+@layer base {
+  body {
+    @apply font-serif;
+  }
+}
+/* 1. Tell Prettier to stop touching this block */
+/* prettier-ignore */
+
 /* Suas outras classes customizadas ou variáveis abaixo... */
+/* Corrigido para verificar o suporte real da API */
+@supports (animation-timeline: scroll()) {
+  @keyframes parallax-topo {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(
+        80%
+      ); /* Move para baixo criando o efeito de lentidão */
+    }
+  }
+
+  .scroll-parallax {
+    animation-name: parallax-topo;
+    animation-fill-mode: both;
+    /* Monitora o scroll da página inteira */
+    animation-timeline: scroll(root);
+    /* O efeito começa em 0px de scroll e termina quando scrollar 400px */
+    animation-range: 0px 400px;
+  }
+}

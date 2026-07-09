@@ -1,19 +1,59 @@
 ---
 // Puxa o CSS global uma vez só aqui!
-import '../styles/global.css';
+import "../styles/global.css";
 
 // Recebe o título dinâmico da página como propriedade
 const { title = "Atelier667 — Projetos Maker" } = Astro.props;
 ---
 
 <html lang="pt-br">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<title>{title}</title>
-	</head>
-	<body class="bg-zinc-950 text-zinc-50 min-h-screen font-sans">
-		<!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
-		<slot />
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-zinc-950 text-zinc-50 min-h-screen">
+    <div class="container mx-auto relative flex">
+      <div
+        class="absolute text-6xl float-start font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline p-6"
+      >
+        <span class="text-primary">programação</span>//<span
+          class="text-primary">design</span
+        >//<span class="text-primary">ilustração</span>//<span
+          class="text-primary">eletrônica</span
+        >
+      </div>
+      <content class="max-w-6xl mx-auto">
+        <header class="relative border-b border-zinc-800 pb-8">
+          <div
+            class="aspect-18/7 w-full max-w-6xl overflow-hidden relative rounded-lg bg-zinc-950"
+          >
+            <img
+              src="/src/assets/images/atelier.png"
+              alt="Atelier667 Banner"
+              class="scroll-parallax w-full h-full object-cover object-center block"
+            />
+          </div>
+        </header>
+        <main class="max-w-6xl mx-auto p-6 md:p-12 space-y-12 bg-zinc-950">
+          <h1
+            class="text-5xl font-bold italic tracking-tight text-primary mt-6"
+          >
+            Atelier667
+          </h1>
+          <p class="text-zinc-400 mt-1 font-extrabold text-xl font-sans">
+            Oficina Maker • Portfólio Técnico de Hardware e Software
+          </p>
+          <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
+          <slot />
+        </main>
+      </content>
+    </div>
+  </body>
 </html>

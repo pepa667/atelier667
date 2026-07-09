@@ -1,83 +1,107 @@
 ---
-import { sanityClient, urlFor } from '../lib/sanity';
-import BaseLayout from '../layouts/BaseLayout.astro'; // <-- Importa o Layout
+import { sanityClient, urlFor } from "../lib/sanity";
+import BaseLayout from "../layouts/BaseLayout.astro"; // <-- Importa o Layout
 
-const projetos = await sanityClient.fetch(`*[_type == "projeto"] | order(_createdAt desc)`);
+const projetos = await sanityClient.fetch(
+  `*[_type == "projeto"] | order(_createdAt desc)`,
+);
 
 const getStatusClass = (status: any) => {
-  switch(status) {
-    case 'concluido': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-    case 'desenvolvimento': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-    case 'pausado': return 'bg-zinc-500/10 text-zinc-400 border-zinc-800';
-    default: return 'bg-zinc-800 text-zinc-400';
+  switch (status) {
+    case "concluido":
+      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+    case "desenvolvimento":
+      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+    case "pausado":
+      return "bg-zinc-500/10 text-zinc-400 border-zinc-800";
+    default:
+      return "bg-zinc-800 text-zinc-400";
   }
 };
 ---
 
 <!-- Chame o Layout aqui abrindo e fechando a tag -->
 <BaseLayout title="Atelier667 — Home">
-	<main class="max-w-6xl mx-auto p-6 md:p-12 space-y-12">
-		
-		<header class="border-b border-zinc-800 pb-8">
-			<h1 class="text-3xl font-bold tracking-tight text-white">Atelier667</h1>
-			<p class="text-zinc-400 mt-1 text-sm">Oficina Maker • Portfólio Técnico de Hardware e Software</p>
-		</header>
+  <!-- Grid de Projetos -->
+  <section
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans"
+  >
+    {
+      projetos.map(
+        (proj: {
+          mainImage: any;
+          title_pt: unknown;
+          categoria: unknown;
+          status: string;
+          progresso: unknown;
+          tags: any[];
+          slug: { current: any };
+        }) => (
+          <article class="group bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-700 transition flex flex-col justify-between">
+            <div>
+              {proj.mainImage && (
+                <div class="aspect-video w-full overflow-hidden bg-zinc-800 relative">
+                  <img
+                    src={urlFor(proj.mainImage).width(600).url()}
+                    alt={proj.title_pt}
+                    class="w-full h-full object-cover group-hover:scale-103 transition duration-300 font-serif"
+                    loading="lazy"
+                  />
+                  {proj.categoria && (
+                    <span class="absolute top-3 left-3 text-[10px] uppercase tracking-wider font-bold bg-zinc-950/80 text-zinc-300 px-2.5 py-1 rounded-md backdrop-blur-xs border border-zinc-800">
+                      {proj.categoria === "3d"
+                        ? "Impressão 3D"
+                        : proj.categoria}
+                    </span>
+                  )}
+                </div>
+              )}
 
-		<!-- Grid de Projetos -->
-		<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{projetos.map((proj: { mainImage: any; title_pt: unknown; categoria: unknown; status: string; progresso: unknown; tags: any[]; slug: { current: any; }; }) => (
-				<article class="group bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-700 transition flex flex-col justify-between">
-					<div>
-						{proj.mainImage && (
-							<div class="aspect-video w-full overflow-hidden bg-zinc-800 relative" >
-								<img 
-									src={urlFor(proj.mainImage).width(600).url()} 
-									alt={proj.title_pt}
-									class="w-full h-full object-cover group-hover:scale-103 transition duration-300"
-									loading="lazy"
-								/>
-								{proj.categoria && (
-									<span class="absolute top-3 left-3 text-[10px] uppercase tracking-wider font-bold bg-zinc-950/80 text-zinc-300 px-2.5 py-1 rounded-md backdrop-blur-xs border border-zinc-800">
-										{proj.categoria === '3d' ? 'Impressão 3D' : proj.categoria}
-									</span>
-								)}
-							</div>
-						)}
-						
-						<div class="p-5 space-y-4">
-							<div class="flex items-center justify-between text-xs">
-								<span class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(proj.status)} font-medium capitalize`}>
-									{proj.status === 'concluido' ? 'Concluído' : proj.status === 'desenvolvimento' ? 'Em Progresso' : 'Pausado'}
-								</span>
-								{proj.progresso !== undefined && (
-									<span class="text-zinc-400 font-mono">{proj.progresso}%</span>
-								)}
-							</div>
+              <div class="p-5 space-y-4">
+                <div class="flex items-center justify-between text-xs">
+                  <span
+                    class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(proj.status)} font-medium capitalize`}
+                  >
+                    {proj.status === "concluido"
+                      ? "Concluído"
+                      : proj.status === "desenvolvimento"
+                        ? "Em Progresso"
+                        : "Pausado"}
+                  </span>
+                  {proj.progresso !== undefined && (
+                    <span class="text-zinc-400 font-mono">
+                      {proj.progresso}%
+                    </span>
+                  )}
+                </div>
 
-							<h2 class="text-xl font-semibold text-zinc-100 group-hover:text-white transition">
-								{proj.title_pt}
-							</h2>
+                <h2 class="text-xl font-semibold text-zinc-100 group-hover:text-white transition">
+                  {proj.title_pt}
+                </h2>
 
-							{proj.tags && (
-								<div class="flex flex-wrap gap-1.5">
-									{proj.tags.map((tag: unknown) => (
-										<span class="text-[11px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-md">
-											#{tag}
-										</span>
-									))}
-								</div>
-							)}
-						</div>
-					</div>
+                {proj.tags && (
+                  <div class="flex flex-wrap gap-1.5">
+                    {proj.tags.map((tag: unknown) => (
+                      <span class="text-[11px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-md">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
 
-					<div class="p-5 pt-0">
-						<a href={`/projeto/${proj.slug.current}`} class="w-full text-center block bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-medium py-2 rounded-xl transition border border-zinc-700/30">
-							Abrir Log Técnico →
-						</a>
-					</div>
-				</article>
-			))}
-		</section>
-
-	</main>
+            <div class="p-5 pt-0">
+              <a
+                href={`/projeto/${proj.slug.current}`}
+                class="w-full text-center block bg-zinc-800 hover:bg-zinc-700 text-zinc-200 hover:text-white text-xs font-medium py-2 rounded-xl transition border border-zinc-700/30"
+              >
+                Abrir Log Técnico →
+              </a>
+            </div>
+          </article>
+        ),
+      )
+    }
+  </section>
 </BaseLayout>
