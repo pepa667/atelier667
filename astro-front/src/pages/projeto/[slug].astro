@@ -4,30 +4,47 @@ import { sanityClient, urlFor } from '../../lib/sanity';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { PortableText } from '@portabletext/react';
 
-// 1. Gera os caminhos (paths) estáticos buscando todos os slugs do Sanity
 export async function getStaticPaths() {
   const projetos = await sanityClient.fetch(`*[_type == "projeto"]{ "slug": slug.current }`);
-  
   return projetos.map((proj) => ({
     params: { slug: proj.slug },
   }));
 }
 
-// 2. Pega o slug atual da URL
 const { slug } = Astro.params;
 
-// 3. Busca os dados completos daquele projeto específico
 const projeto = await sanityClient.fetch(
   `*[_type == "projeto" && slug.current == $slug][0]`,
   { slug }
 );
 
-// Se o projeto sumir ou não for encontrado por segurança
 if (!projeto) {
   return Astro.redirect('/404');
 }
 
-// Helper de design para o status
+// ─── CONFIGURAÇÃO DE RENDERIZADORES CUSTOMIZADOS ───
+// Esse objeto ensina o PortableText a cuspir a tag <img> com Tailwind v4 toda vez que achar uma imagem no texto
+const portableTextComponents = {
+  types: {
+    image: ({ value }) => {
+      if (!value?.asset) return null;
+      return (
+        <div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
+          <img
+            src={urlFor(value).width(800).fit('max').auto('format').url()}
+            alt={value.alt || 'Imagem do log técnico'}
+            class="w-full h-auto rounded-lg object-cover"
+            loading="lazy"
+          />
+          {value.caption && (
+            <p class="text-xs text-center text-zinc-500 mt-2 italic">{value.caption}</p>
+          )}
+        </div>
+      );
+    },
+  },
+};
+
 const getStatusClass = (status) => {
   switch(status) {
     case 'concluido': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
@@ -81,7 +98,7 @@ const getStatusClass = (status) => {
       prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm">
       
       {projeto.log_pt ? (
-        <PortableText value={projeto.log_pt} />
+        <PortableText value={projeto.log_pt} components={portableTextComponents} />
       ) : (
         <p class="text-zinc-500 italic">Nenhum log técnico foi escrito para este projeto ainda.</p>
       )}
