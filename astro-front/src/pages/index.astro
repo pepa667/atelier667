@@ -4,7 +4,7 @@ import BaseLayout from '../layouts/BaseLayout.astro'; // <-- Importa o Layout
 
 const projetos = await sanityClient.fetch(`*[_type == "projeto"] | order(_createdAt desc)`);
 
-const getStatusClass = (status) => {
+const getStatusClass = (status: any) => {
   switch(status) {
     case 'concluido': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
     case 'desenvolvimento': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
@@ -25,7 +25,7 @@ const getStatusClass = (status) => {
 
 		<!-- Grid de Projetos -->
 		<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			{projetos.map((proj) => (
+			{projetos.map((proj: { mainImage: any; title_pt: unknown; categoria: unknown; status: string; progresso: unknown; tags: any[]; slug: { current: any; }; }) => (
 				<article class="group bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-700 transition flex flex-col justify-between">
 					<div>
 						{proj.mainImage && (
@@ -60,7 +60,7 @@ const getStatusClass = (status) => {
 
 							{proj.tags && (
 								<div class="flex flex-wrap gap-1.5">
-									{proj.tags.map((tag) => (
+									{proj.tags.map((tag: unknown) => (
 										<span class="text-[11px] bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-md">
 											#{tag}
 										</span>
