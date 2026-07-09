@@ -2,13 +2,19 @@
 import '../styles/global.css';
 import { sanityClient } from '../lib/sanity';
 
-// O resto do código continua igual...
+// 1. Busca os projetos na bancada
 const projetos = await sanityClient.fetch(`*[_type == "projeto"]{
   title_pt,
   status,
   progresso,
   categoria,
   tags
+}`);
+
+// 2. Busca os drops ordendados por data decrescente
+const drops = await sanityClient.fetch(`*[_type == "drop"] | order(timestamp desc){
+  content,
+  timestamp
 }`);
 ---
 
@@ -20,53 +26,85 @@ const projetos = await sanityClient.fetch(`*[_type == "projeto"]{
 		<title>Atelier667 | Artesanato Técnico</title>
 	</head>
 	<body class="bg-zinc-950 text-zinc-100 font-sans min-h-screen p-8">
-		<main class="max-w-4xl mx-auto">
+<main class="max-w-6xl mx-auto">
 			<header class="border-b border-zinc-800 pb-4 mb-8">
-				<h1 class="text-3xl font-black tracking-wider text-orange-550">ATELIER667</h1>
+				<h1 class="text-3xl font-black tracking-wider text-orange-500">ATELIER667</h1>
 				<p class="text-zinc-400 text-sm italic">"Artesanato Técnico" — Level UP (+1)</p>
 			</header>
 
-			<section>
-				<h2 class="text-xl font-bold mb-4 text-zinc-300">Projetos na Bancada</h2>
+			<!-- Grid de duas colunas: Esquerda (Projetos) | Direita (Drops) -->
+			<div class="grid gap-8 md:grid-cols-3">
 				
-				{projetos.length === 0 ? (
-					<p class="text-zinc-500 italic text-sm">Nenhum projeto encontrado no banco de dados.</p>
-				) : (
-					<div class="grid gap-4 md:grid-cols-2">
-						{projetos.map((proj) => (
-							<div class="bg-zinc-900 border border-zinc-800 p-4 rounded-sm shadow-md">
-								<div class="flex justify-between items-start mb-2">
-									<h3 class="font-bold text-lg text-white">{proj.title_pt}</h3>
-									<span class="text-xs uppercase bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-sm">
-										{proj.categoria}
+				<!-- COLUNA 1 & 2: PROJETOS -->
+				<section class="md:col-span-2 space-y-4">
+					<h2 class="text-xl font-bold text-zinc-300 border-b border-zinc-900 pb-2">Projetos na Bancada</h2>
+					
+					{projetos.length === 0 ? (
+						<p class="text-zinc-500 italic text-sm">Nenhum projeto encontrado no banco de dados.</p>
+					) : (
+						<div class="grid gap-4 sm:grid-cols-2">
+							{projetos.map((proj) => (
+								<div class="bg-zinc-900 border border-zinc-800/60 p-4 rounded-sm shadow-md flex flex-col justify-between">
+									<div>
+										<div class="flex justify-between items-start mb-2 gap-2">
+											<h3 class="font-bold text-base text-white tracking-wide">{proj.title_pt}</h3>
+											<span class="text-[10px] uppercase bg-zinc-800 text-zinc-400 px-2 py-0.5 rounded-sm whitespace-nowrap">
+												{proj.categoria}
+											</span>
+										</div>
+										
+										<div class="space-y-2 mt-4">
+											<div class="flex justify-between text-xs text-zinc-400">
+												<span>Status: <strong class="text-orange-400">{proj.status}</strong></span>
+												<span>{proj.progresso}%</span>
+											</div>
+											<div class="w-full bg-zinc-800 h-1 rounded-full overflow-hidden">
+												<div class="bg-orange-500 h-full" style={`width: ${proj.progresso}%`}></div>
+											</div>
+										</div>
+									</div>
+
+									{proj.tags && (
+										<div class="flex flex-wrap gap-1 mt-4">
+											{proj.tags.map((tag) => (
+												<span class="text-[9px] bg-zinc-950 text-zinc-500 px-1.5 py-0.5 border border-zinc-800 rounded-sm">
+													#{tag}
+												</span>
+											))}
+										</div>
+									)}
+								</div>
+							))}
+						</div>
+					)}
+				</section>
+
+				<!-- COLUNA 3: DROPS (MICROBLOG) -->
+				<section class="space-y-4">
+					<h2 class="text-xl font-bold text-zinc-300 border-b border-zinc-900 pb-2">Drops / Logs Rápidos</h2>
+					
+					{drops.length === 0 ? (
+						<p class="text-zinc-500 italic text-sm">Nenhum log rápido interceptado.</p>
+					) : (
+						<div class="space-y-3">
+							{drops.map((drp) => (
+								<div class="bg-zinc-900/40 border border-zinc-800/40 p-3 rounded-sm">
+									<p class="text-sm text-zinc-300 leading-relaxed font-mono whitespace-pre-wrap">{drp.content}</p>
+									<span class="text-[10px] text-zinc-600 block mt-2 font-sans">
+										{new Date(drp.timestamp).toLocaleString('pt-BR', {
+											day: '2-digit',
+											month: '2-digit',
+											hour: '2-digit',
+											minute: '2-digit'
+										})}
 									</span>
 								</div>
-								
-								<div class="space-y-2">
-									<div class="flex justify-between text-xs text-zinc-400">
-										<span>Status: <strong class="text-orange-400">{proj.status}</strong></span>
-										<span>{proj.progresso}%</span>
-									</div>
-									{/* Barra de progresso maker */}
-									<div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-										<div class="bg-orange-500 h-full" style={`width: ${proj.progresso}%`}></div>
-									</div>
-								</div>
+							))}
+						</div>
+					)}
+				</section>
 
-								{proj.tags && (
-									<div class="flex flex-wrap gap-1.5 mt-4">
-										{proj.tags.map((tag) => (
-											<span class="text-[10px] bg-zinc-950 text-zinc-500 px-2 py-0.5 border border-zinc-800 rounded-sm">
-												#{tag}
-											</span>
-										))}
-									</div>
-								)}
-							</div>
-						))}
-					</div>
-				)}
-			</section>
+			</div>
 		</main>
 	</body>
 </html>
