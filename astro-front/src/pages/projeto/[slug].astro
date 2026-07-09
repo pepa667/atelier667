@@ -14,20 +14,9 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-// ─── MÁGICA NA QUERY (GROQ) ───
-// Adicionamos o "inline mapping" no log_pt para ele expandir o asset interno da imagem do editor
 const projeto = await sanityClient.fetch(
-  `*[_type == "projeto" && slug.current == $slug][0]{
-    ...,
-    log_pt[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->
-      }
-    }
-  }`,
-  { slug }
+  `*[_type == "projeto" && slug.current == $slug][0]`,
+  { slug },
 );
 
 if (!projeto) {
@@ -35,59 +24,95 @@ if (!projeto) {
 }
 
 const getStatusClass = (status) => {
-  switch(status) {
-    case 'concluido': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-    case 'desenvolvimento': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-    case 'pausado': return 'bg-zinc-500/10 text-zinc-400 border-zinc-800';
-    default: return 'bg-zinc-800 text-zinc-400';
+  switch (status) {
+    case "concluido":
+      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+    case "desenvolvimento":
+      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+    case "pausado":
+      return "bg-zinc-500/10 text-zinc-400 border-zinc-800";
+    default:
+      return "bg-zinc-800 text-zinc-400";
   }
 };
 
-// Objeto de renderização limpo que o React/Astro vai engolir sem xiar
+// Deixamos o mapeamento aqui sem renderizar JSX complexo direto na arrow function
 const portableTextComponents = {
   types: {
     image: ({ value }) => {
       if (!value?.asset?.url) return null;
-      return (
-        `<div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
-          <img src="${value.asset.url}" class="w-full h-auto rounded-lg object-cover" loading="lazy" />
-        </div>`
-      );
-    }
-  }
+      // Retornamos a estrutura de nós do React, sem as aspas de string
+      return {
+        $$typeof: Symbol.for("react.element"),
+        type: "div",
+        props: {
+          className:
+            "my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2",
+          children: {
+            $$typeof: Symbol.for("react.element"),
+            type: "img",
+            props: {
+              src: value.asset.url,
+              className: "w-full h-auto rounded-lg object-cover",
+              loading: "lazy",
+            },
+          },
+        },
+      };
+    },
+  },
 };
 ---
 
 <BaseLayout title={`Atelier667 — ${projeto.title_pt}`}>
   <article class="max-w-3xl mx-auto p-6 md:p-12 space-y-8">
-    
-    <a href="/" class="inline-flex items-center text-sm text-zinc-400 hover:text-white transition gap-2 group">
-      <span class="group-hover:-translate-x-1 transition-transform">←</span> Voltar para a oficina
+    <a
+      href="/"
+      class="inline-flex items-center text-sm text-zinc-400 hover:text-white transition gap-2 group"
+    >
+      <span class="group-hover:-translate-x-1 transition-transform">←</span> Voltar
+      para a oficina
     </a>
 
-    {projeto.mainImage && (
-      <div class="aspect-video w-full overflow-hidden bg-zinc-900 rounded-2xl border border-zinc-800">
-        <img 
-          src={urlFor(projeto.mainImage).width(1200).url()} 
-          alt={projeto.title_pt}
-          class="w-full h-full object-cover"
-        />
-      </div>
-    )}
+    {
+      projeto.mainImage && (
+        <div class="aspect-video w-full overflow-hidden bg-zinc-900 rounded-2xl border border-zinc-800">
+          <img
+            src={urlFor(projeto.mainImage).width(1200).url()}
+            alt={projeto.title_pt}
+            class="w-full h-full object-cover"
+          />
+        </div>
+      )
+    }
 
     <header class="space-y-4 border-b border-zinc-800 pb-6">
       <div class="flex items-center gap-3 text-xs">
-        <span class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(projeto.status)} font-medium capitalize`}>
-          {projeto.status === 'concluido' ? 'Concluído' : projeto.status === 'desenvolvimento' ? 'Em Progresso' : 'Pausado'}
+        <span
+          class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(projeto.status)} font-medium capitalize`}
+        >
+          {
+            projeto.status === "concluido"
+              ? "Concluído"
+              : projeto.status === "desenvolvimento"
+                ? "Em Progresso"
+                : "Pausado"
+          }
         </span>
-        {projeto.progresso !== undefined && (
-          <span class="text-zinc-500 font-mono">Progresso: {projeto.progresso}%</span>
-        )}
-        {projeto.categoria && (
-          <span class="text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 uppercase tracking-wider text-[10px]">
-            {projeto.categoria === '3d' ? 'Impressão 3D' : projeto.categoria}
-          </span>
-        )}
+        {
+          projeto.progresso !== undefined && (
+            <span class="text-zinc-500 font-mono">
+              Progresso: {projeto.progresso}%
+            </span>
+          )
+        }
+        {
+          projeto.categoria && (
+            <span class="text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 uppercase tracking-wider text-[10px]">
+              {projeto.categoria === "3d" ? "Impressão 3D" : projeto.categoria}
+            </span>
+          )
+        }
       </div>
 
       <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white">
@@ -95,17 +120,24 @@ const portableTextComponents = {
       </h1>
     </header>
 
-    <section class="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6 
-      prose-headings:text-white prose-headings:font-semibold 
+    <section
+      class="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6
+      prose-headings:text-white prose-headings:font-semibold
       prose-p:text-zinc-300 prose-strong:text-white
-      prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm">
-      
-      {projeto.log_pt ? (
-        <PortableText value={projeto.log_pt} components={portableTextComponents} />
-      ) : (
-        <p class="text-zinc-500 italic">Nenhum log técnico foi escrito para este projeto ainda.</p>
-      )}
+      prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm"
+    >
+      {
+        projeto.log_pt ? (
+          <PortableText
+            value={projeto.log_pt}
+            components={portableTextComponents}
+          />
+        ) : (
+          <p class="text-zinc-500 italic">
+            Nenhum log técnico foi escrito para este projeto ainda.
+          </p>
+        )
+      }
     </section>
-
   </article>
 </BaseLayout>
