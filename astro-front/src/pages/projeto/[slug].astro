@@ -14,9 +14,20 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
+// ─── MÁGICA NA QUERY (GROQ) ───
+// Adicionamos o "inline mapping" no log_pt para ele expandir o asset interno da imagem do editor
 const projeto = await sanityClient.fetch(
-  `*[_type == "projeto" && slug.current == $slug][0]`,
-  { slug },
+  `*[_type == "projeto" && slug.current == $slug][0]{
+    ...,
+    log_pt[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->
+      }
+    }
+  }`,
+  { slug }
 );
 
 if (!projeto) {
@@ -32,13 +43,16 @@ const getStatusClass = (status) => {
   }
 };
 
-// Deixamos o mapeamento aqui sem renderizar JSX complexo direto na arrow function
+// Objeto de renderização limpo que o React/Astro vai engolir sem xiar
 const portableTextComponents = {
   types: {
-    // Tratamos apenas como um retorno simples de objeto estruturado que o React resolve no client
     image: ({ value }) => {
-      const imgUrl = urlFor(value).width(800).url();
-      return `<div><img src="${imgUrl}" class="my-8 rounded-xl border border-zinc-800 w-full h-auto" loading="lazy" /></div>`;
+      if (!value?.asset?.url) return null;
+      return (
+        `<div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
+          <img src="${value.asset.url}" class="w-full h-auto rounded-lg object-cover" loading="lazy" />
+        </div>`
+      );
     }
   }
 };
@@ -87,7 +101,7 @@ const portableTextComponents = {
       prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm">
       
       {projeto.log_pt ? (
-        <PortableText value={projeto.log_pt} />
+        <PortableText value={projeto.log_pt} components={portableTextComponents} />
       ) : (
         <p class="text-zinc-500 italic">Nenhum log técnico foi escrito para este projeto ainda.</p>
       )}
