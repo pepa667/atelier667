@@ -1,0 +1,19 @@
+---
+// Puxa o CSS global uma vez só aqui!
+import '../styles/global.css';
+
+// Recebe o título dinâmico da página como propriedade
+const { title = "Atelier667 — Projetos Maker" } = Astro.props;
+---
+
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>{title}</title>
+	</head>
+	<body class="bg-zinc-950 text-zinc-50 min-h-screen font-sans">
+		<!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
+		<slot />
+	</body>
+</html>
