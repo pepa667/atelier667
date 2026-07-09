@@ -31,6 +31,17 @@ const getStatusClass = (status) => {
     default: return 'bg-zinc-800 text-zinc-400';
   }
 };
+
+// Deixamos o mapeamento aqui sem renderizar JSX complexo direto na arrow function
+const portableTextComponents = {
+  types: {
+    // Tratamos apenas como um retorno simples de objeto estruturado que o React resolve no client
+    image: ({ value }) => {
+      const imgUrl = urlFor(value).width(800).url();
+      return `<div><img src="${imgUrl}" class="my-8 rounded-xl border border-zinc-800 w-full h-auto" loading="lazy" /></div>`;
+    }
+  }
+};
 ---
 
 <BaseLayout title={`Atelier667 — ${projeto.title_pt}`}>
@@ -76,24 +87,7 @@ const getStatusClass = (status) => {
       prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm">
       
       {projeto.log_pt ? (
-        /* Injetamos a regra de imagens direto na tag de forma que o compilador do Astro trate o HTML sem chiar */
-        <PortableText 
-          value={projeto.log_pt} 
-          components={{
-            types: {
-              image: ({ value }) => (
-                <div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
-                  <img
-                    src={urlFor(value).width(800).fit("max").auto("format").url()}
-                    alt={value.alt || "Imagem do log técnico"}
-                    class="w-full h-auto rounded-lg object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              )
-            }
-          }}
-        />
+        <PortableText value={projeto.log_pt} />
       ) : (
         <p class="text-zinc-500 italic">Nenhum log técnico foi escrito para este projeto ainda.</p>
       )}
