@@ -1,7 +1,6 @@
 ---
 import { sanityClient, urlFor } from "../../lib/sanity";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { PortableText } from "@portabletext/react";
 
 export async function getStaticPaths() {
   const projetos = await sanityClient.fetch(
@@ -14,8 +13,18 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
+// Query otimizada puxando o bloco cru + imagens expandidas
 const projeto = await sanityClient.fetch(
-  `*[_type == "projeto" && slug.current == $slug][0]`,
+  `*[_type == "projeto" && slug.current == $slug][0]{
+    ...,
+    log_pt[]{
+      ...,
+      _type == "image" => {
+        ...,
+        asset->
+      }
+    }
+  }`,
   { slug },
 );
 
@@ -34,33 +43,6 @@ const getStatusClass = (status) => {
     default:
       return "bg-zinc-800 text-zinc-400";
   }
-};
-
-// Deixamos o mapeamento aqui sem renderizar JSX complexo direto na arrow function
-const portableTextComponents = {
-  types: {
-    image: ({ value }) => {
-      if (!value?.asset?.url) return null;
-      // Retornamos a estrutura de nós do React, sem as aspas de string
-      return {
-        $$typeof: Symbol.for("react.element"),
-        type: "div",
-        props: {
-          className:
-            "my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2",
-          children: {
-            $$typeof: Symbol.for("react.element"),
-            type: "img",
-            props: {
-              src: value.asset.url,
-              className: "w-full h-auto rounded-lg object-cover",
-              loading: "lazy",
-            },
-          },
-        },
-      };
-    },
-  },
 };
 ---
 
@@ -128,10 +110,27 @@ const portableTextComponents = {
     >
       {
         projeto.log_pt ? (
-          <PortableText
-            value={projeto.log_pt}
-            components={portableTextComponents}
-          />
+          // Varremos o array usando o map nativo do Astro, renderizando texto e imagem direto no HTML real
+          projeto.log_pt.map((block) => {
+            if (block._type === "image" && block.asset?.url) {
+              return (
+                <div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
+                  <img
+                    src={block.asset.url}
+                    class="w-full h-auto rounded-lg object-cover"
+                    loading="lazy"
+                  />
+                </div>
+              );
+            }
+
+            if (block._type === "block") {
+              // Renderiza os parágrafos de texto normais
+              return <p>{block.children?.map((c) => c.text).join("")}</p>;
+            }
+
+            return null;
+          })
         ) : (
           <p class="text-zinc-500 italic">
             Nenhum log técnico foi escrito para este projeto ainda.
