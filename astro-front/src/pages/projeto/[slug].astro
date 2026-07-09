@@ -1,11 +1,13 @@
 ---
 // Garanta que o caminho do import da lib está batendo com a pasta onde o arquivo está!
-import { sanityClient, urlFor } from '../../lib/sanity'; 
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { PortableText } from '@portabletext/react';
+import { sanityClient, urlFor } from "../../lib/sanity";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { PortableText } from "@portabletext/react";
 
 export async function getStaticPaths() {
-  const projetos = await sanityClient.fetch(`*[_type == "projeto"]{ "slug": slug.current }`);
+  const projetos = await sanityClient.fetch(
+    `*[_type == "projeto"]{ "slug": slug.current }`,
+  );
   return projetos.map((proj) => ({
     params: { slug: proj.slug },
   }));
@@ -15,11 +17,11 @@ const { slug } = Astro.params;
 
 const projeto = await sanityClient.fetch(
   `*[_type == "projeto" && slug.current == $slug][0]`,
-  { slug }
+  { slug },
 );
 
 if (!projeto) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 // ─── CONFIGURAÇÃO DE RENDERIZADORES CUSTOMIZADOS ───
@@ -31,13 +33,15 @@ const portableTextComponents = {
       return (
         <div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
           <img
-            src={urlFor(value).width(800).fit('max').auto('format').url()}
-            alt={value.alt || 'Imagem do log técnico'}
+            src={urlFor(value).width(800).fit("max").auto("format").url()}
+            alt={value.alt || "Imagem do log técnico"}
             class="w-full h-auto rounded-lg object-cover"
             loading="lazy"
           />
           {value.caption && (
-            <p class="text-xs text-center text-zinc-500 mt-2 italic">{value.caption}</p>
+            <p class="text-xs text-center text-zinc-500 mt-2 italic">
+              {value.caption}
+            </p>
           )}
         </div>
       );
@@ -46,45 +50,68 @@ const portableTextComponents = {
 };
 
 const getStatusClass = (status) => {
-  switch(status) {
-    case 'concluido': return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-    case 'desenvolvimento': return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-    case 'pausado': return 'bg-zinc-500/10 text-zinc-400 border-zinc-800';
-    default: return 'bg-zinc-800 text-zinc-400';
+  switch (status) {
+    case "concluido":
+      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+    case "desenvolvimento":
+      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+    case "pausado":
+      return "bg-zinc-500/10 text-zinc-400 border-zinc-800";
+    default:
+      return "bg-zinc-800 text-zinc-400";
   }
 };
 ---
 
 <BaseLayout title={`Atelier667 — ${projeto.title_pt}`}>
   <article class="max-w-3xl mx-auto p-6 md:p-12 space-y-8">
-    
-    <a href="/" class="inline-flex items-center text-sm text-zinc-400 hover:text-white transition gap-2 group">
-      <span class="group-hover:-translate-x-1 transition-transform">←</span> Voltar para a oficina
+    <a
+      href="/"
+      class="inline-flex items-center text-sm text-zinc-400 hover:text-white transition gap-2 group"
+    >
+      <span class="group-hover:-translate-x-1 transition-transform">←</span> Voltar
+      para a oficina
     </a>
 
-    {projeto.mainImage && (
-      <div class="aspect-video w-full overflow-hidden bg-zinc-900 rounded-2xl border border-zinc-800">
-        <img 
-          src={urlFor(projeto.mainImage).width(1200).url()} 
-          alt={projeto.title_pt}
-          class="w-full h-full object-cover"
-        />
-      </div>
-    )}
+    {
+      projeto.mainImage && (
+        <div class="aspect-video w-full overflow-hidden bg-zinc-900 rounded-2xl border border-zinc-800">
+          <img
+            src={urlFor(projeto.mainImage).width(1200).url()}
+            alt={projeto.title_pt}
+            class="w-full h-full object-cover"
+          />
+        </div>
+      )
+    }
 
     <header class="space-y-4 border-b border-zinc-800 pb-6">
       <div class="flex items-center gap-3 text-xs">
-        <span class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(projeto.status)} font-medium capitalize`}>
-          {projeto.status === 'concluido' ? 'Concluído' : projeto.status === 'desenvolvimento' ? 'Em Progresso' : 'Pausado'}
+        <span
+          class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(projeto.status)} font-medium capitalize`}
+        >
+          {
+            projeto.status === "concluido"
+              ? "Concluído"
+              : projeto.status === "desenvolvimento"
+                ? "Em Progresso"
+                : "Pausado"
+          }
         </span>
-        {projeto.progresso !== undefined && (
-          <span class="text-zinc-500 font-mono">Progresso: {projeto.progresso}%</span>
-        )}
-        {projeto.categoria && (
-          <span class="text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 uppercase tracking-wider text-[10px]">
-            {projeto.categoria === '3d' ? 'Impressão 3D' : projeto.categoria}
-          </span>
-        )}
+        {
+          projeto.progresso !== undefined && (
+            <span class="text-zinc-500 font-mono">
+              Progresso: {projeto.progresso}%
+            </span>
+          )
+        }
+        {
+          projeto.categoria && (
+            <span class="text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 uppercase tracking-wider text-[10px]">
+              {projeto.categoria === "3d" ? "Impressão 3D" : projeto.categoria}
+            </span>
+          )
+        }
       </div>
 
       <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white">
@@ -92,17 +119,24 @@ const getStatusClass = (status) => {
       </h1>
     </header>
 
-    <section class="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6 
-      prose-headings:text-white prose-headings:font-semibold 
+    <section
+      class="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6
+      prose-headings:text-white prose-headings:font-semibold
       prose-p:text-zinc-300 prose-strong:text-white
-      prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm">
-      
-      {projeto.log_pt ? (
-        <PortableText value={projeto.log_pt} components={portableTextComponents} />
-      ) : (
-        <p class="text-zinc-500 italic">Nenhum log técnico foi escrito para este projeto ainda.</p>
-      )}
+      prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm"
+    >
+      {
+        projeto.log_pt ? (
+          <PortableText
+            value={projeto.log_pt}
+            components={portableTextComponents}
+          />
+        ) : (
+          <p class="text-zinc-500 italic">
+            Nenhum log técnico foi escrito para este projeto ainda.
+          </p>
+        )
+      }
     </section>
-
   </article>
 </BaseLayout>
