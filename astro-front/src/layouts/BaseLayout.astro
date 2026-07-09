@@ -1,4 +1,11 @@
 ---
+// 1. Importa o componente nativo de imagem do Astro
+import { Image } from "astro:assets";
+
+// 2. Importa a imagem local direto do seu diretório de assets
+import atelierBanner from "../assets/images/atelier.png";
+// (Ajuste os pontinhos `../` dependendo de quão profunda está a pasta do arquivo atual)
+
 // Puxa o CSS global uma vez só aqui!
 import "../styles/global.css";
 
@@ -34,10 +41,11 @@ const { title = "Atelier667 — Projetos Maker" } = Astro.props;
           <div
             class="aspect-18/7 w-full max-w-6xl overflow-hidden relative rounded-lg bg-zinc-950"
           >
-            <img
-              src="/src/assets/images/atelier.png"
+            <Image
+              src={atelierBanner}
               alt="Atelier667 Banner"
               class="scroll-parallax w-full h-full object-cover object-center block"
+              loading="eager"
             />
           </div>
         </header>
