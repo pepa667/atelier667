@@ -20,50 +20,40 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
     <title>{title}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&display=swap"
-      rel="stylesheet"
-    />
   </head>
-  <body class="bg-zinc-950 text-zinc-50 min-h-screen">
-    <div class="container mx-auto relative flex">
-      <div
-        class="max-xl:absolute relative text-6xl float-start font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline p-6"
+  <body class="bg-zinc-950 text-zinc-200 min-h-screen">
+    <div
+      class="mx-auto relative flex flex-row justify-center overflow-y-hidden"
+    >
+      <aside
+        class="fixed h-svh top-0 left-0 xl:left-[calc(50svw-36rem-80px)] p-2"
       >
-        <span class="text-primary">programação</span>//<span
-          class="text-primary">design</span
-        >//<span class="text-primary">ilustração</span>//<span
-          class="text-primary">eletrônica</span
+        <ol
+          class="scroll-side-bar text-2xl *:inline-block *:text-primary whitespace-nowrap list-none p-0 *:before:content-['//'] *:before:text-white sm:text-4xl lg:text-4xl 2xl:text-6xl font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline border-l border-primary-800"
         >
-      </div>
-      <content class="max-w-6xl mx-auto">
-        <header class="relative border-b border-zinc-800 pb-8">
-          <div
-            class="aspect-18/7 w-full max-w-6xl overflow-hidden relative rounded-lg bg-zinc-950"
-          >
-            <Image
-              src={atelierBanner}
-              alt="Atelier667 Banner"
-              format="png"
-              quality="max"
-              class="scroll-parallax w-full h-auto object-cover object-center block"
-              loading="eager"
-            />
-          </div>
-        </header>
-        <main class="max-w-6xl mx-auto p-6 md:p-12 space-y-12 bg-zinc-950">
-          <h1
-            class="text-5xl font-bold italic tracking-tight text-primary mt-6"
-          >
-            Atelier667
-          </h1>
-          <p class="text-zinc-400 mt-1 font-extrabold text-xl font-sans">
-            Oficina Maker • Portfólio Técnico de Hardware e Software
-          </p>
-          <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
+          <li>Software</li>
+          <li>Hardware</li>
+          <li>Impressão</li>
+          <li>CNC</li>
+          <li>Retro Mod</li>
+          <li>Firmware</li>
+          <li>Arcade</li>
+          <li>Marcenaria</li>
+          <li>DevOps</li>
+          <li>Ilustração</li>
+          <li>Modelagem</li>
+        </ol>
+      </aside>
+      <div class="w-6xl max-w-svw mt-8 inline-flex">
+        <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
+        <span
+          class="text-2xl sm:text-3xl lg:text-4xl 2xl:text-6xl font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline border-l border-primary-50 p-2 opacity-0 xl:hidden"
+          >Pepa667</span
+        >
+        <div class="flex flex-col">
           <slot />
-        </main>
-      </content>
+        </div>
+      </div>
     </div>
   </body>
 </html>

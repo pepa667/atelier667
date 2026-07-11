@@ -1,0 +1,42 @@
+---
+// Recebemos uma propriedade para saber se estamos na Home ou em uma página interna
+interface Props {
+  isHome?: boolean;
+}
+
+const { isHome = false } = Astro.props;
+---
+
+<header class={`border-b border-primary-800 pb-8 relative  transition-all duration-300  ${!isHome ? '' : 'py-4'}`}>
+  <div class="px-4 md:px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    
+    <div>
+      {isHome ? (
+        // Na Home: Título Gigante destruidor
+        <h1 class="font-serif text-5xl md:text-6xl lg:text-8xl pl-6 border-l-24 border-primary font-bold italic tracking-tight text-primary ">
+          Atelier667
+        </h1>
+        <p class="ml-5 md:ml10 xl:ml-20 text-zinc-300 mt-1 font-light text-xs md:text-lg lg:text-xl font-sans">
+          Oficina Maker <span class="text-primary-600 px-1">•</span> Traço, Código e Matéria
+        </p>
+      ) : (
+        // Nas páginas internas: Versão slim, focada em navegação rápida
+        <a href="/" class="group inline-block">
+          <h2 class="text-3xl font-black italic tracking-tight text-white group-hover:text-primary transition-colors font-serif">
+            Atelier667<span class="text-primary font-sans not-italic text-ls ml-1 font-normal tracking-normal">.oficina</span>
+          </h2>
+        </a>
+      )}
+    </div>
+
+    <nav class="flex items-center gap-6 font-serif-2 text-sm tracking-wider">
+      <a href="/" class="text-zinc-400 hover:text-white transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 hover:after:w-full after:bg-primary after:transition-all">
+        Projetos
+      </a>
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-zinc-500 hover:text-white transition-colors flex items-center gap-1">
+        GitHub <span>↗</span>
+      </a>
+    </nav>
+
+  </div>
+</header>

@@ -2,13 +2,13 @@
 export default {
   semi: true,
   singleQuote: true,
-  trailingComma: "all",
-  plugins: ["prettier-plugin-astro"],
+  trailingComma: 'all',
+  plugins: ['prettier-plugin-astro'],
   overrides: [
     {
-      files: "*.astro",
+      files: '*.astro',
       options: {
-        parser: "astro",
+        parser: 'astro',
       },
     },
   ],

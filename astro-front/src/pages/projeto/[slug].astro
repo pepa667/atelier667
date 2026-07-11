@@ -1,6 +1,7 @@
 ---
-import { sanityClient, urlFor } from "../../lib/sanity";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sanityClient, urlFor } from '../../lib/sanity';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
 
 export async function getStaticPaths() {
   const projetos = await sanityClient.fetch(
@@ -29,25 +30,26 @@ const projeto = await sanityClient.fetch(
 );
 
 if (!projeto) {
-  return Astro.redirect("/404");
+  return Astro.redirect('/404');
 }
 
 const getStatusClass = (status) => {
   switch (status) {
-    case "concluido":
-      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
-    case "desenvolvimento":
-      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
-    case "pausado":
-      return "bg-zinc-500/10 text-zinc-400 border-zinc-800";
+    case 'concluido':
+      return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
+    case 'desenvolvimento':
+      return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+    case 'pausado':
+      return 'bg-zinc-500/10 text-zinc-400 border-zinc-800';
     default:
-      return "bg-zinc-800 text-zinc-400";
+      return 'bg-zinc-800 text-zinc-400';
   }
 };
 ---
 
 <BaseLayout title={`Atelier667 — ${projeto.title_pt}`}>
-  <article class="max-w-3xl mx-auto p-6 md:p-12 space-y-8">
+  <Header isHome={false} />
+  <article class="p-6 md:p-12 space-y-8">
     <a
       href="/"
       class="inline-flex items-center text-sm text-zinc-400 hover:text-white transition gap-2 group"
@@ -74,11 +76,11 @@ const getStatusClass = (status) => {
           class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(projeto.status)} font-medium capitalize`}
         >
           {
-            projeto.status === "concluido"
-              ? "Concluído"
-              : projeto.status === "desenvolvimento"
-                ? "Em Progresso"
-                : "Pausado"
+            projeto.status === 'concluido'
+              ? 'Concluído'
+              : projeto.status === 'desenvolvimento'
+                ? 'Em Progresso'
+                : 'Pausado'
           }
         </span>
         {
@@ -91,7 +93,7 @@ const getStatusClass = (status) => {
         {
           projeto.categoria && (
             <span class="text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 uppercase tracking-wider text-[10px]">
-              {projeto.categoria === "3d" ? "Impressão 3D" : projeto.categoria}
+              {projeto.categoria === '3d' ? 'Impressão 3D' : projeto.categoria}
             </span>
           )
         }
@@ -112,7 +114,7 @@ const getStatusClass = (status) => {
         projeto.log_pt ? (
           // Varremos o array usando o map nativo do Astro, renderizando texto e imagem direto no HTML real
           projeto.log_pt.map((block) => {
-            if (block._type === "image" && block.asset?.url) {
+            if (block._type === 'image' && block.asset?.url) {
               return (
                 <div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
                   <img
@@ -124,9 +126,9 @@ const getStatusClass = (status) => {
               );
             }
 
-            if (block._type === "block") {
+            if (block._type === 'block') {
               // Renderiza os parágrafos de texto normais
-              return <p>{block.children?.map((c) => c.text).join("")}</p>;
+              return <p>{block.children?.map((c) => c.text).join('')}</p>;
             }
 
             return null;

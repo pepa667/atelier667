@@ -1,8 +1,12 @@
 @import "tailwindcss";
+@import url(sideBar.css);
+
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
 
 @theme {
   --font-serif: "Bodoni Moda", serif;
-  --font-sans: "Roboto Slab", serif;
+  --font-serif-2: "Roboto Slab", serif;
+  --font-sans: "Inter", sans-serif;
 
   --color-primary-50: var(--color-lime-50);
   --color-primary-100: var(--color-lime-100);
@@ -22,7 +26,7 @@
 
 @layer base {
   body {
-    @apply font-serif;
+    @apply font-sans;
   }
 }
 /* 1. Tell Prettier to stop touching this block */
@@ -30,24 +34,31 @@
 
 /* Suas outras classes customizadas ou variáveis abaixo... */
 /* Corrigido para verificar o suporte real da API */
-@supports (animation-timeline: scroll()) {
-  @keyframes parallax-topo {
-    from {
-      transform: translateY(0);
-    }
-    to {
-      transform: translateY(
-        80%
-      ); /* Move para baixo criando o efeito de lentidão */
-    }
-  }
 
-  .scroll-parallax {
-    animation-name: parallax-topo;
-    animation-fill-mode: both;
-    /* Monitora o scroll da página inteira */
-    animation-timeline: scroll(root);
-    /* O efeito começa em 0px de scroll e termina quando scrollar 400px */
-    animation-range: 0px 400px;
+@keyframes fade-drop {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
   }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-drop {
+  from {
+    transform: translateY(calc(100% + 16px));
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.enter-drop {
+  animation-name: fade-drop;
+  animation-duration: 2s;
+}
+.slide-drop {
+  animation-name: slide-drop;
+  animation-duration: 2s;
 }
