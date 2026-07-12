@@ -1,4 +1,5 @@
 @import "tailwindcss";
+
 @import url(sideBar.css);
 
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
@@ -34,31 +35,3 @@
 
 /* Suas outras classes customizadas ou variáveis abaixo... */
 /* Corrigido para verificar o suporte real da API */
-
-@keyframes fade-drop {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-@keyframes slide-drop {
-  from {
-    transform: translateY(calc(100% + 16px));
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-.enter-drop {
-  animation-name: fade-drop;
-  animation-duration: 2s;
-}
-.slide-drop {
-  animation-name: slide-drop;
-  animation-duration: 2s;
-}

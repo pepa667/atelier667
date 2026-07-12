@@ -1,144 +1,247 @@
 ---
-import { sanityClient, urlFor } from '../../lib/sanity';
+import { marked } from 'marked';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
+// Importe o seu cliente do Sanity aqui
+// import { sanityClient } from 'sanity:client';
+import { sanityClient, urlFor } from '../../lib/sanity';
 
 export async function getStaticPaths() {
-  const projetos = await sanityClient.fetch(
-    `*[_type == "projeto"]{ "slug": slug.current }`,
-  );
-  return projetos.map((proj) => ({
+  // 1. Puxa os projetos do Sanity para gerar as rotas estáticas [slug]
+  // Aqui está a query exata batendo com o nosso novo schema
+  const projetos = await sanityClient.fetch(`*[_type == "projeto"]{
+    title_pt,
+    title_en,
+    "slug": slug.current,
+    githubLink,
+    status,
+    progresso,
+    mainImage,
+    categorias,
+    escopo,
+    linhaDoTempo[]{
+      timestamp,
+      tituloLog,
+      textoLog,
+      galeria[]{
+        asset->{ url },
+        alt
+      }
+    }
+  }`);
+
+  return projetos.map((proj: any) => ({
     params: { slug: proj.slug },
+    props: { proj },
   }));
 }
 
-const { slug } = Astro.params;
+const { proj } = Astro.props;
 
-// Query otimizada puxando o bloco cru + imagens expandidas
-const projeto = await sanityClient.fetch(
-  `*[_type == "projeto" && slug.current == $slug][0]{
-    ...,
-    log_pt[]{
-      ...,
-      _type == "image" => {
-        ...,
-        asset->
-      }
-    }
-  }`,
-  { slug },
-);
+// 2. Transforma os campos de Markdown do Sanity em HTML puro
+const escopoHTML = proj.escopo ? marked.parse(proj.escopo) : '';
 
-if (!projeto) {
-  return Astro.redirect('/404');
-}
-
-const getStatusClass = (status) => {
-  switch (status) {
-    case 'concluido':
-      return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-    case 'desenvolvimento':
-      return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-    case 'pausado':
-      return 'bg-zinc-500/10 text-zinc-400 border-zinc-800';
-    default:
-      return 'bg-zinc-800 text-zinc-400';
-  }
+// Mapeia o status para badges visuais
+const statusLabels: Record<string, string> = {
+  ideacao: 'Ideação',
+  desenvolvimento: 'Em Progresso',
+  pausado: 'Pausado',
+  concluido: 'Concluído',
 };
 ---
 
-<BaseLayout title={`Atelier667 — ${projeto.title_pt}`}>
-  <Header isHome={false} />
-  <article class="p-6 md:p-12 space-y-8">
-    <a
-      href="/"
-      class="inline-flex items-center text-sm text-zinc-400 hover:text-white transition gap-2 group"
-    >
-      <span class="group-hover:-translate-x-1 transition-transform">←</span> Voltar
-      para a oficina
-    </a>
+<BaseLayout title={`${proj.title_pt} — Atelier667`}>
+  <!-- Header global carregado em modo Slim automaticamente -->
+  <Header />
 
-    {
-      projeto.mainImage && (
-        <div class="aspect-video w-full overflow-hidden bg-zinc-900 rounded-2xl border border-zinc-800">
-          <img
-            src={urlFor(projeto.mainImage).width(1200).url()}
-            alt={projeto.title_pt}
-            class="w-full h-full object-cover"
-          />
-        </div>
-      )
-    }
-
-    <header class="space-y-4 border-b border-zinc-800 pb-6">
-      <div class="flex items-center gap-3 text-xs">
+  <main class="max-w-4xl mx-auto px-6 py-12">
+    <!-- ─── HEADER DO PROJETO ────────────────────────────────────────── -->
+    <div class="border-b border-zinc-800 pb-8 mb-12">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
         <span
-          class={`px-2.5 py-0.5 rounded-full border ${getStatusClass(projeto.status)} font-medium capitalize`}
+          class="font-mono text-xs uppercase tracking-wider bg-zinc-800 px-3 py-1 rounded text-zinc-300 border border-zinc-700"
         >
-          {
-            projeto.status === 'concluido'
-              ? 'Concluído'
-              : projeto.status === 'desenvolvimento'
-                ? 'Em Progresso'
-                : 'Pausado'
-          }
+          {statusLabels[proj.status] || proj.status}
         </span>
         {
-          projeto.progresso !== undefined && (
-            <span class="text-zinc-500 font-mono">
-              Progresso: {projeto.progresso}%
-            </span>
-          )
-        }
-        {
-          projeto.categoria && (
-            <span class="text-zinc-500 bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800 uppercase tracking-wider text-[10px]">
-              {projeto.categoria === '3d' ? 'Impressão 3D' : projeto.categoria}
+          proj.progresso !== undefined && (
+            <span class="font-mono text-xs bg-amber-950/50 text-amber-400 px-3 py-1 rounded border border-amber-900">
+              {proj.progresso}% complete
             </span>
           )
         }
       </div>
 
-      <h1 class="text-3xl md:text-4xl font-bold tracking-tight text-white">
-        {projeto.title_pt}
+      <h1
+        class="text-4xl md:text-5xl font-black italic tracking-tight text-zinc-100 font-mono mb-2"
+      >
+        {proj.title_pt}
       </h1>
-    </header>
+      <p class="text-zinc-500 font-mono text-sm mb-6">{proj.title_en}</p>
 
-    <section
-      class="prose prose-invert max-w-none text-zinc-300 leading-relaxed space-y-6
-      prose-headings:text-white prose-headings:font-semibold
-      prose-p:text-zinc-300 prose-strong:text-white
-      prose-code:text-amber-400 prose-code:bg-zinc-900 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm"
-    >
+      <!-- Categorias do Schema -->
       {
-        projeto.log_pt ? (
-          // Varremos o array usando o map nativo do Astro, renderizando texto e imagem direto no HTML real
-          projeto.log_pt.map((block) => {
-            if (block._type === 'image' && block.asset?.url) {
+        proj.categorias && (
+          <div class="flex flex-wrap gap-2 mb-6">
+            {proj.categorias.map((cat: string) => (
+              <span class="text-xs font-mono bg-zinc-900 text-zinc-400 border border-zinc-800 px-2 py-0.5 rounded">
+                #{cat}
+              </span>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        proj.githubLink && (
+          <a
+            href={proj.githubLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 font-mono text-xs text-amber-400 hover:text-white transition"
+          >
+            <span>[REPOSITORY_URL]</span> ➜ {proj.githubLink}
+          </a>
+        )
+      }
+    </div>
+
+    <!-- ─── CONTEÚDO / ESCOPO (README) ────────────────────────────────── -->
+    <section class="prose prose-invert prose-amber max-w-none mb-16 font-sans">
+      <h3
+        class="font-mono text-zinc-400 text-lg uppercase tracking-wider border-b border-zinc-800 pb-2 mb-6"
+      >
+        // Escopo & Especificações
+      </h3>
+      {/* Injeta o Markdown convertido em HTML */}
+      <div
+        class="text-zinc-300 font-light leading-relaxed"
+        set:html={escopoHTML}
+      />
+    </section>
+
+    <!-- ─── LINHA DO TEMPO (LOGS TÉCNICOS) ────────────────────────────── -->
+    <section class="mt-16">
+      <h3
+        class="font-mono text-zinc-400 text-lg uppercase tracking-wider border-b border-zinc-800 pb-2 mb-8"
+      >
+        // Diário de Bordo & Iterações
+      </h3>
+
+      {
+        proj.linhaDoTempo && proj.linhaDoTempo.length > 0 ? (
+          <div class="relative border-l-2 border-zinc-800 ml-4 space-y-12 pl-6">
+            {proj.linhaDoTempo.map((log: any) => {
+              // Tratamento cirúrgico do timestamp que aprendemos nos cards
+              const d = new Date(log.timestamp);
+              const dataStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
+              const horaStr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+
+              const logHTML = log.textoLog ? marked.parse(log.textoLog) : '';
+
               return (
-                <div class="my-8 rounded-xl overflow-hidden border border-zinc-800 bg-zinc-900/50 p-2">
-                  <img
-                    src={block.asset.url}
-                    class="w-full h-auto rounded-lg object-cover"
-                    loading="lazy"
+                <article class="relative group">
+                  {/* <!-- Marcador de Linha do Tempo --> */}
+                  <div class="absolute -left-[31px] top-1.5 bg-zinc-950 border-2 border-zinc-700 group-hover:border-amber-400 w-3 h-3 rounded-full transition-colors" />
+
+                  <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                    <h4 class="text-xl font-bold font-mono text-zinc-200 group-hover:text-zinc-100 transition-colors">
+                      {log.tituloLog}
+                    </h4>
+                    <time class="font-mono text-xs text-zinc-500 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded w-fit">
+                      {dataStr} @ {horaStr}
+                    </time>
+                  </header>
+
+                  {/* Conteúdo do Log em Markdown */}
+                  <div
+                    class="prose prose-invert prose-sm max-w-none text-zinc-400 font-light font-sans mb-4"
+                    set:html={logHTML}
                   />
-                </div>
+
+                  {/* Galeria de Imagens do Log */}
+                  {log.galeria && log.galeria.length > 0 && (
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
+                      {log.galeria.map((img: any) => (
+                        <div class="overflow-hidden rounded border border-zinc-800 bg-zinc-900 aspect-video group/img">
+                          <img
+                            src={img.asset.url}
+                            alt={img.alt || 'Log image'}
+                            class="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </article>
               );
-            }
-
-            if (block._type === 'block') {
-              // Renderiza os parágrafos de texto normais
-              return <p>{block.children?.map((c) => c.text).join('')}</p>;
-            }
-
-            return null;
-          })
+            })}
+          </div>
         ) : (
-          <p class="text-zinc-500 italic">
-            Nenhum log técnico foi escrito para este projeto ainda.
+          <p class="text-zinc-600 font-mono text-sm italic">
+            Nenhum log registrado para este projeto ainda.
           </p>
         )
       }
     </section>
-  </article>
+  </main>
 </BaseLayout>
+
+<style is:global>
+  /* Reset para o HTML injetado do Markdown casar com o tema industrial */
+  .prose p {
+    margin-bottom: 1rem; /* Equivalente ao mb-4 */
+    line-height: 1.625; /* Equivalente ao leading-relaxed */
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+      'Courier New', monospace; /* font-mono */
+    font-weight: 700; /* font-bold */
+    color: #e4e4e7; /* text-zinc-200 */
+    margin-top: 1.5rem; /* mt-6 */
+    margin-bottom: 0.75rem; /* mb-3 */
+    font-style: italic; /* italic */
+  }
+
+  .prose code {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    background-color: #18181b; /* bg-zinc-900 */
+    border: 1px solid #27272a; /* border-zinc-800 */
+    color: #fbbf24; /* text-amber-400 */
+    padding: 0.125rem 0.375rem; /* px-1.5 py-0.5 */
+    border-radius: 0.25rem; /* rounded */
+    font-size: 0.875rem; /* text-sm */
+  }
+
+  .prose pre {
+    background-color: rgba(24, 24, 27, 0.5); /* bg-zinc-900/50 */
+    border: 1px solid #27272a; /* border-zinc-800 */
+    padding: 1rem; /* p-4 */
+    border-radius: 0.75rem; /* rounded-xl */
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: 0.875rem; /* text-sm */
+    overflow-x: auto; /* overflow-x-auto */
+    margin-top: 1rem;
+    margin-bottom: 1rem; /* my-4 */
+    color: #d4d4d8; /* text-zinc-300 */
+  }
+
+  .prose ul {
+    list-style-type: disc; /* list-disc */
+    list-style-position: inside; /* list-inside */
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem; /* my-3 */
+    color: #a1a1aa; /* text-zinc-400 */
+  }
+
+  .prose ul li {
+    margin-bottom: 0.25rem; /* space-y-1 */
+  }
+</style>

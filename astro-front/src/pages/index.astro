@@ -32,7 +32,6 @@ const getStatusClass = (status: any) => {
   <section
     id="drops-container"
     class="relative flex flex-col p-12 gap-4 border-r border-primary-800"
-    data-drops={JSON.stringify(drops)}
   >
     <span
       class="font-serif text-2xl italic font-bold text-primary bg-primary-950 p-2 absolute -top-8 right-8 border-r-8 border-primary"
@@ -40,9 +39,13 @@ const getStatusClass = (status: any) => {
       drops
     </span>
 
-    <div id="drops-list" class="flex flex-col gap-4 *:opacity-100">
+    <ul
+      id="drops-list"
+      class="relative transition-all duration-1000 flex flex-col h-full overflow-hidden [&>*:nth-child(n+3)]:max-h-0 [&>*:nth-child(n+3)]:py-0
+      [&>*:nth-child(n+3)]:border-b-0 [&>*:nth-child(n+3)]:gap-0 [&>*:nth-child(n+3)]:overflow-hidden [&>*:nth-child(n+3)]:*:h-0"
+    >
       {
-        drops.slice(0, 2).map((drp: { content: string; timestamp: string }) => {
+        drops.map((drp: { content: string; timestamp: string }) => {
           const d = new Date(drp.timestamp);
           const dia = String(d.getDate()).padStart(2, '0');
           const mes = String(d.getMonth() + 1).padStart(2, '0');
@@ -56,19 +59,18 @@ const getStatusClass = (status: any) => {
           const dropHora = `${hora}:${min}:${seg}.${mil}`;
 
           return (
-            <article class="drop-card enter-drop relative  bg-primary-950/25 border-l-8 border-b border-primary-800 border-l-zinc-300 hover:border-l-primary transition flex flex-col justify-between font-sans font-light p-4 opacity-0">
-              <p class="drop-content transition-all delay-300 duration-10000 h-auto">
-                {drp.content}
-              </p>
+            <li class="translate-y-0 duration-1000 bg-primary-950/25 border-l-8 border-b border-primary-800 border-l-zinc-300 hover:border-l-primary transition-all flex flex-col justify-between font-sans font-light p-4 mb-0">
+              {' '}
+              <p class="h-auto">{drp.content}</p>
               <span class="inline-block absolute -bottom-2 -right-2 text-sm text-zinc-400 font-mono">
                 <span class="drop-date">{dropData}</span>#
                 <span class="drop-time text-xs">{dropHora}</span>
               </span>
-            </article>
+            </li>
           );
         })
       }
-    </div>
+    </ul>
 
     <article
       class="relative bg-zinc-950/25 border-l-8 border-b border-zinc-800 transition flex flex-col justify-between font-sans font-light text-zinc-500 p-4"
@@ -84,58 +86,40 @@ const getStatusClass = (status: any) => {
   </section>
 
   <script>
-    const container = document.getElementById('drops-container');
     const btnNext = document.getElementById('next-drop');
-    const listContainer = document.getElementById('drops-list');
+    if (btnNext) {
+      btnNext.addEventListener('click', () => {
+        const dropsContainer = document.getElementById('drops-container');
+        const dropsLista = dropsContainer?.querySelector('ul');
+        const dropsFirst = dropsLista?.querySelector('li') as HTMLElement; // Forçando tipagem rápida se for TS
 
-    // Parseamos a lista completa de drops que veio do Astro
-    let localDrops = JSON.parse(container.getAttribute('data-drops') || '[]');
+        if (dropsLista && dropsFirst) {
+          // Pega a altura exata do elemento para o margin negativo ser perfeito
+          const CurrentHeight = dropsFirst.offsetHeight;
 
-    function renderRotatedDrops() {
-      const cards = listContainer.querySelectorAll('.drop-card');
+          // 1. Aplica a transição de subida e sumiço
+          dropsFirst.style.transition = 'margin-top 1s linear, opacity 1s ease';
+          dropsFirst.style.marginTop = `-${CurrentHeight}px`;
+          dropsFirst.style.opacity = '0';
 
-      // Pegamos apenas os 2 primeiros do array rotacionado
-      const activeDrops = localDrops.slice(0, 2);
-      cards[0].classList.remove('slide-drop');
-      void cards[0].offsetWidth;
-      cards[0].classList.add('slide-drop');
-      cards[1].classList.remove('enter-drop');
-      void cards[1].offsetWidth;
-      cards[1].classList.add('enter-drop');
+          // 2. Espera 1 segundo a animação acabar
+          setTimeout(() => {
+            // 3. Move para o final do DOM
+            dropsLista.appendChild(dropsFirst);
 
-      activeDrops.forEach((drp, index) => {
-        if (!cards[index]) return;
+            // 4. Reseta os estilos inline para ele voltar ao normal no fim da fila
+            dropsFirst.style.transition = 'none';
+            dropsFirst.style.marginTop = '0px';
+            dropsFirst.style.opacity = '1';
 
-        // Atualiza o texto do parágrafo
-        cards[index].querySelector('.drop-content').textContent = drp.content;
-
-        // Formata a nova data/hora no padrão da oficina
-        const d = new Date(drp.timestamp);
-        const dia = String(d.getDate()).padStart(2, '0');
-        const mes = String(d.getMonth() + 1).padStart(2, '0');
-        const ano = d.getFullYear();
-        const hora = String(d.getHours()).padStart(2, '0');
-        const min = String(d.getMinutes()).padStart(2, '0');
-        const seg = String(d.getSeconds()).padStart(2, '0');
-        const mil = String(d.getMilliseconds()).padStart(3, '0');
-
-        cards[index].querySelector('.drop-date').textContent =
-          `${ano}.${mes}.${dia}`;
-        cards[index].querySelector('.drop-time').textContent =
-          `${hora}:${min}:${seg}.${mil}`;
+            // Força o browser a registrar o reset antes de reativar transições do CSS do Tailwind
+            setTimeout(() => {
+              dropsFirst.style.transition = '';
+            }, 50);
+          }, 1000);
+        }
       });
     }
-
-    btnNext.addEventListener('click', () => {
-      if (localDrops.length <= 2) return; // Não faz sentido rotacionar se tiver 2 ou menos
-
-      // ROTACIONA O ARRAY: Tira o primeiro elemento e empurra pro final
-      const first = localDrops.shift();
-      localDrops.push(first);
-
-      // Renderiza as novas informações nos cards existentes
-      renderRotatedDrops();
-    });
   </script>
   <section
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 font-sans p-6"
