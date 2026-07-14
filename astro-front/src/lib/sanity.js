@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import { createImageUrlBuilder } from '@sanity/image-url';
 
 export const sanityClient = createClient({
   projectId: import.meta.env.PUBLIC_SANITY_PROJECT_ID, // <--- Agora lê do .env
@@ -9,7 +9,7 @@ export const sanityClient = createClient({
 });
 
 // Configura o gerador de links de imagem a partir do client acima
-const builder = imageUrlBuilder(sanityClient);
+const builder = createImageUrlBuilder(sanityClient);
 
 // Função exportada para gerar a URL do asset
 export function urlFor(source) {

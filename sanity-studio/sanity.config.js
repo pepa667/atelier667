@@ -4,14 +4,17 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 // 1. Importa o plugin de tradução
 import {ptBRLocale} from '@sanity/locale-pt-br'
-import {markdownSchema} from 'sanity-plugin-markdown' // 1. Importa o plugin
+import {markdownSchema} from 'sanity-plugin-markdown' // <--- IMPORTA AQUI
+
+const projectId = import.meta.env.SANITY_STUDIO_PROJECT_ID
+const dataset = import.meta.env.SANITY_STUDIO_DATASET
 
 export default defineConfig({
   name: 'default',
   title: 'Atelier667 Core',
 
-  projectId: '7ev62ugl',
-  dataset: 'production',
+  projectId: projectId || '7ev62ugl', // Evita quebrar se vier undefined localmente
+  dataset: dataset || 'production',
 
   plugins: [
     structureTool(),

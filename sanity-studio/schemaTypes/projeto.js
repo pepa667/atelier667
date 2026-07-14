@@ -3,7 +3,6 @@ export default {
   title: 'Projetos',
   type: 'document',
   fields: [
-    // ─── IDENTIFICAÇÃO & MÍDIA ──────────────────────────────────────────
     {
       name: 'title_pt',
       title: 'Título (PT-BR)',
@@ -14,11 +13,10 @@ export default {
       name: 'title_en',
       title: 'Título (EN)',
       type: 'string',
-      validation: (Rule) => Rule.required(),
     },
     {
       name: 'slug',
-      title: 'Slug',
+      title: 'Slug (URL)',
       type: 'slug',
       options: {
         source: 'title_pt',
@@ -27,70 +25,75 @@ export default {
       validation: (Rule) => Rule.required(),
     },
     {
-      name: 'githubLink',
-      title: 'Link do Repositório GitHub',
-      type: 'url',
-    },
-    {
       name: 'status',
-      title: 'Etapa de Produção',
+      title: 'Status do Projeto',
       type: 'string',
       options: {
         list: [
-          {title: 'Ideação', value: 'ideacao'},
-          {title: 'Em Progresso', value: 'desenvolvimento'},
+          {title: 'Rascunho', value: 'rascunho'},
+          {title: 'Em Desenvolvimento', value: 'desenvolvimento'},
           {title: 'Pausado', value: 'pausado'},
           {title: 'Concluído', value: 'concluido'},
         ],
-        layout: 'radio',
       },
-      validation: (Rule) => Rule.required(),
+      initialValue: 'rascunho',
     },
     {
       name: 'progresso',
-      title: 'Barra de Progresso (%)',
+      title: 'Progresso (%)',
       type: 'number',
       validation: (Rule) => Rule.min(0).max(100),
     },
     {
-      name: 'mainImage',
-      title: 'Imagem de Destaque (Capa)',
-      type: 'image',
-      options: {hotspot: true},
+      name: 'githubLink',
+      title: 'Link do GitHub',
+      type: 'url',
     },
+    // 1. CATEGORIAS PREDEFINIDAS (Geram os links vivos de navegação)
 
-    // ─── CATEGORIAS PREDEFINIDAS ────────────────────────────────────────
     {
       name: 'categorias',
-      title: 'Categorias do Projeto',
+      title: 'Categorias Principais do Projeto',
       type: 'array',
       of: [{type: 'string'}],
+      description: 'Selecione as disciplinas principais deste projeto.',
       options: {
         list: [
+          {title: 'Comercial (Produtos/Vendas/Open Hardware)', value: 'comercial'},
           {title: 'WebDev (Websites/NodeJS/ReactJS)', value: 'webdev'},
           {title: 'Software (Web/Docker/APIs)', value: 'software'},
+          {title: 'Firmware (Microcontroladores/C++)', value: 'firmware'},
           {title: 'Hardware (Eletrônica/Circuitos)', value: 'hardware'},
+          {title: 'DevOps (Deploy/CI-CD/Netlify)', value: 'devops'},
+          {title: 'Modelagem (CAD/Fusion360/Blender)', value: 'modelagem'},
           {title: 'Impressão 3D (PLA/PETG/Fatiamento)', value: '3d-printing'},
           {title: 'CNC Laser (Router/MDF/Acrílico)', value: 'cnc-laser'},
-          {title: 'Retro Modding (Consoles/Botões/Telas)', value: 'retro-mod'},
-          {title: 'Firmware (Microcontroladores/C++)', value: 'firmware'},
-          {title: 'Arcade (Controles/Fiação/Sanwa)', value: 'arcade'},
           {title: 'Marcenaria (Gabinete/Bancada)', value: 'woodworking'},
-          {title: 'DevOps (Deploy/CI-CD/Netlify)', value: 'devops'},
+          {title: 'Retro Modding (Consoles/Botões/Telas)', value: 'retro-mod'},
           {title: 'Ilustração (Vetor/Identidade Visual)', value: 'ilustracao'},
-          {title: 'Modelagem (CAD/Fusion360/Blender)', value: 'modelagem'},
         ],
       },
     },
 
-    // ─── VISÃO GERAL (MARKDOWN) ─────────────────────────────────────────
+    // 2. TAGS PERSONALIZADAS (Apenas para indexação do Google / SEO)
+    {
+      name: 'tagsSeo',
+      title: 'Tags personalizadas para SEO',
+      type: 'array',
+      of: [{type: 'string'}],
+      description:
+        'Tags livres para ajudar no robô do Google (ex: esp32, nintendo, react, rpi). Não aparecem no layout.',
+      options: {
+        layout: 'tags', // Transforma a interface do Sanity naquele input de badges estilo tag
+      },
+    },
     {
       name: 'escopo',
-      title: 'Escopo do Projeto (Readme)',
-      type: 'markdown', // Campo habilitado pelo plugin
+      title: 'Escopo do Projeto (Markdown)',
+      type: 'markdown',
+      description: 'Este texto será o README.MD principal do projeto.',
     },
 
-    // ─── LINHA DO TEMPO / LOGS VISUAIS ──────────────────────────────────
     {
       name: 'linhaDoTempo',
       title: 'Linha do Tempo (Logs Técnicos)',
@@ -99,42 +102,55 @@ export default {
         {
           type: 'object',
           name: 'logItem',
-          title: 'Registro de Log',
+          title: 'Log de Atualização',
           fields: [
             {
-              name: 'timestamp',
-              title: 'Data do Registro',
-              type: 'datetime',
-              initialValue: () => new Date().toISOString(),
-            },
-            {
               name: 'tituloLog',
-              title: 'Sumário Curto do Update',
+              title: 'Título do Log',
               type: 'string',
               validation: (Rule) => Rule.required(),
             },
             {
+              name: 'timestamp',
+              title: 'Data/Hora do Log',
+              type: 'datetime',
+              validation: (Rule) => Rule.required(),
+            },
+            // ADICIONADO: Categorias específicas para este LOG
+            {
+              name: 'categoriasLog',
+              title: 'Categorias Deste Log',
+              type: 'array',
+              of: [{type: 'string'}],
+              description:
+                'Se aplicou alguma disciplina específica neste dia (ex: fez a case de madeira, marque Marcenaria aqui).',
+              options: {
+                list: [
+                  {title: 'Comercial (Produtos/Vendas/Open Hardware)', value: 'comercial'},
+                  {title: 'WebDev (Websites/NodeJS/ReactJS)', value: 'webdev'},
+                  {title: 'Software (Web/Docker/APIs)', value: 'software'},
+                  {title: 'Firmware (Microcontroladores/C++)', value: 'firmware'},
+                  {title: 'Hardware (Eletrônica/Circuitos)', value: 'hardware'},
+                  {title: 'DevOps (Deploy/CI-CD/Netlify)', value: 'devops'},
+                  {title: 'Modelagem (CAD/Fusion360/Blender)', value: 'modelagem'},
+                  {title: 'Impressão 3D (PLA/PETG/Fatiamento)', value: '3d-printing'},
+                  {title: 'CNC Laser (Router/MDF/Acrílico)', value: 'cnc-laser'},
+                  {title: 'Marcenaria (Gabinete/Bancada)', value: 'woodworking'},
+                  {title: 'Retro Modding (Consoles/Botões/Telas)', value: 'retro-mod'},
+                  {title: 'Ilustração (Vetor/Identidade Visual)', value: 'ilustracao'},
+                ],
+              },
+            },
+            {
               name: 'textoLog',
-              title: 'Relatório da Iteração (Markdown)',
-              type: 'markdown', // Markdown ativo nos logs individuais
+              title: 'Texto do Log (Markdown)',
+              type: 'markdown',
             },
             {
               name: 'galeria',
-              title: 'Galeria de Imagens deste Log',
+              title: 'Imagens do Log',
               type: 'array',
-              of: [
-                {
-                  type: 'image',
-                  options: {hotspot: true},
-                  fields: [
-                    {
-                      name: 'alt',
-                      title: 'Texto Alternativo (Acessibilidade)',
-                      type: 'string',
-                    },
-                  ],
-                },
-              ],
+              of: [{type: 'image', options: {hotspot: true}}],
             },
           ],
         },
