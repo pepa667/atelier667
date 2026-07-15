@@ -1,4 +1,8 @@
 ---
+import { Image } from 'astro:assets';
+import anarch from '../assets/images/a.png';
+import texture from '../assets/images/texture.gif';
+
 // Recebemos uma propriedade para saber se estamos na Home ou em uma página interna
 interface Props {
   isHome?: boolean;
@@ -13,10 +17,12 @@ const { isHome = false } = Astro.props;
     <div>
       {isHome ? (
         // Na Home: Título Gigante destruidor
-        <h1 class="font-serif text-5xl md:text-6xl lg:text-8xl pl-6 border-l-24 border-primary font-bold italic tracking-tight text-primary ">
+        <h1 class={`relative font-title text-5xl md:text-6xl lg:text-[10rem]   text-primary`} style={`mask-image:url('${texture.src}'); mask-position: ${Math.random() * 100}% ${Math.random() * 100}%`}>
+          <span class="w-20 h-32 bg-primary inline-block relative"></span>
           Atelier667
+          <Image src={anarch} class={'absolute -right-20 -bottom-6 pop_01' } alt="Descrição da imagem"  />
         </h1>
-        <p class="ml-5 md:ml10 xl:ml-20 text-zinc-300 mt-1 font-light text-xs md:text-lg lg:text-xl font-sans">Oficina Maker<span class="text-primary-600 px-1">&bullet;</span>Traço, Código e Matéria</p>
+        <p class="text-zinc-300 font-light text-xs md:text-lg lg:text-xl font-sans">Oficina Maker<span class="text-primary-600 px-1">&bullet;</span>Traço, Código e Matéria</p>
       ) : (
         // Nas páginas internas: Versão slim, focada em navegação rápida
         <a href="/" class="group inline-block">
