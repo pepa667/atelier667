@@ -25,56 +25,24 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
 
     <script is:inline>
       (function () {
-        // Os 4 valores de Hue (graus no círculo cromático) das suas cores originais
         const originalHues = [74, 330, 186, 43];
+        const filterMap = {
+          74: 'brightness(0) saturate(100%) invert(86%) sepia(97%) saturate(447%) hue-rotate(22deg) brightness(105%) contrast(121%)',
+          330: 'brightness(0) saturate(100%) invert(16%) sepia(81%) saturate(5968%) hue-rotate(322deg) brightness(99%) contrast(110%)',
+          186: 'brightness(0) saturate(100%) invert(73%) sepia(50%) saturate(3689%) hue-rotate(143deg) brightness(102%) contrast(112%)',
+          43: 'brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(527%) hue-rotate(340deg) brightness(105%) contrast(97%)',
+        };
 
-        // Embaralha os ângulos de matiz
         const shuffledHues = [...originalHues].sort(() => Math.random() - 0.5);
-
-        // Aplica apenas os números nas variáveis do :root (HTML)
         const root = document.documentElement;
-        root.style.setProperty('--hue-rotate-1', shuffledHues[0]);
-        root.style.setProperty('--hue-rotate-2', shuffledHues[1]);
-        root.style.setProperty('--hue-rotate-3', shuffledHues[2]);
-        root.style.setProperty('--hue-rotate-4', shuffledHues[3]);
 
-        // O loop correto vai de 0 até 3 (i < 4 ou i <= 3)
-        for (let i = 0; i <= 3; i++) {
-          // Se o valor for 74, você precisa mudar ou pular para não travar o navegador
-          if (shuffledHues[i] === 74) {
-            // Exemplo: muda para outro número ou use 'continue' para pular
-            // O valor da string NÃO deve conter "filter:" nem ";"
-            const filterValue =
-              'brightness(0) saturate(100%) invert(86%) sepia(97%) saturate(447%) hue-rotate(22deg) brightness(105%) contrast(121%)';
-
-            // Interpolação correta usando Template Literals (crases)
-            root.style.setProperty(`--img-hue-${i + 1}`, filterValue);
-          } else if (shuffledHues[i] === 330) {
-            // Exemplo: muda para outro número ou use 'continue' para pular
-            // O valor da string NÃO deve conter "filter:" nem ";"
-            const filterValue =
-              'brightness(0) saturate(100%) invert(16%) sepia(81%) saturate(5968%) hue-rotate(322deg) brightness(99%) contrast(110%)';
-
-            // Interpolação correta usando Template Literals (crases)
-            root.style.setProperty(`--img-hue-${i + 1}`, filterValue);
-          } else if (shuffledHues[i] === 186) {
-            // Exemplo: muda para outro número ou use 'continue' para pular
-            // O valor da string NÃO deve conter "filter:" nem ";"
-            const filterValue =
-              'brightness(0) saturate(100%) invert(73%) sepia(50%) saturate(3689%) hue-rotate(143deg) brightness(102%) contrast(112%)';
-
-            // Interpolação correta usando Template Literals (crases)
-            root.style.setProperty(`--img-hue-${i + 1}`, filterValue);
-          } else if (shuffledHues[i] === 43) {
-            // Exemplo: muda para outro número ou use 'continue' para pular
-            // O valor da string NÃO deve conter "filter:" nem ";"
-            const filterValue =
-              'brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(527%) hue-rotate(340deg) brightness(105%) contrast(97%)';
-
-            // Interpolação correta usando Template Literals (crases)
-            root.style.setProperty(`--img-hue-${i + 1}`, filterValue);
+        shuffledHues.forEach((hue, index) => {
+          root.style.setProperty(`--hue-rotate-${index + 1}`, hue);
+          const filterValue = filterMap[hue];
+          if (filterValue) {
+            root.style.setProperty(`--img-hue-${index + 1}`, filterValue);
           }
-        }
+        });
       })();
     </script>
   </head>
