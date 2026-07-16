@@ -9,7 +9,7 @@ import Punk from '../assets/images/icons/punk.png';
 import WoodWorking from '../assets/images/icons/woodworking.png';
 
 // Recebe o nome do ícone e o tamanho da janela (ex: Size={176})
-const { Icon = 'Deco', Size = 176 } = Astro.props;
+const { Icon = 'Deco', Size = 176, class: className } = Astro.props;
 
 const iconMap: Record<string, ImageMetadata> = {
   Deco,
@@ -38,11 +38,12 @@ switch (Icon) {
 
 <div
   class="relative overflow-hidden aspect-square"
+  class:list={[className]}
   style={`width: ${Size}px; height: ${Size}px;`}
 >
   <Image
     src={activeIcon}
-    class="absolute max-w-none sprite-target pop_01"
+    class="absolute max-w-none sprite-target"
     style={`width: ${max_X * Size}px; height: ${max_Y * Size}px; top: 0px; left: 0px;`}
     data-max-x={max_X}
     data-max-y={max_Y}
