@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+
+import Deco from '../assets/images/icons/deco.png';
+import Code from '../assets/images/icons/code.png';
+import Hardware from '../assets/images/icons/hardware.png';
+import Machine from '../assets/images/icons/machine.png';
+import Punk from '../assets/images/icons/punk.png';
+import WoodWorking from '../assets/images/icons/woodworking.png';
+
+// Recebe o nome do ícone e o tamanho da janela (ex: Size={176})
+const { Icon = 'Deco', Size = 176 } = Astro.props;
+
+const iconMap: Record<string, ImageMetadata> = {
+  Deco,
+  Code,
+  Hardware,
+  Machine,
+  Punk,
+  WoodWorking,
+};
+
+const activeIcon = iconMap[Icon] || Deco;
+
+// Define as dimensões do sprite (X colunas por Y linhas)
+let max_X = 4;
+let max_Y = 6;
+
+// Se o tamanho da grade mudar por ícone, você configura aqui
+switch (Icon) {
+  case 'Code':
+  case 'Hardware':
+  default:
+    max_X = 4;
+    max_Y = 6;
+}
+---
+
+<div
+  class="relative overflow-hidden aspect-square"
+  style={`width: ${Size}px; height: ${Size}px;`}
+>
+  <Image
+    src={activeIcon}
+    class="absolute max-w-none sprite-target pop_01"
+    style={`width: ${max_X * Size}px; height: ${max_Y * Size}px; top: 0px; left: 0px;`}
+    data-max-x={max_X}
+    data-max-y={max_Y}
+    data-size={Size}
+    alt={`Ícone de ${Icon}`}
+  />
+</div>
+
+<script>
+  function randomizeSprites() {
+    const targets = document.querySelectorAll('.sprite-target');
+
+    targets.forEach((el) => {
+      if (el instanceof HTMLElement) {
+        // Puxa as configurações que deixamos salvas no HTML (dataset)
+        const maxX = parseInt(el.dataset.maxX || '4', 10);
+        const maxY = parseInt(el.dataset.maxY || '6', 10);
+        const size = parseInt(el.dataset.size || '176', 10);
+
+        // Sorteia um frame aleatório dentro do limite da grade (0 até max-1)
+        const frameX = Math.floor(Math.random() * maxX);
+        const frameY = Math.floor(Math.random() * maxY);
+
+        // Calcula o deslocamento negativo para mover a folha de sprite
+        const posX = frameX * size;
+        const posY = frameY * size;
+
+        // Aplica o deslocamento físico: X move a imagem para a esquerda (left), Y move para cima (top)
+        el.style.left = `-${posX}px`;
+        el.style.top = `-${posY}px`;
+      }
+    });
+  }
+
+  // Executa imediatamente no carregamento da página
+  randomizeSprites();
+
+  // Garante que funcione caso você esteja usando View Transitions do Astro
+  document.addEventListener('astro:after-swap', randomizeSprites);
+</script>

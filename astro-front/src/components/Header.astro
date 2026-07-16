@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import anarch from '../assets/images/a.png';
 import texture from '../assets/images/texture.gif';
 
+import Icon from '../components/Icon.astro';
+
 // Recebemos uma propriedade para saber se estamos na Home ou em uma página interna
 interface Props {
   isHome?: boolean;
@@ -18,9 +20,11 @@ const { isHome = false } = Astro.props;
       {isHome ? (
         // Na Home: Título Gigante destruidor
         <div class="relative">
-          <Image src={anarch} class={'absolute -right-20 -bottom-6 pop_01' } alt="Descrição da imagem"  />
-          <h1  class={`relative font-title text-5xl md:text-6xl lg:text-[10rem] texture  text-primary`} >
-            <span class="w-20 h-32 bg-primary inline-block relative"></span>
+          <div class={'absolute -right-20 bottom-8 pop_01 max-sm:hidden' } alt="Descrição da imagem"  >
+            <Icon Icon="Deco" Size="100"/>
+          </div>
+          <h1  class={`relative font-title text-[clamp(4rem,12vw,10rem)]  texture  text-primary`} >
+            <span class="min-w-8 max-w-20 w-[5svw] h-[clamp(0.5em,10vw,8rem)] bg-primary inline-block relative"></span>
             Atelier667
           </h1>
         </div>
