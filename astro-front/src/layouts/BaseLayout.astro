@@ -48,7 +48,9 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
   </head>
 </html>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
-  <div class="mx-auto relative flex flex-row justify-center overflow-y-hidden">
+  <div
+    class="mx-auto relative flex flex-row justify-center overflow-y-hidden textured"
+  >
     <SideScroller />
     <div class="w-6xl max-w-svw mt-8 inline-flex">
       <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
@@ -61,4 +63,31 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
       </div>
     </div>
   </div>
-</body>
+  <!-- src/layouts/BaseLayout.astro -->
+
+  <!-- No final do arquivo, ou onde preferir -->
+  <script>
+    function applyTexturePosition() {
+      const textured = document.querySelectorAll('.texture');
+
+      textured.forEach((el) => {
+        // CORREÇÃO: Type Guard para acalmar o TypeScript
+        if (el instanceof HTMLElement) {
+          const posX = Math.random() * 100;
+          const posY = Math.random() * 100;
+          const posValue = `${posX}% ${posY}%`;
+
+          el.style.setProperty('--mask-pos', posValue);
+          el.style.maskPosition = posValue;
+          el.style.webkitMaskPosition = posValue;
+        }
+      });
+    }
+
+    // Executa
+    applyTexturePosition();
+
+    // Se usar View Transitions do Astro, descomente:
+    // document.addEventListener('astro:after-swap', applyTexturePosition);
+  </script></body
+>

@@ -17,11 +17,13 @@ const { isHome = false } = Astro.props;
     <div>
       {isHome ? (
         // Na Home: Título Gigante destruidor
-        <h1 style={{ '--mask-url': `url(${texture.src})` }} class={`relative font-title text-5xl md:text-6xl lg:text-[10rem] mask-(--mask-url)  text-primary`} >
-          <span class="w-20 h-32 bg-primary inline-block relative"></span>
-          Atelier667
+        <div class="relative">
           <Image src={anarch} class={'absolute -right-20 -bottom-6 pop_01' } alt="Descrição da imagem"  />
-        </h1>
+          <h1  class={`relative font-title text-5xl md:text-6xl lg:text-[10rem] texture  text-primary`} >
+            <span class="w-20 h-32 bg-primary inline-block relative"></span>
+            Atelier667
+          </h1>
+        </div>
         <p class="text-zinc-300 font-light text-xs md:text-lg lg:text-xl font-sans">Oficina Maker<span class="text-primary-600 px-1">&bullet;</span>Traço, Código e Matéria</p>
       ) : (
         // Nas páginas internas: Versão slim, focada em navegação rápida

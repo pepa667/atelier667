@@ -26,7 +26,6 @@
 @layer base {
   body {
     @apply font-sans;
-    background-image: url(../assets/images/texture.gif);
   }
 }
 /* 1. Tell Prettier to stop touching this block */
@@ -53,4 +52,11 @@
 .pop_04 {
   filter: var(--img-hue-4);
   /* filter: hue-rotate(calc(var(--hue-rotate-4) * 1deg)) saturate(20); */
+}
+
+.texture {
+  mask-image: url(../assets/images/texture.gif);
+  -webkit-mask-image: url(../assets/images/texture.gif);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-position: var(--mask-pos, 0% 0%);
 }
