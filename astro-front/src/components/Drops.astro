@@ -8,7 +8,7 @@ const drops = await sanityClient.fetch(
 
 <section
   id="drops-container"
-  class="relative m-4 p-4 py-10 flex flex-col gap-4 bg-zinc-950"
+  class="relative mt-4 p-4 py-10 flex flex-col gap-4 bg-zinc-950"
 >
   <div class="absolute -inset-1 bg-second/40 -z-1 texture-to-[to_bottom]"></div>
   <span class="absolute -top-12 right-8 perspective-near">
@@ -20,7 +20,7 @@ const drops = await sanityClient.fetch(
 
   <div
     id="drops-list"
-    class="relative transition-all duration-1000 flex flex-col gap-14 h-full overflow-hidden *:flex [&>*:nth-child(n+3)]:hidden [&>*:nth-child(n+3)]:max-h-0 [&>*:nth-child(n+3)]:py-0
+    class="relative flex flex-col gap-14 [&>*:nth-child(n+3)]:hidden [&>*:nth-child(n+3)]:max-h-0 [&>*:nth-child(n+3)]:py-0
       [&>*:nth-child(n+3)]:border-b-0 [&>*:nth-child(n+3)]:gap-0 [&>*:nth-child(n+3)]:overflow-hidden [&>*:nth-child(n+3)]:*:h-0"
   >
     {
@@ -39,39 +39,71 @@ const drops = await sanityClient.fetch(
           const dropHora = `${hora}:${min}:${seg}.${mil}`;
 
           return (
-            <article class=" flex flex-row justify-between font-sans font-light ">
-              <div class="relative  flex flex-col font-title py-4 px-12 border text-center ">
-                <span class="text-2xl font-title">{ano}</span>
-                <span class="text-6xl">{dia}</span>
-                <span class="text-4xl">.{mes}</span>
+            <article class="relative flex flex-row justify-between font-sans font-light bg-zinc-950">
+              <div class="relative isolate p-4 py-10 flex flex-col gap-4 bg-zinc-950 min-w-[120px] text-third text-center">
+                <div class=" font-title absolute -inset-0 border-4  border-third z-[-1] texture-to-[to_right] leading-none" />
+                <span class="text-sm lg:text-lg xl:text-xl 2xl:text-2xl">
+                  {ano}
+                </span>
+                <span class="text-xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold">
+                  {dia}
+                </span>
+                <span class="text-base lg:text-2xl xl:text-3xl 2xl:text-4xl">
+                  .{mes}
+                </span>
               </div>
-              <div class="flex flex-row relative w-full h-auto text-4xl px-12 items-center border border-third ">
-                {drp.title}
+              <div class="relative isolate contents bg-zinc-950  text-center *:border-y-4 *:border-third/30 ">
+                <div class="flex flex-row relative w-full notfrt h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 items-center  border-third">
+                  {drp.title}
+                </div>
+                <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center  before:content-['TIME'] block content-center">
+                  {dropHora}
+                </div>
               </div>
-              <div class="relative w-auto h-auto text-xl text-zinc-400 font-slab items-center border border-third before:content-['TIME'] block  content-center">
-                {dropHora}
-              </div>
-              <button class="border px-12">#</button>
+              <button class="relative isolate  p-4 py-10 flex flex-col gap-4 bg-zinc-950 min-w-[120px] text-center">
+                #
+                <div class=" font-title absolute -inset-0 border-4 border-third z-[-1] texture-to-[to_left]" />
+              </button>
             </article>
           );
         },
       )
     }
   </div>
-
   <article class="flex flex-row justify-between font-sans font-light">
     <div
-      class="relative flex flex-col font-title py-4 px-12 border text-center"
+      class="relative flex flex-col font-title
+              py-1
+              px-4
+              sm:py-2
+              sm:px-6
+              lg:py-4
+              lg:px-8
+              border text-center"
     >
-      <span class="text-8xl font-title">+</span>
+      <span class="text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-title"
+        >+</span
+      >
     </div>
     <div
-      class="flex flex-row relative w-full h-auto text-4xl px-12 items-center border border-third"
+      class="flex flex-row relative w-full h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 items-center border border-third"
     >
       Mais Drops
     </div>
-    <button id="next-drop" class="border px-12">+</button>
+    <button
+      id="next-drop"
+      class="relative flex flex-col font-title
+              py-1
+              px-4
+              sm:py-2
+              sm:px-6
+              lg:py-4
+              lg:px-8
+              border text-center"
+      >+</button
+    >
   </article>
+
   <script>
     const btnNext = document.getElementById('next-drop');
     if (btnNext) {
