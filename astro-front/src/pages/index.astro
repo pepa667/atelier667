@@ -8,11 +8,10 @@ import BaseLayout from '../layouts/BaseLayout.astro'; // <-- Importa o Layout
 
 import Header from '../components/Header.astro';
 
+import Drops from '../components/Drops.astro';
+
 const projetos = await sanityClient.fetch(
   `*[_type == "projeto"] | order(_modifiedAt desc)`,
-);
-const drops = await sanityClient.fetch(
-  `*[_type == "drop"] | order(_createdAt desc)`,
 );
 
 const getStatusClass = (status: any) => {
@@ -33,107 +32,7 @@ const getStatusClass = (status: any) => {
 <BaseLayout title="Atelier667 — Home">
   <Header isHome={true} />
   <!-- Grid de Projetos -->
-  <section
-    id="drops-container"
-    class={`relative m-4 p-4 py-10 flex flex-col gap-4 border border-second/40 bg-zinc-950
-  after:content-['']
-  after:absolute
-  after:block
-  after:-inset-10
-  after:p-20
-  after:bg-third
-  after:mask-[url(${texture.src})]
-  after:-z-10`}
-  >
-    <span class="absolute -top-12 right-8 perspective-near">
-      <span
-        class="font-serif text-5xl italic font-black text-zinc-900 bg-second px-8 py-4 block -rotate-y-30 rotate-x-6"
-        >drops</span
-      >
-    </span>
-
-    <ul
-      id="drops-list"
-      class="relative transition-all duration-1000 flex flex-col h-full overflow-hidden [&>*:nth-child(n+3)]:max-h-0 [&>*:nth-child(n+3)]:py-0
-      [&>*:nth-child(n+3)]:border-b-0 [&>*:nth-child(n+3)]:gap-0 [&>*:nth-child(n+3)]:overflow-hidden [&>*:nth-child(n+3)]:*:h-0"
-    >
-      {
-        drops.map((drp: { content: string; timestamp: string }) => {
-          const d = new Date(drp.timestamp);
-          const dia = String(d.getDate()).padStart(2, '0');
-          const mes = String(d.getMonth() + 1).padStart(2, '0');
-          const ano = d.getFullYear();
-          const hora = String(d.getHours()).padStart(2, '0');
-          const min = String(d.getMinutes()).padStart(2, '0');
-          const seg = String(d.getSeconds()).padStart(2, '0');
-          const mil = String(d.getMilliseconds()).padStart(3, '0');
-
-          const dropData = `${ano}.${mes}.${dia}`;
-          const dropHora = `${hora}:${min}:${seg}.${mil}`;
-
-          return (
-            <li class="translate-y-0 duration-1000 bg-primary-950/25 border-l-8 border-b border-primary-800 border-l-zinc-300 hover:border-l-primary transition-all flex flex-col justify-between font-sans font-light  mb-0">
-              {' '}
-              <p class="h-auto">{drp.content}</p>
-              <span class="inline-block absolute -bottom-2 -right-2 text-sm text-zinc-400 font-mono">
-                <span class="drop-date">{dropData}</span>#
-                <span class="drop-time text-xs">{dropHora}</span>
-              </span>
-            </li>
-          );
-        })
-      }
-    </ul>
-
-    <article
-      class="relative bg-zinc-950/25 border-l-8 border-b border-zinc-800 transition flex flex-col justify-between font-sans font-light text-zinc-500"
-    >
-      <p>Mais Drops</p>
-      <button
-        id="next-drop"
-        class="absolute right-4 top-1/2 -translate-y-1/2 text-6xl text-zinc-400 hover:text-white transition cursor-pointer"
-      >
-        +
-      </button>
-    </article>
-  </section>
-
-  <script>
-    const btnNext = document.getElementById('next-drop');
-    if (btnNext) {
-      btnNext.addEventListener('click', () => {
-        const dropsContainer = document.getElementById('drops-container');
-        const dropsLista = dropsContainer?.querySelector('ul');
-        const dropsFirst = dropsLista?.querySelector('li') as HTMLElement; // Forçando tipagem rápida se for TS
-
-        if (dropsLista && dropsFirst) {
-          // Pega a altura exata do elemento para o margin negativo ser perfeito
-          const CurrentHeight = dropsFirst.offsetHeight;
-
-          // 1. Aplica a transição de subida e sumiço
-          dropsFirst.style.transition = 'margin-top 1s linear, opacity 1s ease';
-          dropsFirst.style.marginTop = `-${CurrentHeight}px`;
-          dropsFirst.style.opacity = '0';
-
-          // 2. Espera 1 segundo a animação acabar
-          setTimeout(() => {
-            // 3. Move para o final do DOM
-            dropsLista.appendChild(dropsFirst);
-
-            // 4. Reseta os estilos inline para ele voltar ao normal no fim da fila
-            dropsFirst.style.transition = 'none';
-            dropsFirst.style.marginTop = '0px';
-            dropsFirst.style.opacity = '1';
-
-            // Força o browser a registrar o reset antes de reativar transições do CSS do Tailwind
-            setTimeout(() => {
-              dropsFirst.style.transition = '';
-            }, 50);
-          }, 1000);
-        }
-      });
-    }
-  </script>
+  <Drops />
   <section
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 font-sans"
   >

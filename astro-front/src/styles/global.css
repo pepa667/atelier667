@@ -7,7 +7,7 @@
 
 @theme {
   --font-serif: "Bodoni Moda", serif;
-  --font-serif-2: "Roboto Slab", serif;
+  --font-slab: "Roboto Slab", serif;
   --font-sans: "Inter", sans-serif;
   --font-title: "Big Shoulders", sans-serif;
 
@@ -16,47 +16,49 @@
   --hue-rotate-8: 180;
   --hue-rotate-0: 43;
 
-  /* CORREÇÃO: Adicionado o % para validar o HSL padrão */
   --color-primary: hsl(var(--hue-rotate-1), 100%, 60%);
   --color-second: hsl(var(--hue-rotate-2), 100%, 60%);
   --color-third: hsl(var(--hue-rotate-3), 100%, 60%);
   --color-fourth: hsl(var(--hue-rotate-4), 100%, 60%);
 }
 
-@layer base {
-  body {
-    @apply font-sans;
-  }
-}
-/* 1. Tell Prettier to stop touching this block */
-/* prettier-ignore */
-
-/* #76ff03 (Verde limão) $\approx$ 92
-#ff007f (Rosa neon) $\approx$ 330
-#00e5ff (Ciano) $\approx$ 186
-#fbbf24 (Âmbar/Amarelo) $\approx$ 43 */
-
-/* CORREÇÃO: calc() multiplicando por 1deg para transformar o número puro em ângulo válido */
-.pop_01 {
-  filter: var(--img-hue-1);
-  /* filter: invert(1) sepia(1) hue-rotate(calc(calc(var(--hue-rotate-1) - 60) * 1deg)) saturate(20); */
-}
-.pop_02 {
-  filter: var(--img-hue-2);
-  /* filter: hue-rotate(calc(var(--hue-rotate-2) * 1deg)) saturate(20); */
-}
-.pop_03 {
-  filter: var(--img-hue-3);
-  /* filter: hue-rotate(calc(var(--hue-rotate-3) * 1deg)) saturate(20); */
-}
-.pop_04 {
-  filter: var(--img-hue-4);
-  /* filter: hue-rotate(calc(var(--hue-rotate-4) * 1deg)) saturate(20); */
+body {
+  font-family: var(--font-sans);
 }
 
-.texture {
+@utility texture {
   mask-image: url(../assets/images/texture.gif);
   -webkit-mask-image: url(../assets/images/texture.gif);
   -webkit-mask-position: var(--mask-pos, 0% 0%);
   mask-position: var(--mask-pos, 0% 0%);
+}
+
+/* SOLUÇÃO DEFINITIVA V4: Captura o valor exato passado na classe substituindo '_' por espaços */
+@utility texture-to-* {
+  --gradient-dir: --value([*]);
+
+  mask-image: linear-gradient(var(--gradient-dir), black, transparent), url(../assets/images/texture.gif);
+  -webkit-mask-image: linear-gradient(var(--gradient-dir), black, transparent), url(../assets/images/texture.gif);
+
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+
+  mask-repeat: no-repeat, repeat;
+  -webkit-mask-repeat: no-repeat, repeat;
+
+  mask-position: var(--mask-pos, 0% 0%);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+}
+
+/* 1. Tell Prettier to stop touching this block */
+/* prettier-ignore */
+.pop_01 { filter: var(--img-hue-1); }
+.pop_02 {
+  filter: var(--img-hue-2);
+}
+.pop_03 {
+  filter: var(--img-hue-3);
+}
+.pop_04 {
+  filter: var(--img-hue-4);
 }

@@ -62,7 +62,9 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
   <!-- No final do arquivo, ou onde preferir -->
   <script>
     function applyTexturePosition() {
-      const textured = document.querySelectorAll('.texture');
+      const textured = document.querySelectorAll(
+        '.texture, [class*="texture-to-"]',
+      );
 
       textured.forEach((el) => {
         // CORREÇÃO: Type Guard para acalmar o TypeScript
