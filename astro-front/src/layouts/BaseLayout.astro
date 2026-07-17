@@ -52,11 +52,11 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
   <Icon Icon="Maker" class="hidden" />
   <div
-    class="mx-auto w-7xl max-w-svw relative flex flex-row justify-center overflow-y-hidden"
+    class="mx-auto w-7xl 2xl:min-w-7xl 2xl:w-[70svw] max-w-svw relative flex flex-row justify-around overflow-y-hidden"
   >
     <SideScroller />
     <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
-    <div class="flex flex-col m-4 lg:m-10 max-w-[90svw]">
+    <div class="flex flex-col m-4 lg:m-10 max-w-5xl">
       <slot />
     </div>
   </div>

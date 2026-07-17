@@ -68,3 +68,6 @@ body {
   display: flex;
   margin-block: 1.7rem;
 }
+.drop_slide {
+  transform: translateX(0%);
+}

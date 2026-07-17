@@ -22,7 +22,7 @@ const drops = await sanityClient.fetch(
   <div id="drops-list" class="relative flex flex-col gap-0">
     {
       drops.map(
-        (drp: { title: string; content: string; timestamp: string }) => {
+        (drp: { title: string; content: string; timestamp: string; }) => {
           const d = new Date(drp.timestamp);
           const dia = String(d.getDate()).padStart(2, '0');
           const mes = String(d.getMonth() + 1).padStart(2, '0');
@@ -57,7 +57,7 @@ const drops = await sanityClient.fetch(
                   {dropHora}
                 </div>
               </div>
-              <button class="relative isolate  p-6  flex flex-col gap-4 hover:bg-third/20 justify-center texture  text-center cursor-pointer">
+              <button class="relative isolate  p-6  flex flex-col gap-4 hover:bg-third/20 justify-center texture  text-center cursor-pointer" onclick="toggle class drop_slide from readDrop index" >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -75,6 +75,44 @@ const drops = await sanityClient.fetch(
                 </svg>{' '}
                 <div class=" font-title absolute inset-0 border-4 border-third z-[-1] texture-to-[to_left]" />
               </button>
+
+            </div>
+            <div id="readDrop"{drp.index} class=" fullDrop absolute flex my-0 overflow-hidden translate-x-full flex-row inset-0 z-10 justify-between font-sans font-light bg-zinc-950 transition-all duration-1000">
+              <div class="relative isolate p-12  flex font-title justify-end flex-col bg-zinc-950 text-third text-center">
+                <div class=" font-title absolute inset-0 border-4  border-third z-[-1] texture-to-[to_right]" />
+                <span class="text-sm lg:text-lg xl:text-xl 2xl:text-2xl leading-none">
+                  {ano}
+                </span>
+                <span class="text-xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-[0.85]">
+                  {dia}
+                </span>
+                <span class="text-base lg:text-2xl xl:text-3xl 2xl:text-4xl leading-none">
+                  .{mes}
+                </span>
+              </div>
+              <div class="relative isolate flex flex-col  bg-zinc-950  justify-between p-8 w-4/5 border-y-4 border-zinc-500/50 ">
+                <div class=" relative w-full h-auto text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl px-4 lg:px-6 items-center   font-sans font-bold">
+                  {drp.title}
+                </div>
+                <div class=" relative mt-12 w-full h-full text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl px-4 lg:px-6 items-center   font-sans font-light  ">
+                  {drp.content}
+                </div>
+                <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center">
+                  {dropHora}
+                </div>
+              </div>
+              <button class="relative isolate  p-12  flex flex-col gap-4 hover:bg-third/20 justify-end texture  text-center cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  class="size-14 mb-8 "
+                >
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z" fill="#0F1729" class="fill-third" />
+                </svg>{' '}
+                <div class=" font-title absolute inset-0 border-4 border-third z-[-1] texture-to-[to_left]" />
+              </button>
+
             </div>
           );
         },
@@ -137,7 +175,7 @@ const drops = await sanityClient.fetch(
         ) as HTMLElement | null;
         if (dropsLista && dropsFirst && dropsAdd && dropsSec) {
           const CurrentHeight = dropsFirst.offsetHeight;
-
+console.log(dropsFirst.lengh)
           dropsFirst.classList.toggle('ativa_drop');
 
           setTimeout(() => {
@@ -168,5 +206,13 @@ const drops = await sanityClient.fetch(
         dropsSec.classList.toggle('ativa_drop');
       }
     };
+        function fullDrop() {
+      const dropButtons = document.querySelectorAll(
+        '.articles button',
+      );
+
+      dropButtons.forEach((el) => {
+      })
+    }
   </script>
 </section>
