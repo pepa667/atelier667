@@ -62,3 +62,9 @@ body {
 .pop_04 {
   filter: var(--img-hue-4);
 }
+
+.ativa_drop {
+  height: 100%;
+  display: flex;
+  margin-block: 1.7rem;
+}

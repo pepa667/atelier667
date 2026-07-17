@@ -19,11 +19,7 @@ const drops = await sanityClient.fetch(
     >
   </span>
 
-  <div
-    id="drops-list"
-    class="relative flex flex-col gap-14 [&>*:nth-child(n+3)]:hidden [&>*:nth-child(n+3)]:max-h-0 [&>*:nth-child(n+3)]:py-0
-      [&>*:nth-child(n+3)]:border-b-0 [&>*:nth-child(n+3)]:gap-0 [&>*:nth-child(n+3)]:overflow-hidden [&>*:nth-child(n+3)]:*:h-0"
-  >
+  <div id="drops-list" class="relative flex flex-col gap-0">
     {
       drops.map(
         (drp: { title: string; content: string; timestamp: string }) => {
@@ -39,7 +35,7 @@ const drops = await sanityClient.fetch(
           const dropHora = `${hora}:${min}:${seg}.${mil}`;
 
           return (
-            <article class="relative flex flex-row justify-between font-sans font-light bg-zinc-950">
+            <div class="article relative  flex my-0 overflow-hidden flex-row h-0 justify-between font-sans font-light bg-zinc-950 transition-all duration-1000">
               <div class="relative isolate p-6  flex font-title flex-col  bg-zinc-950 text-third text-center">
                 <div class=" font-title absolute inset-0 border-4  border-third z-[-1] texture-to-[to_right]" />
                 <span class="text-sm lg:text-lg xl:text-xl 2xl:text-2xl leading-[1]">
@@ -79,7 +75,7 @@ const drops = await sanityClient.fetch(
                 </svg>{' '}
                 <div class=" font-title absolute inset-0 border-4 border-third z-[-1] texture-to-[to_left]" />
               </button>
-            </article>
+            </div>
           );
         },
       )
@@ -129,28 +125,48 @@ const drops = await sanityClient.fetch(
           '#drops-list',
         ) as HTMLElement | null;
         const dropsFirst = dropsLista?.querySelector(
-          'article',
+          '.article',
         ) as HTMLElement | null;
 
-        if (dropsLista && dropsFirst) {
+        const dropsSec = dropsLista?.querySelector(
+          ':nth-child(2 of .article)',
+        ) as HTMLElement | null;
+
+        const dropsAdd = dropsLista?.querySelector(
+          ':nth-child(3 of .article)',
+        ) as HTMLElement | null;
+        if (dropsLista && dropsFirst && dropsAdd && dropsSec) {
           const CurrentHeight = dropsFirst.offsetHeight;
 
-          dropsFirst.style.transition = ' opacity 1s ease';
-          dropsFirst.style.opacity = '0';
-          dropsFirst.style.overflow = 'hidden';
+          dropsFirst.classList.toggle('ativa_drop');
 
           setTimeout(() => {
+            dropsAdd.classList.toggle('ativa_drop');
             dropsLista.appendChild(dropsFirst);
-
-            dropsFirst.style.transition = 'none';
-            dropsFirst.style.opacity = '1';
-
-            setTimeout(() => {
-              dropsFirst.style.transition = '';
-            }, 50);
           }, 1000);
         }
       });
     }
+    window.onload = () => {
+      // 1. Seleciona o elemento
+
+      const dropsContainer = document.getElementById('drops-container');
+      const dropsLista = dropsContainer?.querySelector(
+        '#drops-list',
+      ) as HTMLElement | null;
+      const dropsFirst = dropsLista?.querySelector(
+        '.article',
+      ) as HTMLElement | null;
+
+      const dropsSec = dropsLista?.querySelector(
+        ':nth-child(2 of .article)',
+      ) as HTMLElement | null;
+
+      // 2. Verifica se o elemento existe antes de adicionar a classe
+      if (dropsFirst && dropsSec) {
+        dropsFirst.classList.toggle('ativa_drop');
+        dropsSec.classList.toggle('ativa_drop');
+      }
+    };
   </script>
 </section>
