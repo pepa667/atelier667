@@ -1,52 +1,55 @@
 ---
 import { Image } from 'astro:assets';
-import anarch from '../assets/images/a.png';
 import texture from '../assets/images/texture.gif';
 
 import Icon from '../components/Icon.astro';
 
 // Recebemos uma propriedade para saber se estamos na Home ou em uma página interna
-interface Props {
-  isHome?: boolean;
-}
-
-const { isHome = false } = Astro.props;
 ---
 
-<header class={`border-b border-primary-800 pb-8 relative  transition-all duration-300  ${!isHome ? '' : 'py-4'}`}>
-  <div class="px-4 md:px-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    
+<header class="pb-8 relative transition-all duration-300">
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+  >
     <div>
-      {isHome ? (
-        // Na Home: Título Gigante destruidor
-        <div class="relative">
-          <div class={'absolute -right-20 bottom-8 pop_01 max-sm:hidden' } alt="Descrição da imagem"  >
-            <Icon Icon="Deco" Size="100"/>
-          </div>
-          <h1  class={`relative font-title text-[clamp(4rem,12vw,10rem)]  texture  text-primary`} >
-            <span class="min-w-8 max-w-20 w-[5svw] h-[clamp(0.5em,10vw,8rem)] bg-primary inline-block relative"></span>
-            Atelier667
-          </h1>
+      <div class="relative inline-block">
+        <div
+          class="absolute -right-10 -bottom-4 md:-right-20 md:-bottom-8 pop_01"
+        >
+          <Icon Icon="Maker" class="w-18 md:w-32" />
         </div>
-        <p class="text-zinc-300 font-light text-xs md:text-lg lg:text-xl font-sans">Oficina Maker<span class="text-primary-600 px-1">&bullet;</span>Traço, Código e Matéria</p>
-      ) : (
-        // Nas páginas internas: Versão slim, focada em navegação rápida
-        <a href="/" class="group inline-block">
-          <h2 class="text-3xl font-black italic tracking-tight text-white group-hover:text-primary transition-colors font-serif">
-            Atelier667<span class="text-primary font-sans not-italic text-ls ml-1 font-normal tracking-normal">.oficina</span>
-          </h2>
-        </a>
-      )}
+        <h1
+          class="relative font-title text-[clamp(4rem,12vw,10rem)] leading-none texture text-primary my-2 lg:my-4"
+        >
+          <span
+            class="min-w-4 max-w-20 w-[5svw] h-[clamp(0.5em,10vw,8rem)] bg-primary inline-block relative"
+          ></span>
+          Atelier667
+        </h1>
+      </div>
+      <p
+        class="text-zinc-300 font-light text-xs md:text-lg lg:text-xl font-sans"
+      >
+        Oficina Maker<span class="text-primary px-1">&bullet;</span>Traço,
+        Código e Matéria
+      </p>
     </div>
 
     <nav class="flex items-center gap-6 font-serif-2 text-sm tracking-wider">
-      <a href="/" class="text-zinc-400 hover:text-white transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 hover:after:w-full after:bg-primary after:transition-all">
+      <a
+        href="/"
+        class="text-zinc-400 hover:text-white transition-colors py-1 relative after:absolute after:bottom-0 after:left-0 after:h-px after:w-0 hover:after:w-full after:bg-primary after:transition-all"
+      >
         Projetos
       </a>
-      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-zinc-500 hover:text-white transition-colors flex items-center gap-1">
+      <a
+        href="https://github.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-zinc-500 hover:text-white transition-colors flex items-center gap-1"
+      >
         GitHub <span>↗</span>
       </a>
     </nav>
-
   </div>
 </header>

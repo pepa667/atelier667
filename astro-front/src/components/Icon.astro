@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
+import Maker from '../assets/images/icons/maker.png';
 import Deco from '../assets/images/icons/deco.png';
 import Code from '../assets/images/icons/code.png';
 import Hardware from '../assets/images/icons/hardware.png';
@@ -8,10 +9,11 @@ import Machine from '../assets/images/icons/machine.png';
 import Punk from '../assets/images/icons/punk.png';
 import WoodWorking from '../assets/images/icons/woodworking.png';
 
-// Recebe o nome do ícone e o tamanho da janela (ex: Size={176})
-const { Icon = 'Deco', Size = 176, class: className } = Astro.props;
+// Agora o "Size" é opcional! Se não for passado, você controla o tamanho 100% pelas classes do Tailwind
+const { Icon = 'Deco', Size, class: className } = Astro.props;
 
 const iconMap: Record<string, ImageMetadata> = {
+  Maker,
   Deco,
   Code,
   Hardware,
@@ -26,61 +28,83 @@ const activeIcon = iconMap[Icon] || Deco;
 let max_X = 4;
 let max_Y = 6;
 
-// Se o tamanho da grade mudar por ícone, você configura aqui
 switch (Icon) {
   case 'Code':
-  case 'Hardware':
-  default:
+    max_X = 4;
+    max_Y = 1;
+    break;
+  case 'Deco':
     max_X = 4;
     max_Y = 6;
+    break;
+  case 'Hardware':
+    max_X = 3;
+    max_Y = 2;
+    break;
+  case 'Machine':
+    max_X = 3;
+    max_Y = 2;
+    break;
+  case 'Maker':
+    max_X = 5;
+    max_Y = 2;
+    break;
+  case 'Punk':
+    max_X = 3;
+    max_Y = 2;
+    break;
+  case 'WoodWorking':
+    max_X = 4;
+    max_Y = 2;
+    break;
+  default:
+    // Fallback de segurança caso venha um ícone não mapeado
+    max_X = 0;
+    max_Y = 0;
 }
+
+// Se o usuário passou um "Size" fixo, usamos ele. Se não, deixamos livre para o Tailwind agir.
+const containerStyle = Size ? `width: ${Size}px; height: ${Size}px;` : '';
 ---
 
 <div
-  class="relative overflow-hidden aspect-square"
-  class:list={[className]}
-  style={`width: ${Size}px; height: ${Size}px;`}
+  class:list={['relative overflow-hidden aspect-square', className]}
+  style={containerStyle}
 >
   <Image
     src={activeIcon}
     class="absolute max-w-none sprite-target"
-    style={`width: ${max_X * Size}px; height: ${max_Y * Size}px; top: 0px; left: 0px;`}
+    style={`width: ${max_X * 100}%; height: ${max_Y * 100}%; top: 0px; left: 0px;`}
     data-max-x={max_X}
     data-max-y={max_Y}
-    data-size={Size}
     alt={`Ícone de ${Icon}`}
   />
 </div>
-
 <script>
   function randomizeSprites() {
     const targets = document.querySelectorAll('.sprite-target');
 
     targets.forEach((el) => {
       if (el instanceof HTMLElement) {
-        // Puxa as configurações que deixamos salvas no HTML (dataset)
         const maxX = parseInt(el.dataset.maxX || '4', 10);
         const maxY = parseInt(el.dataset.maxY || '6', 10);
-        const size = parseInt(el.dataset.size || '176', 10);
 
-        // Sorteia um frame aleatório dentro do limite da grade (0 até max-1)
+        // Sorteia o frame (0 até max - 1)
         const frameX = Math.floor(Math.random() * maxX);
         const frameY = Math.floor(Math.random() * maxY);
 
-        // Calcula o deslocamento negativo para mover a folha de sprite
-        const posX = frameX * size;
-        const posY = frameY * size;
+        // A mágica da porcentagem: calcula o offset baseado no número total de intervalos
+        // Se maxX é 4, os frames são 0, 1, 2, 3. Os deslocamentos em % serão: 0%, 33.33%, 66.66%, 100%.
+        const percentX = frameX * 100;
+        const percentY = frameY * 100;
 
-        // Aplica o deslocamento físico: X move a imagem para a esquerda (left), Y move para cima (top)
-        el.style.left = `-${posX}px`;
-        el.style.top = `-${posY}px`;
+        // O CSS traduz "left: -50%" de forma relativa ao tamanho do container pai automaticamente!
+        el.style.left = `-${percentX}%`;
+        el.style.top = `-${percentY}%`;
       }
     });
   }
 
-  // Executa imediatamente no carregamento da página
   randomizeSprites();
-
-  // Garante que funcione caso você esteja usando View Transitions do Astro
   document.addEventListener('astro:after-swap', randomizeSprites);
 </script>

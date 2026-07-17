@@ -48,17 +48,13 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
   </head>
 </html>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
-  <div class="mx-auto relative flex flex-row justify-center overflow-y-hidden">
+  <div
+    class="mx-auto max-w-7xl relative flex flex-row justify-center overflow-y-hidden"
+  >
     <SideScroller />
-    <div class="w-6xl max-w-svw mt-8 inline-flex">
-      <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
-      <span
-        class="text-2xl sm:text-3xl py-4 lg:text-4xl 2xl:text-6xl font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline border-l border-primary-50 p-2 opacity-0 xl:hidden"
-        >Pepa667</span
-      >
-      <div class="flex flex-col mx-4">
-        <slot />
-      </div>
+    <!-- O <slot /> injeta o HTML específico de cada página aqui dentro -->
+    <div class="flex flex-col m-10">
+      <slot />
     </div>
   </div>
   <!-- src/layouts/BaseLayout.astro -->

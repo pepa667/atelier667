@@ -2,28 +2,24 @@
 import Icon from '../components/Icon.astro';
 ---
 
-<aside
-  class="fixed h-svh top-0 left-0 xl:left-[calc(50svw-38rem)] xl:-translate-x-full xl:max-w-[calc(50svw-38rem)]"
->
-  <ol
-    class="scroll-side-bar text-2xl texture *:inline-block whitespace-nowrap list-none py-4 *:before:content-['_//_'] *:before:text-white *:italic sm:text-4xl lg:text-4xl 2xl:text-6xl font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline border-l border-primary-800 [&>li:nth-child(1n)]:text-primary [&>li:nth-child(2n)]:text-second [&>li:nth-child(3n)]:text-third [&>li:nth-child(4n)]:text-fourth"
-  >
-    <div class="*:w-2">
-      <Icon Icon="Deco" Size="50" class="pop_01 translate-x-full" />
-    </div>
-    <li>Software</li>
-    <li>Hardware</li>
-    <li>Impressão</li>
-    <li>CNC</li>
-    <li>Retro Mod</li>
-    <li>Firmware</li>
-    <li>Arcade</li>
-    <li>Marcenaria</li>
-    <li>DevOps</li>
-    <li>Ilustração</li>
-    <li>Modelagem</li>
-    <li class="w-auto">
-      <Icon Icon="Deco" Size="50" class="pop_01 before:hidden" />
-    </li>
-  </ol>
+<aside class="relative min-w-16 lg:min-w-24">
+  <div class="fixed max-h-svh">
+    <ol
+      class="scroll-side-bar text-2xl texture *:inline-block whitespace-nowrap list-none py-4 [&>li]:before:content-['_//_'] [&>li]:before:text-white *:italic sm:text-4xl lg:text-4xl 2xl:text-6xl font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline border-l border-primary-800 [&>li:nth-child(1n)]:text-primary [&>li:nth-child(2n)]:text-second [&>li:nth-child(3n)]:text-third [&>li:nth-child(4n)]:text-fourth"
+    >
+      <Icon Icon="Maker" class="pop_01 w-6 sm:w-10 lg:w-15 mt-8" />
+      <li>Software</li>
+      <li>Hardware</li>
+      <li>Impressão</li>
+      <li>CNC</li>
+      <li>Retro Mod</li>
+      <li>Firmware</li>
+      <li>Arcade</li>
+      <li>Marcenaria</li>
+      <li>DevOps</li>
+      <li>Ilustração</li>
+      <li class="after:content-['_//_'] after:text-white">Modelagem</li>
+      <Icon Icon="Maker" class="pop_01 sm:w-10 lg:w-15 mb-8" />
+    </ol>
+  </div>
 </aside>
