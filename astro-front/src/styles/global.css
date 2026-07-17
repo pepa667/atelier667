@@ -37,8 +37,8 @@ body {
 @utility texture-to-* {
   --gradient-dir: --value([*]);
 
-  mask-image: linear-gradient(var(--gradient-dir), black, transparent), url(../assets/images/texture.gif);
-  -webkit-mask-image: linear-gradient(var(--gradient-dir), black, transparent), url(../assets/images/texture.gif);
+  mask-image: linear-gradient(var(--gradient-dir), , black , transparent 80%), url(../assets/images/texture.gif) ;
+  -webkit-mask-image: linear-gradient(var(--gradient-dir), black , transparent 80%), url(../assets/images/texture.gif);
 
   mask-composite: intersect;
   -webkit-mask-composite: source-in;

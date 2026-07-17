@@ -6,6 +6,8 @@ import { Image } from 'astro:assets';
 import atelierBanner from '../assets/images/atelier.png';
 // (Ajuste os pontinhos `../` dependendo de quão profunda está a pasta do arquivo atual)
 
+import Icon from '../components/Icon.astro';
+
 // Puxa o CSS global uma vez só aqui!
 import '../styles/global.css';
 
@@ -48,6 +50,7 @@ const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
   </head>
 </html>
 <body class="bg-zinc-950 text-zinc-200 min-h-screen">
+  <Icon Icon="Maker" class="hidden" />
   <div
     class="mx-auto w-7xl max-w-svw relative flex flex-row justify-center overflow-y-hidden"
   >

@@ -1,5 +1,6 @@
 ---
-import { sanityClient, urlFor } from '../lib/sanity';
+import { sanityClient } from '../lib/sanity';
+import Icon from '../components/Icon.astro';
 
 const drops = await sanityClient.fetch(
   `*[_type == "drop"] | order(_createdAt desc)`,
@@ -35,34 +36,48 @@ const drops = await sanityClient.fetch(
           const seg = String(d.getSeconds()).padStart(2, '0');
           const mil = String(d.getMilliseconds()).padStart(3, '0');
 
-          const dropData = `${ano}.${mes}.${dia}`;
           const dropHora = `${hora}:${min}:${seg}.${mil}`;
 
           return (
             <article class="relative flex flex-row justify-between font-sans font-light bg-zinc-950">
-              <div class="relative isolate p-4 py-10 flex flex-col gap-4 bg-zinc-950 min-w-[120px] text-third text-center">
-                <div class=" font-title absolute -inset-0 border-4  border-third z-[-1] texture-to-[to_right] leading-none" />
-                <span class="text-sm lg:text-lg xl:text-xl 2xl:text-2xl">
+              <div class="relative isolate p-6  flex font-title flex-col  bg-zinc-950 text-third text-center">
+                <div class=" font-title absolute inset-0 border-4  border-third z-[-1] texture-to-[to_right]" />
+                <span class="text-sm lg:text-lg xl:text-xl 2xl:text-2xl leading-[1]">
                   {ano}
                 </span>
-                <span class="text-xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold">
+                <span class="text-xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-[0.85]">
                   {dia}
                 </span>
-                <span class="text-base lg:text-2xl xl:text-3xl 2xl:text-4xl">
+                <span class="text-base lg:text-2xl xl:text-3xl 2xl:text-4xl leading-[1]">
                   .{mes}
                 </span>
               </div>
-              <div class="relative isolate contents bg-zinc-950  text-center *:border-y-4 *:border-third/30 ">
-                <div class="flex flex-row relative w-full notfrt h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 items-center  border-third">
+              <div class="relative isolate contents bg-zinc-950  text-center *:border-y-4 *:border-zinc-500/30 ">
+                <div class="flex flex-row relative w-full notfrt h-auto text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl px-4 lg:px-6 items-center  border-third font-sans font-bold before:absolute before:h-1/3 before:border-l-4 before:left-3 before:border-third/30 ">
                   {drp.title}
+                  <Icon Icon="Punk" class="pop_03 w-6 sm:w-10 lg:w-24 ml-8" />
                 </div>
-                <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center  before:content-['TIME'] block content-center">
+                <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center">
                   {dropHora}
                 </div>
               </div>
-              <button class="relative isolate  p-4 py-10 flex flex-col gap-4 bg-zinc-950 min-w-[120px] text-center">
-                #
-                <div class=" font-title absolute -inset-0 border-4 border-third z-[-1] texture-to-[to_left]" />
+              <button class="relative isolate  p-6  flex flex-col gap-4 hover:bg-third/20 justify-center texture  text-center cursor-pointer">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  class="size-10 "
+                >
+                  <path
+                    d="M7 17L17 7M17 7H8M17 7V16"
+                    stroke="#00ff00"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="stroke-third"
+                  />
+                </svg>{' '}
+                <div class=" font-title absolute inset-0 border-4 border-third z-[-1] texture-to-[to_left]" />
               </button>
             </article>
           );
@@ -70,6 +85,7 @@ const drops = await sanityClient.fetch(
       )
     }
   </div>
+
   <article class="flex flex-row justify-between font-sans font-light">
     <div
       class="relative flex flex-col font-title
@@ -109,34 +125,26 @@ const drops = await sanityClient.fetch(
     if (btnNext) {
       btnNext.addEventListener('click', () => {
         const dropsContainer = document.getElementById('drops-container');
-        // getElementById is not available on HTMLElement, use querySelector scoped to the container
         const dropsLista = dropsContainer?.querySelector(
           '#drops-list',
         ) as HTMLElement | null;
         const dropsFirst = dropsLista?.querySelector(
           'article',
-        ) as HTMLElement | null; // Forçando tipagem rápida se for TS
+        ) as HTMLElement | null;
 
         if (dropsLista && dropsFirst) {
-          // Pega a altura exata do elemento para o margin negativo ser perfeito
           const CurrentHeight = dropsFirst.offsetHeight;
 
-          // 1. Aplica a transição de subida e sumiço
-          dropsFirst.style.transition = 'margin-top 1s linear, opacity 1s ease';
-          dropsFirst.style.marginTop = `-${CurrentHeight}px`;
+          dropsFirst.style.transition = ' opacity 1s ease';
           dropsFirst.style.opacity = '0';
+          dropsFirst.style.overflow = 'hidden';
 
-          // 2. Espera 1 segundo a animação acabar
           setTimeout(() => {
-            // 3. Move para o final do DOM
             dropsLista.appendChild(dropsFirst);
 
-            // 4. Reseta os estilos inline para ele voltar ao normal no fim da fila
             dropsFirst.style.transition = 'none';
-            dropsFirst.style.marginTop = '0px';
             dropsFirst.style.opacity = '1';
 
-            // Força o browser a registrar o reset antes de reativar transições do CSS do Tailwind
             setTimeout(() => {
               dropsFirst.style.transition = '';
             }, 50);
