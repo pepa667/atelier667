@@ -9,7 +9,7 @@ const drops = await sanityClient.fetch(
 
 <section
   id="drops-container"
-  class="relative mt-4 p-4 py-10 flex flex-col gap-4 bg-zinc-950"
+  class="relative mt-4 p-4 py-10 flex flex-col gap-4 bg-zinc-950/80"
 >
   <div
     id="backDropDrops"
@@ -53,8 +53,10 @@ const drops = await sanityClient.fetch(
             // A tag vazia <> (Fragmento) permite retornar dois elementos irmãos no Astro
             <>
               {/* --- CARD DE RESUMO --- */}
-              <div class="article relative flex my-0 max-md:gap-8 overflow-hidden flex-col md:flex-row h-0 md:justify-between font-sans font-light bg-zinc-950 transition-all duration-1000 max-md:border-2 border-third/50">
-                <div class="relative isolate p-6  max-md:gap-2 flex font-title flex-row md:flex-col  md:bg-zinc-950 text-third text-center">
+              <div class="article relative flex my-0 max-md:gap-8 overflow-hidden flex-col md:flex-row h-0 md:justify-between font-sans font-light  transition-all duration-1000 max-md:border-2 border-third/50">
+                <div class="absolute -inset-1 bg-black  texture_md" />
+
+                <div class="relative isolate p-6  max-md:gap-2 flex font-title flex-row md:flex-col   text-third text-center">
                   <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
                   <span class="text-2xl md:text-lg xl:text-xl 2xl:text-2xl md:leading-none">
                     {ano}
@@ -166,11 +168,11 @@ const drops = await sanityClient.fetch(
 
   <article class="relative flex flex-row justify-between font-sans font-light">
     <div
-      class="absolute inset-0 bg-linear-to-l from-zinc-800/75 to-transparent texture_md"
+      class="absolute inset-0 bg-linear-to-l from-zinc-800/80 to-zinc-900 texture_md"
     >
     </div>
     <div
-      class="flex items-center font-bold text-third relative w-full h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 border border-zinc-600"
+      class="flex items-center font-bold text-third relative w-full h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 border-4 border-zinc-800"
     >
       Mais Drops
     </div>

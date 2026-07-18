@@ -38,7 +38,7 @@ body {
   --gradient-dir: --value([*]);
 
   mask-image:
-    linear-gradient(var(--gradient-dir), , black, transparent 80%),
+    linear-gradient(var(--gradient-dir), black, transparent 80%),
     url(../assets/images/texture.gif);
   -webkit-mask-image:
     linear-gradient(var(--gradient-dir), black, transparent 80%),
@@ -65,7 +65,7 @@ body {
   --gradient-dir: --value([*]);
 
   mask-image:
-    linear-gradient(var(--gradient-dir), , black, transparent 80%),
+    linear-gradient(var(--gradient-dir), black, transparent 80%),
     url(../assets/images/texture_md.png);
   -webkit-mask-image:
     linear-gradient(var(--gradient-dir), black, transparent 80%),
