@@ -10,6 +10,8 @@ import Header from '../components/Header.astro';
 
 import Drops from '../components/Drops.astro';
 
+import Projects from '../components/Projects.astro';
+
 const projetos = await sanityClient.fetch(
   `*[_type == "projeto"] | order(_modifiedAt desc)`,
 );
@@ -35,78 +37,5 @@ const getStatusClass = (status: any) => {
   <Header isHome={true} />
   <!-- Grid de Projetos -->
   <Drops />
-  <section
-    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-6 font-sans"
-  >
-    {
-      projetos.map(
-        (proj: {
-          mainImage: any;
-          title_pt: string;
-          categorias: any;
-          status: string;
-          progresso: unknown;
-          slug: { current: any };
-        }) => (
-          <article class="group relative bg-zinc-800 border-t p-y-3 border-primary-800 overflow-hidden hover:border-primary-500 duration-700 transition flex flex-col aspect-square justify-between">
-            <h2 class="text-2xl border-l-8 border-primary pl-2 mt-3 font-bold text-primary-200 group-hover:text-primary transition font-serif italic">
-              {proj.title_pt}
-            </h2>
-
-            <span
-              class={`px-2.5 py-0.5 w-fit  border ${getStatusClass(proj.status)} font-medium capitalize`}
-            >
-              {proj.status === 'concluido'
-                ? 'Concluído'
-                : proj.status === 'desenvolvimento'
-                  ? 'Em Progresso'
-                  : proj.status === 'rascunho'
-                    ? 'Rascunho'
-                    : 'Pausado'}
-            </span>
-            {proj.progresso !== undefined && (
-              <span
-                class="text-zinc-200 font-mono absolute w-auto bottom-0 px-2 right-4 min-h-12 bg-zinc-950/50 border-r border-primary"
-                style={`height:${proj.progresso}%;`}
-              >
-                {proj.progresso}%
-              </span>
-            )}
-
-            <div class=" w-full  overflow-hidden  relative inline-flex">
-              <a
-                href={`/projeto/${proj.slug.current}`}
-                class="aspect-square w-1/2 bg-zinc-950"
-              >
-                {proj.mainImage && (
-                  <img
-                    src={urlFor(proj.mainImage).width(600).url()}
-                    alt={proj.title_pt}
-                    class="h-full aspect-square object-cover opacity-50 group-hover:scale-103 group-hover:opacity-100 transition duration-300 font-serif"
-                    loading="lazy"
-                  />
-                )}
-              </a>
-              {proj.categorias && (
-                <div class="ml-2 uppercase tracking-wider font-light flex flex-col   ">
-                  {proj.categorias.map((categoria: string) => (
-                    <span class="text-xs bg-zinc-800 text-zinc-400 mx-2 my-1 py-1 border-t border-primary">
-                      #{categoria}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <a
-              href={`/projeto/${proj.slug.current}`}
-              class="w-auto -m-3 py-2 text-center block bg-primary-800 group-hover:bg-primary text-zinc-200 group-hover:text-zinc-900 transition duration-700 text-lg font-medium  "
-            >
-              Abrir Log Técnico →
-            </a>
-          </article>
-        ),
-      )
-    }
-  </section>
+  <Projects />
 </BaseLayout>

@@ -10,9 +10,19 @@ import Punk from '../assets/images/icons/punk.png';
 import WoodWorking from '../assets/images/icons/woodworking.png';
 
 // Agora o "Size" é opcional! Se não for passado, você controla o tamanho 100% pelas classes do Tailwind
-const { Icon = 'Deco', Size, class: className } = Astro.props;
+type IconKey =
+  'Code' | 'Deco' | 'Hardware' | 'Machine' | 'Maker' | 'Punk' | 'WoodWorking';
+const {
+  Icon = 'Deco',
+  Size,
+  class: className,
+} = Astro.props as {
+  Icon?: IconKey;
+  Size?: number;
+  class?: string;
+};
 
-const iconMap: Record<string, ImageMetadata> = {
+const iconMap: Record<IconKey, ImageMetadata> = {
   Maker,
   Deco,
   Code,
@@ -25,44 +35,19 @@ const iconMap: Record<string, ImageMetadata> = {
 const activeIcon = iconMap[Icon] || Deco;
 
 // Define as dimensões do sprite (X colunas por Y linhas)
-let max_X = 4;
-let max_Y = 6;
 
-switch (Icon) {
-  case 'Code':
-    max_X = 4;
-    max_Y = 1;
-    break;
-  case 'Deco':
-    max_X = 4;
-    max_Y = 6;
-    break;
-  case 'Hardware':
-    max_X = 3;
-    max_Y = 2;
-    break;
-  case 'Machine':
-    max_X = 3;
-    max_Y = 2;
-    break;
-  case 'Maker':
-    max_X = 5;
-    max_Y = 2;
-    break;
-  case 'Punk':
-    max_X = 3;
-    max_Y = 2;
-    break;
-  case 'WoodWorking':
-    max_X = 4;
-    max_Y = 2;
-    break;
-  default:
-    // Fallback de segurança caso venha um ícone não mapeado
-    max_X = 0;
-    max_Y = 0;
-}
+const spriteSizes = {
+  Code: { x: 4, y: 1 },
+  Deco: { x: 4, y: 6 },
+  Hardware: { x: 3, y: 2 },
+  Machine: { x: 3, y: 2 },
+  Maker: { x: 5, y: 2 },
+  Punk: { x: 3, y: 2 },
+  WoodWorking: { x: 4, y: 2 },
+};
 
+// Puxa as dimensões ou usa o padrão do 'Deco' como fallback
+const { x: max_X, y: max_Y } = spriteSizes[Icon] || spriteSizes.Deco;
 // Se o usuário passou um "Size" fixo, usamos ele. Se não, deixamos livre para o Tailwind agir.
 const containerStyle = Size ? `width: ${Size}px; height: ${Size}px;` : '';
 ---
