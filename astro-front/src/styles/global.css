@@ -31,6 +31,8 @@ body {
   -webkit-mask-image: url(../assets/images/texture.gif);
   -webkit-mask-position: var(--mask-pos, 0% 0%);
   mask-position: var(--mask-pos, 0% 0%);
+  mask-size: 400px 250px;
+  -webkit-mask-size: 400px 250px;
 }
 
 /* SOLUÇÃO DEFINITIVA V4: Captura o valor exato passado na classe substituindo '_' por espaços */
@@ -52,12 +54,20 @@ body {
 
   mask-position: var(--mask-pos, 0% 0%);
   -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-size:
+    101% 100%,
+    400px 250px;
+  -webkit-mask-size:
+    101% 100%,
+    400px 250px;
 }
 @utility texture_md {
   mask-image: url(../assets/images/texture_md.png);
   -webkit-mask-image: url(../assets/images/texture_md.png);
   -webkit-mask-position: var(--mask-pos, 0% 0%);
   mask-position: var(--mask-pos, 0% 0%);
+  mask-size: 600px 300px;
+  -webkit-mask-size: 600px 300px;
 }
 
 /* SOLUÇÃO DEFINITIVA V4: Captura o valor exato passado na classe substituindo '_' por espaços */
@@ -74,11 +84,20 @@ body {
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
 
+  mask-size:
+    101% 100%,
+    600px 300px;
+  -webkit-mask-size:
+    101% 100%,
+    600px 300px;
+
   mask-repeat: no-repeat, repeat;
   -webkit-mask-repeat: no-repeat, repeat;
 
   mask-position: var(--mask-pos, 0% 0%);
   -webkit-mask-position: var(--mask-pos, 0% 0%);
+  /* mask-size: 600px 300px;
+  -webkit-mask-size: 600px 300px; */
 }
 
 /* 1. Tell Prettier to stop touching this block */
@@ -104,9 +123,6 @@ body {
 }
 
 @utility popDrop_full {
-  width: 60svw;
-  height: 80svh;
-  position: fixed;
   left: unset;
   right: 50%;
   top: 50%;
@@ -114,9 +130,6 @@ body {
 }
 
 @utility popDrop_none {
-  width: 60svw;
-  height: 80svh;
-  position: fixed;
   left: unset;
   right: 0%;
   top: 50%;

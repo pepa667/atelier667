@@ -1,5 +1,7 @@
 ---
 import { sanityClient } from '../lib/sanity';
+import { marked } from 'marked';
+
 import Icon from '../components/Icon.astro';
 
 const drops = await sanityClient.fetch(
@@ -18,12 +20,14 @@ const drops = await sanityClient.fetch(
   </div>
   <div class="absolute -inset-1 bg-second/40 -z-1 texture_md-to-[to_bottom]">
   </div>
-  <span class="absolute -top-12 right-8 perspective-near">
-    <span
-      class="font-serif text-5xl italic font-black text-zinc-900 bg-second px-8 py-4 block -rotate-y-30 rotate-x-6"
-      >drops</span
+  <div class="absolute -top-12 right-8 perspective-near">
+    <div
+      class="font-serif text-5xl italic font-black text-zinc-900 bg-second px-8 pr-3 py-4 flex items-center -rotate-y-30 rotate-x-6"
     >
-  </span>
+      drops&nbsp;
+      <Icon Icon="Maker" class="w-16" />
+    </div>
+  </div>
 
   <div
     id="drops-list"
@@ -53,18 +57,19 @@ const drops = await sanityClient.fetch(
             // A tag vazia <> (Fragmento) permite retornar dois elementos irmãos no Astro
             <>
               {/* --- CARD DE RESUMO --- */}
-              <div class="article relative flex my-0 max-md:gap-8 overflow-hidden flex-col md:flex-row h-0 md:justify-between font-sans font-light  transition-all duration-1000 max-md:border-2 border-third/50">
-                <div class="absolute -inset-1 bg-black  texture_md" />
+              <button
+                data-target={panelId}
+                class="btn-open-drop article relative group flex my-0 max-md:gap-8 overflow-hidden flex-col md:flex-row h-0 md:justify-between font-sans font-light  transition-all duration-1000 max-md:border-2 border-third/50 cursor-pointer bg-third/2 hover:bg-third/10"
+              >
+                <div class="absolute -inset-1 bg-black  texture_md mask-size-[25%]" />
 
-                <div class="relative isolate p-6  max-md:gap-2 flex font-title flex-row md:flex-col   text-third text-center">
+                <div class="relative isolate p-2 px-10 md:justify-center max-md:gap-2 flex font-title flex-row md:flex-col   text-third text-center before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-r before:from-third/30 group-hover:before:opacity-100 before:to-transparent before:opacity-0">
                   <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
-                  <span class="text-2xl md:text-lg xl:text-xl 2xl:text-2xl md:leading-none">
-                    {ano}
-                  </span>
-                  <span class="text-2xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold md:leading-[0.85]">
+                  <span class="text-2xl md:text-lg md:leading-none">{ano}</span>
+                  <span class="text-2xl md:text-4xl md:leading-[0.85]">
                     {dia}
                   </span>
-                  <span class="text-2xl md:text-2xl xl:text-3xl 2xl:text-4xl md:leading-none">
+                  <span class="text-2xl md:text-2xl md:leading-none">
                     .{mes}
                   </span>
                 </div>
@@ -83,9 +88,9 @@ const drops = await sanityClient.fetch(
                 </div>
 
                 {/* BOTÃO ABRIR: Usando data-target para guardar qual painel ele deve abrir */}
-                <button
+                <div
                   data-target={panelId}
-                  class="btn-open-drop relative isolate p-6 flex flex-col max-md:items-end gap-4 before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-l before:from-third/10 hover:before:opacity-100 before:to-transparent before:opacity-0 justify-center text-center cursor-pointer"
+                  class="btn-open-drop relative isolate p-6 flex flex-col max-md:items-end gap-4 before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-l before:from-third/30 group-hover:before:opacity-100 before:to-transparent before:opacity-0 justify-center text-center"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -103,14 +108,14 @@ const drops = await sanityClient.fetch(
                     />
                   </svg>
                   <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] md:texture-to-[to_left] bg-third/10 max-md:texture_md" />
-                </button>
-              </div>
+                </div>
+              </button>
 
               {/* --- FULL DROP (Painel Completo) --- */}
               {/* Agora ele é IRMÃO do article. O 'absolute inset-0' vai cobrir o pai dele (o #drops-list inteiro) */}
               <div
                 id={panelId}
-                class="fullDrop max-md:absolute hidden my-0 flex-col md:flex-row overflow-hidden max-md:translate-x-full inset-0 z-30 justify-between font-sans font-light bg-zinc-950 transition-all duration-1000 ease-in-out max-md:border-2 border-third/50  max-md:max-h-fit md:popDrop_none"
+                class="fullDrop fixed hidden my-0 flex-col md:flex-row overflow-hidden  inset-0 z-30 justify-between font-sans font-light bg-zinc-950 transition-all duration-1000 ease-in-out max-md:border-2 border-third/50  popDrop_none w-[90svw] h-[90svh] md:w-[60svw] md:h-[80svh] "
               >
                 <div class="relative isolate p-6  max-md:gap-2 flex font-title flex-row md:flex-col  md:bg-zinc-950 text-third text-center">
                   <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
@@ -130,7 +135,7 @@ const drops = await sanityClient.fetch(
                     {drp.title}
                   </div>
                   <div class="relative mt-12 w-full h-full text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl md:px-4 lg:px-6 items-center font-sans font-light overflow-y-auto">
-                    {drp.content}
+                    <div set:html={marked.parse(drp.content)} />
                   </div>
                   <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center">
                     {dropHora}
@@ -166,22 +171,25 @@ const drops = await sanityClient.fetch(
     }
   </div>
 
-  <article class="relative flex flex-row justify-between font-sans font-light">
+  <button
+    id="next-drop"
+    class="relative flex flex-row justify-between font-sans font-light group cursor-pointer bg-fourth/10 hover:bg-fourth/20 transition-background duration-700"
+  >
     <div
-      class="absolute inset-0 bg-linear-to-l from-zinc-800/80 to-zinc-900 texture_md"
+      class="absolute inset-0 bg-linear-to-l from-black/30 to-black texture_md"
     >
     </div>
     <div
-      class="flex items-center font-bold text-third relative w-full h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 border-4 border-zinc-800"
+      class="flex items-center font-bold text-fourth relative w-full h-auto text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl px-4 lg:px-12 border-4 border-zinc-800"
     >
       Mais Drops
     </div>
-    <button
-      id="next-drop"
-      class="text-6xl 2xl:text-8xl leading-[0.8] font-title aspect-square transition-background duration-700 justify-center text-center border-4 border-third bg-third/20 hover:bg-third/50 text-third texture cursor-pointer"
-      >+</button
+    <div
+      class="text-6xl 2xl:text-8xl leading-[0.8] font-title aspect-square transition-background duration-700 justify-center text-center border-4 border-fourth bg-fourth/20 group-hover:bg-fourth/50 text-fourth texture cursor-pointer"
     >
-  </article>
+      +
+    </div>
+  </button>
 
   <script>
     // 1. Função de Rotação dos Drops (mantida a sua lógica original)
@@ -235,10 +243,8 @@ const drops = await sanityClient.fetch(
             fullPanelView.classList.add('flex');
 
             setTimeout(() => {
-              fullPanelView.classList.remove('md:popDrop_none');
-              fullPanelView.classList.remove('max-md:translate-x-full');
-              fullPanelView.classList.add('max-md:translate-x-0');
-              fullPanelView.classList.add('md:popDrop_full');
+              fullPanelView.classList.remove('popDrop_none');
+              fullPanelView.classList.add('popDrop_full');
             }, 100);
             // 2. Faz a tela do navegador rolar suavemente para o topo do container pai
             const dropsList = document.getElementById('drops-list');
@@ -277,10 +283,8 @@ const drops = await sanityClient.fetch(
           const fullPanelView = document.getElementById(targetId);
           if (fullPanelView) {
             // 1. Faz a animação de deslize
-            fullPanelView.classList.add('md:popDrop_none');
-            fullPanelView.classList.add('max-md:translate-x-full');
-            fullPanelView.classList.remove('max-md:translate-x-0');
-            fullPanelView.classList.remove('md:popDrop_full');
+            fullPanelView.classList.add('popDrop_none');
+            fullPanelView.classList.remove('popDrop_full');
 
             setTimeout(() => {
               fullPanelView.classList.remove('flex');
