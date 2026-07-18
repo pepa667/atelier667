@@ -1,4 +1,5 @@
 ---
+import type { string } from 'astro:schema';
 import { sanityClient, urlFor } from '../lib/sanity';
 
 const projetos = await sanityClient.fetch(
@@ -30,7 +31,7 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
 ---
 
 <section
-  class="mt-[20svh] grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 font-sans bg-zinc-950/90
+  class="mt-[20svh] grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 gap-y-16 font-sans bg-zinc-950/90
   relative p-8 py-32"
 >
   <div
@@ -38,13 +39,13 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
   >
   </div>
   <div
-    class="absolute size-0 -top-20 -right-5 md:-right-20 border-l-[30svw] border-r-[5svw] border-x-transparent mask-[110%,50%] rotate-y-16 -rotate-x-24 border-t-300 rounded-xl border-primary texture_md-to-[to_bottom]"
+    class="absolute size-0 -top-20 right-5 md:-right-20 border-l-[30svw] border-r-[5svw] border-x-transparent mask-[110%,50%] rotate-y-16 -rotate-x-24 border-t-300 rounded-xl border-primary texture_md-to-[to_bottom]"
   >
   </div>
 
-  <div class="absolute -top-15 md:left-8 -left-12">
+  <div class="absolute -top-15 left-[5%]">
     <div
-      class="font-serif text-6xl italic font-black text-primary px-8 pr-3 py-4 texture mask-size-[200%]"
+      class="font-serif text-6xl italic font-black text-primary texture mask-size-[200%]"
     >
       Projetos::
     </div>
@@ -79,12 +80,14 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
         return (
           <article class="group relative  isolate  ">
             <div class="absolute inset-x-0 -inset-y-3 block bg-primary texture -z-1" />
-            <div class="bg-zinc-950/95 p-y-6    flex flex-col aspect-3/4 justify-between   ">
-              <h2 class="text-5xl sm:text-3xl lg:text-4xl border-l-8 border-second pl-2 mt-3 font-bold text-zinc-200 group-hover:text-second transition font-title">
-                {proj.title_pt}
-              </h2>
+            <div class="bg-zinc-950/95 m-y-12    flex flex-col justify-between  h-full ">
+              <a href={`/projeto/${proj.slug.current}`}>
+                <h2 class="text-5xl sm:text-3xl lg:text-4xl border-l-8 border-second pl-2 mt-3 font-bold text-zinc-200 group-hover:text-second transition font-title">
+                  {proj.title_pt}
+                </h2>
+              </a>
               <span
-                class={`px-2.5 py-0.5 w-fit ml-4 border-4 ${getStatusClass(proj.status)} font-medium capitalize`}
+                class={`px-2.5 py-0.5 w-fit my-4 ml-4 border-4 ${getStatusClass(proj.status)} font-medium capitalize`}
               >
                 {proj.status === 'concluido'
                   ? 'Concluído'
@@ -94,18 +97,38 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
                       ? 'Rascunho'
                       : 'Pausado'}
               </span>
-              <code class="font-mono text-primary text-2xl px-2 py-1 inline-block">
+              <code class="font-mono text-second text-lg md:text-xl lg:text-lg xl:text-2xl px-0 py-1 inline-block whitespace-nowrap">
                 {barraAscii} {porcentagem}%{''}
               </code>
-              {proj.categorias && (
-                <ul class="ml-2 uppercase tracking-wider font-light flex flex-row *:inline-block whitespace-nowrap list-none py-4 self-baseline  ">
-                  {proj.categorias.map((categoria: string) => (
-                    <li class="text-xs bg-zinc-800 text-zinc-400 mx-2 my-1 py-1 border rounded border-primary">
-                      #{categoria}
+              <div class="ml-2 w-11/12 overflow-hidden self-baseline py-4 mask-marquee">
+                {proj.categorias && proj.categorias.length > 0 ? (
+                  /* O container flex agora ganha a animação 'animate-marquee' */
+                  <ul class="flex flex-row whitespace-nowrap list-none animate-marquee w-max uppercase tracking-wider font-light">
+                    {/* BLOCO 1: Renderiza original */}
+                    {proj.categorias.map((categoria: string) => (
+                      <li class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block">
+                        #{categoria || 'Nada'}
+                      </li>
+                    ))}
+
+                    {/* BLOCO 2: Duplicado idêntico para criar o efeito infinito visual */}
+                    {proj.categorias.map((categoria: string) => (
+                      <li
+                        class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block"
+                        aria-hidden="true"
+                      >
+                        #{categoria || 'Nada'}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul class="list-none">
+                    <li class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block">
+                      Não tem
                     </li>
-                  ))}
-                </ul>
-              )}
+                  </ul>
+                )}
+              </div>
               <div class=" w-full  overflow-hidden  relative inline-flex">
                 <a
                   href={`/projeto/${proj.slug.current}`}
@@ -123,7 +146,7 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
               </div>
               <a
                 href={`/projeto/${proj.slug.current}`}
-                class="w-auto -m-3 py-2 text-center block bg-primary-800 group-hover:bg-primary text-zinc-200 group-hover:text-zinc-900 transition duration-700 text-lg font-medium  "
+                class="w-auto  text-center block bg-primary/10 group-hover:bg-second text-zinc-200 hover:text-zinc-600 transition duration-700 text-lg font-medium  py-2 border-b-12 border-zinc-950"
               >
                 Abrir Log Técnico →
               </a>
