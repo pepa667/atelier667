@@ -40,7 +40,7 @@
 body {
   font-family: var(--font-sans);
   background-image: url(../assets/images/8.jpg);
-  ]background-size: fill;
+  background-size: contain;
 }
 
 @utility texture {
