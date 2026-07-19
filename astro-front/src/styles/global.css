@@ -40,7 +40,10 @@
 body {
   font-family: var(--font-sans);
   background-image: url(../assets/images/8.jpg);
-  background-size: contain;
+  background-size: 1000% 50%;
+  background-repeat: repeat-y;
+  background-attachment: fixed;
+  background-position: 0%;
 }
 
 @utility texture {
