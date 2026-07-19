@@ -1,10 +1,10 @@
 ---
-import { marked } from 'marked';
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import Header from '../../components/Header.astro';
+import { marked } from "marked";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Header from "../../components/Header.astro";
 // Importe o seu cliente do Sanity aqui
 // import { sanityClient } from 'sanity:client';
-import { sanityClient, urlFor } from '../../lib/sanity';
+import { sanityClient, urlFor } from "../../lib/sanity";
 
 export async function getStaticPaths() {
   // 1. Puxa os projetos do Sanity para gerar as rotas estáticas [slug]
@@ -30,7 +30,7 @@ export async function getStaticPaths() {
     }
   }`);
 
-  return projetos.map((proj: any) => ({
+  return projetos.map((proj) => ({
     params: { slug: proj.slug },
     props: { proj },
   }));
@@ -39,14 +39,14 @@ export async function getStaticPaths() {
 const { proj } = Astro.props;
 
 // 2. Transforma os campos de Markdown do Sanity em HTML puro
-const escopoHTML = proj.escopo ? marked.parse(proj.escopo) : '';
+const escopoHTML = proj.escopo ? marked.parse(proj.escopo) : "";
 
 // Mapeia o status para badges visuais
-const statusLabels: Record<string, string> = {
-  ideacao: 'Ideação',
-  desenvolvimento: 'Em Progresso',
-  pausado: 'Pausado',
-  concluido: 'Concluído',
+const statusLabels = {
+  ideacao: "Ideação",
+  desenvolvimento: "Em Progresso",
+  pausado: "Pausado",
+  concluido: "Concluído",
 };
 ---
 
@@ -83,7 +83,7 @@ const statusLabels: Record<string, string> = {
       {
         proj.categorias && (
           <div class="flex flex-wrap gap-2 mb-6">
-            {proj.categorias.map((cat: string) => (
+            {proj.categorias.map((cat) => (
               <span class="text-xs font-mono bg-zinc-900 text-zinc-400 border border-zinc-800 px-2 py-0.5 rounded">
                 #{cat}
               </span>
@@ -131,13 +131,13 @@ const statusLabels: Record<string, string> = {
       {
         proj.linhaDoTempo && proj.linhaDoTempo.length > 0 ? (
           <div class="relative border-l-2 border-zinc-800 ml-4 space-y-12 pl-6">
-            {proj.linhaDoTempo.map((log: any) => {
+            {proj.linhaDoTempo.map((log) => {
               // Tratamento cirúrgico do timestamp que aprendemos nos cards
               const d = new Date(log.timestamp);
-              const dataStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
-              const horaStr = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+              const dataStr = `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+              const horaStr = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 
-              const logHTML = log.textoLog ? marked.parse(log.textoLog) : '';
+              const logHTML = log.textoLog ? marked.parse(log.textoLog) : "";
 
               return (
                 <article class="relative group">
@@ -162,12 +162,14 @@ const statusLabels: Record<string, string> = {
                   {/* Galeria de Imagens do Log */}
                   {log.galeria && log.galeria.length > 0 && (
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
-                      {log.galeria.map((img: any) => (
+                      {log.galeria.map((img) => (
                         <div class="overflow-hidden rounded border border-zinc-800 bg-zinc-900 aspect-video group/img">
                           <img
                             src={img.asset.url}
-                            alt={img.alt || 'Log image'}
-                            class="w-full h-full" />
+                            alt={img.alt || "Log image"}
+                            class="w-full h-full object-cover group-hover/img:scale-105 transition duration-300"
+                            loading="lazy"
+                          />
                         </div>
                       ))}
                     </div>
@@ -197,8 +199,8 @@ const statusLabels: Record<string, string> = {
   .prose h2,
   .prose h3 {
     font-family:
-      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-      'Courier New', monospace; /* font-mono */
+      ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+      "Courier New", monospace; /* font-mono */
     font-weight: 700; /* font-bold */
     color: #e4e4e7; /* text-zinc-200 */
     margin-top: 1.5rem; /* mt-6 */
