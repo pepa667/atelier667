@@ -1,18 +1,11 @@
 ---
-// 1. Importa o componente nativo de imagem do Astro
-import { Image } from 'astro:assets';
-
-// 2. Importa a imagem local direto do seu diretório de assets
-import atelierBanner from '../assets/images/atelier.png';
-// (Ajuste os pontinhos `../` dependendo de quão profunda está a pasta do arquivo atual)
-
 import Icon from '../components/Icon.astro';
 
 // Puxa o CSS global uma vez só aqui!
 import '../styles/global.css';
 
-import SideScroller from '../components/SideScroller.astro';
 
+import SideScroller from '../components/SideScroller.astro';
 // Recebe o título dinâmico da página como propriedade
 const { title = 'Atelier667 — Projetos Maker' } = Astro.props;
 ---
