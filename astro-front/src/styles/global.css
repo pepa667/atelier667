@@ -50,8 +50,12 @@ body {
 @utility texture-to-* {
   --gradient-dir: --value([*]);
 
-  mask-image: linear-gradient(var(--gradient-dir), black, transparent 80%), url(../assets/images/texture.gif);
-  -webkit-mask-image: linear-gradient(var(--gradient-dir), black, transparent 80%), url(../assets/images/texture.gif);
+  mask-image:
+    linear-gradient(var(--gradient-dir), black, transparent 80%),
+    url(../assets/images/texture.gif);
+  -webkit-mask-image:
+    linear-gradient(var(--gradient-dir), black, transparent 80%),
+    url(../assets/images/texture.gif);
 
   mask-composite: intersect;
   -webkit-mask-composite: source-in;
@@ -81,9 +85,12 @@ body {
 @utility texture_md-to-* {
   --gradient-dir: --value([*]);
 
-  mask-image: linear-gradient(var(--gradient-dir), black, transparent 80%), url(../assets/images/texture_md.png);
+  mask-image:
+    linear-gradient(var(--gradient-dir), black, transparent 80%),
+    url(../assets/images/texture_md.png);
   -webkit-mask-image:
-    linear-gradient(var(--gradient-dir), black, transparent 80%), url(../assets/images/texture_md.png);
+    linear-gradient(var(--gradient-dir), black, transparent 80%),
+    url(../assets/images/texture_md.png);
 
   mask-composite: intersect;
   -webkit-mask-composite: source-in;

@@ -1,28 +1,18 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import Maker from '../assets/images/icons/maker.png';
-import Deco from '../assets/images/icons/deco.png';
-import Code from '../assets/images/icons/code.png';
-import Hardware from '../assets/images/icons/hardware.png';
-import Machine from '../assets/images/icons/machine.png';
-import Punk from '../assets/images/icons/punk.png';
-import WoodWorking from '../assets/images/icons/woodworking.png';
+import Maker from "../assets/images/icons/maker.png";
+import Deco from "../assets/images/icons/deco.png";
+import Code from "../assets/images/icons/code.png";
+import Hardware from "../assets/images/icons/hardware.png";
+import Machine from "../assets/images/icons/machine.png";
+import Punk from "../assets/images/icons/punk.png";
+import WoodWorking from "../assets/images/icons/woodworking.png";
 
 // Agora o "Size" é opcional! Se não for passado, você controla o tamanho 100% pelas classes do Tailwind
-type IconKey =
-  'Code' | 'Deco' | 'Hardware' | 'Machine' | 'Maker' | 'Punk' | 'WoodWorking';
-const {
-  Icon = 'Deco',
-  Size,
-  class: className,
-} = Astro.props as {
-  Icon?: IconKey;
-  Size?: number;
-  class?: string;
-};
+const { Icon = "Deco", Size, class: className } = Astro.props;
 
-const iconMap: Record<IconKey, ImageMetadata> = {
+const iconMap = {
   Maker,
   Deco,
   Code,
@@ -49,11 +39,11 @@ const spriteSizes = {
 // Puxa as dimensões ou usa o padrão do 'Deco' como fallback
 const { x: max_X, y: max_Y } = spriteSizes[Icon] || spriteSizes.Deco;
 // Se o usuário passou um "Size" fixo, usamos ele. Se não, deixamos livre para o Tailwind agir.
-const containerStyle = Size ? `width: ${Size}px; height: ${Size}px;` : '';
+const containerStyle = Size ? `width: ${Size}px; height: ${Size}px;` : "";
 ---
 
 <div
-  class:list={['relative overflow-hidden aspect-square', className]}
+  class:list={["relative overflow-hidden aspect-square", className]}
   style={containerStyle}
 >
   <Image
@@ -67,12 +57,12 @@ const containerStyle = Size ? `width: ${Size}px; height: ${Size}px;` : '';
 </div>
 <script>
   function randomizeSprites() {
-    const targets = document.querySelectorAll('.sprite-target');
+    const targets = document.querySelectorAll(".sprite-target");
 
     targets.forEach((el) => {
       if (el instanceof HTMLElement) {
-        const maxX = parseInt(el.dataset.maxX || '4', 10);
-        const maxY = parseInt(el.dataset.maxY || '6', 10);
+        const maxX = parseInt(el.dataset.maxX || "4", 10);
+        const maxY = parseInt(el.dataset.maxY || "6", 10);
 
         // Sorteia o frame (0 até max - 1)
         const frameX = Math.floor(Math.random() * maxX);
@@ -91,5 +81,5 @@ const containerStyle = Size ? `width: ${Size}px; height: ${Size}px;` : '';
   }
 
   randomizeSprites();
-  document.addEventListener('astro:after-swap', randomizeSprites);
+  document.addEventListener("astro:after-swap", randomizeSprites);
 </script>

@@ -1,23 +1,30 @@
 import js from "@eslint/js";
 import tseslint from "typescript-eslint";
 import eslintPluginAstro from "eslint-plugin-astro";
-import eslintConfigPrettier from "eslint-config-prettier"; // 1. Import config
+import eslintConfigPrettier from "eslint-config-prettier";
 
 export default [
-  // Base JavaScript and TypeScript rules
+  {
+    ignores: ["dist/**", "node_modules/**", ".astro/**"],
+  },
   js.configs.recommended,
   ...tseslint.configs.recommended,
-
-  // Astro recommended configuration
   ...eslintPluginAstro.configs.recommended,
-
-  // Custom rule overrides
   {
     files: ["**/*.astro"],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        parser: tseslint.parser,
+        extraFileExtensions: [".astro"],
+        ecmaVersion: "latest",
+        sourceType: "module",
+      },
+    },
     rules: {
-      // Example: override or add specific Astro rules here
-      // "astro/no-set-html-directive": "error"
+      // Keep Astro-specific rules enabled but allow these to be adjusted later if needed.
+      // "astro/no-set-html-directive": "error",
     },
   },
-  eslintConfigPrettier, // 2. Must be last to override formatting rules
+  eslintConfigPrettier,
 ];

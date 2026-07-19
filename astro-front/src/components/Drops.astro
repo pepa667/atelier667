@@ -1,8 +1,8 @@
 ---
-import { sanityClient } from '../lib/sanity';
-import { marked } from 'marked';
+import { sanityClient } from "../lib/sanity";
+import { marked } from "marked";
 
-import Icon from '../components/Icon.astro';
+import Icon from "../components/Icon.astro";
 
 const drops = await sanityClient.fetch(
   `*[_type == "drop"] | order(_createdAt desc)`,
@@ -34,140 +34,133 @@ const drops = await sanityClient.fetch(
     class="relative mt-12 flex flex-col gap-0 overflow-hidden"
   >
     {
-      drops.map(
-        (
-          drp: { title: string; content: string; timestamp: string },
-          index: number,
-        ) => {
-          const d = new Date(drp.timestamp);
-          const dia = String(d.getDate()).padStart(2, '0');
-          const mes = String(d.getMonth() + 1).padStart(2, '0');
-          const ano = d.getFullYear();
-          const hora = String(d.getHours()).padStart(2, '0');
-          const min = String(d.getMinutes()).padStart(2, '0');
-          const seg = String(d.getSeconds()).padStart(2, '0');
-          const mil = String(d.getMilliseconds()).padStart(3, '0');
+      drops.map((drp, index) => {
+        const d = new Date(drp.timestamp);
+        const dia = String(d.getDate()).padStart(2, "0");
+        const mes = String(d.getMonth() + 1).padStart(2, "0");
+        const ano = d.getFullYear();
+        const hora = String(d.getHours()).padStart(2, "0");
+        const min = String(d.getMinutes()).padStart(2, "0");
+        const seg = String(d.getSeconds()).padStart(2, "0");
+        const mil = String(d.getMilliseconds()).padStart(3, "0");
 
-          const dropHora = `${hora}:${min}:${seg}.${mil}`;
+        const dropHora = `${hora}:${min}:${seg}.${mil}`;
 
-          // ID único para cada Drop para o JS encontrar o painel correspondente
-          const panelId = `drop-panel-${index}`;
+        // ID único para cada Drop para o JS encontrar o painel correspondente
+        const panelId = `drop-panel-${index}`;
 
-          return (
-            // A tag vazia <> (Fragmento) permite retornar dois elementos irmãos no Astro
-            <>
-              {/* --- CARD DE RESUMO --- */}
+        return (
+          // A tag vazia <> (Fragmento) permite retornar dois elementos irmãos no Astro
+          <>
+            {/* --- CARD DE RESUMO --- */}
+            <button
+              data-target={panelId}
+              class="btn-open-drop article relative group flex my-0 max-md:gap-8 overflow-hidden flex-col md:flex-row h-0 md:justify-between font-sans font-light  transition-all duration-1000 max-md:border-2 border-third/50 cursor-pointer bg-third/2 hover:bg-third/10"
+            >
+              <div class="absolute -inset-1 bg-black  texture_md mask-size-[25%]" />
+
+              <div class="relative isolate p-2 px-10 md:justify-center max-md:gap-2 flex font-title flex-row md:flex-col   text-third text-center before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-r before:from-third/30 group-hover:before:opacity-100 before:to-transparent before:opacity-0">
+                <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
+                <span class="text-2xl md:text-lg md:leading-none">{ano}</span>
+                <span class="text-2xl md:text-4xl md:leading-[0.85]">
+                  {dia}
+                </span>
+                <span class="text-2xl md:text-2xl md:leading-none">.{mes}</span>
+              </div>
+
+              <div class="relative isolate contents bg-zinc-950 text-center *:border-y-4 *:border-zinc-500/30">
+                <div class="flex flex-row relative w-full notfrt h-auto text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl px-4 lg:px-6 items-center border-third font-sans font-bold before:absolute before:h-1/3 before:border-l-4 before:left-3 before:border-third/30">
+                  {drp.title}
+                  <Icon
+                    Icon="Punk"
+                    class="pop_03 w-6 sm:w-10 lg:w-24 ml-8 max-md:hidden"
+                  />
+                </div>
+                <div class="relative w-auto h-auto text-lg md:text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center max-md:pl-4">
+                  {dropHora}
+                </div>
+              </div>
+
+              {/* BOTÃO ABRIR: Usando data-target para guardar qual painel ele deve abrir */}
+              <div
+                data-target={panelId}
+                class="btn-open-drop relative isolate p-6 flex flex-col max-md:items-end gap-4 before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-l before:from-third/30 group-hover:before:opacity-100 before:to-transparent before:opacity-0 justify-center text-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  class="size-10"
+                >
+                  <path
+                    d="M7 17L17 7M17 7H8M17 7V16"
+                    stroke="#00ff00"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="stroke-third"
+                  />
+                </svg>
+                <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] md:texture-to-[to_left] bg-third/10 max-md:texture_md" />
+              </div>
+            </button>
+
+            {/* --- FULL DROP (Painel Completo) --- */}
+            {/* Agora ele é IRMÃO do article. O 'absolute inset-0' vai cobrir o pai dele (o #drops-list inteiro) */}
+            <div
+              id={panelId}
+              class="fullDrop fixed hidden my-0 flex-col md:flex-row overflow-hidden  inset-0 z-30 justify-between font-sans font-light bg-zinc-950 transition-all duration-1000 ease-in-out max-md:border-2 border-third/50  popDrop_none w-[90svw] h-[90svh] md:w-[60svw] md:h-[80svh] "
+            >
+              <div class="relative isolate p-6  max-md:gap-2 flex font-title flex-row md:flex-col  md:bg-zinc-950 text-third text-center">
+                <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
+                <span class="text-2xl md:text-lg xl:text-xl 2xl:text-2xl md:leading-none">
+                  {ano}
+                </span>
+                <span class="text-2xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold md:leading-[0.85]">
+                  {dia}
+                </span>
+                <span class="text-2xl md:text-2xl xl:text-3xl 2xl:text-4xl md:leading-none">
+                  .{mes}
+                </span>
+              </div>
+
+              <div class="relative isolate flex flex-col bg-zinc-950 justify-between p-2 max-md:my-2 max-md:h-auto max-md:min-h-[50svh] md:p-8 w-full md:w-4/5 border-y-4 border-zinc-500/50">
+                <div class="relative w-full h-auto text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl md:px-4 lg:px-6 items-center font-sans font-bold max-md:mt-6 ">
+                  {drp.title}
+                </div>
+                <div class="relative mt-12 w-full h-full text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl md:px-4 lg:px-6 items-center font-sans font-light overflow-y-auto">
+                  <div set:html={marked.parse(drp.content)} />
+                </div>
+                <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center">
+                  {dropHora}
+                </div>
+              </div>
+
+              {/* BOTÃO ABRIR: Usando data-target para guardar qual painel ele deve abrir */}
               <button
                 data-target={panelId}
-                class="btn-open-drop article relative group flex my-0 max-md:gap-8 overflow-hidden flex-col md:flex-row h-0 md:justify-between font-sans font-light  transition-all duration-1000 max-md:border-2 border-third/50 cursor-pointer bg-third/2 hover:bg-third/10"
+                class="btn-close-drop relative isolate p-6 flex flex-col max-md:items-end gap-4 before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-l before:from-third/10 hover:before:opacity-100 before:to-transparent before:opacity-0 justify-center text-center cursor-pointer"
               >
-                <div class="absolute -inset-1 bg-black  texture_md mask-size-[25%]" />
-
-                <div class="relative isolate p-2 px-10 md:justify-center max-md:gap-2 flex font-title flex-row md:flex-col   text-third text-center before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-r before:from-third/30 group-hover:before:opacity-100 before:to-transparent before:opacity-0">
-                  <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
-                  <span class="text-2xl md:text-lg md:leading-none">{ano}</span>
-                  <span class="text-2xl md:text-4xl md:leading-[0.85]">
-                    {dia}
-                  </span>
-                  <span class="text-2xl md:text-2xl md:leading-none">
-                    .{mes}
-                  </span>
-                </div>
-
-                <div class="relative isolate contents bg-zinc-950 text-center *:border-y-4 *:border-zinc-500/30">
-                  <div class="flex flex-row relative w-full notfrt h-auto text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl px-4 lg:px-6 items-center border-third font-sans font-bold before:absolute before:h-1/3 before:border-l-4 before:left-3 before:border-third/30">
-                    {drp.title}
-                    <Icon
-                      Icon="Punk"
-                      class="pop_03 w-6 sm:w-10 lg:w-24 ml-8 max-md:hidden"
-                    />
-                  </div>
-                  <div class="relative w-auto h-auto text-lg md:text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center max-md:pl-4">
-                    {dropHora}
-                  </div>
-                </div>
-
-                {/* BOTÃO ABRIR: Usando data-target para guardar qual painel ele deve abrir */}
-                <div
-                  data-target={panelId}
-                  class="btn-open-drop relative isolate p-6 flex flex-col max-md:items-end gap-4 before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-l before:from-third/30 group-hover:before:opacity-100 before:to-transparent before:opacity-0 justify-center text-center"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  class="size-14 md:mb-8"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    class="size-10"
-                  >
-                    <path
-                      d="M7 17L17 7M17 7H8M17 7V16"
-                      stroke="#00ff00"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="stroke-third"
-                    />
-                  </svg>
-                  <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] md:texture-to-[to_left] bg-third/10 max-md:texture_md" />
-                </div>
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
+                    fill="#0F1729"
+                    class="fill-third"
+                  />
+                </svg>
+                <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] md:texture-to-[to_left] bg-third/10 max-md:texture_md" />
               </button>
-
-              {/* --- FULL DROP (Painel Completo) --- */}
-              {/* Agora ele é IRMÃO do article. O 'absolute inset-0' vai cobrir o pai dele (o #drops-list inteiro) */}
-              <div
-                id={panelId}
-                class="fullDrop fixed hidden my-0 flex-col md:flex-row overflow-hidden  inset-0 z-30 justify-between font-sans font-light bg-zinc-950 transition-all duration-1000 ease-in-out max-md:border-2 border-third/50  popDrop_none w-[90svw] h-[90svh] md:w-[60svw] md:h-[80svh] "
-              >
-                <div class="relative isolate p-6  max-md:gap-2 flex font-title flex-row md:flex-col  md:bg-zinc-950 text-third text-center">
-                  <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] bg-third/10 max-md:texture_md md:texture-to-[to_right]" />
-                  <span class="text-2xl md:text-lg xl:text-xl 2xl:text-2xl md:leading-none">
-                    {ano}
-                  </span>
-                  <span class="text-2xl md:text-4xl xl:text-5xl 2xl:text-6xl font-bold md:leading-[0.85]">
-                    {dia}
-                  </span>
-                  <span class="text-2xl md:text-2xl xl:text-3xl 2xl:text-4xl md:leading-none">
-                    .{mes}
-                  </span>
-                </div>
-
-                <div class="relative isolate flex flex-col bg-zinc-950 justify-between p-2 max-md:my-2 max-md:h-auto max-md:min-h-[50svh] md:p-8 w-full md:w-4/5 border-y-4 border-zinc-500/50">
-                  <div class="relative w-full h-auto text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl md:px-4 lg:px-6 items-center font-sans font-bold max-md:mt-6 ">
-                    {drp.title}
-                  </div>
-                  <div class="relative mt-12 w-full h-full text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl md:px-4 lg:px-6 items-center font-sans font-light overflow-y-auto">
-                    <div set:html={marked.parse(drp.content)} />
-                  </div>
-                  <div class="relative w-auto h-auto text-sm lg:text-xl text-zinc-400 font-slab items-center text-left before:content-['TIME'] before:text-third block content-center">
-                    {dropHora}
-                  </div>
-                </div>
-
-                {/* BOTÃO ABRIR: Usando data-target para guardar qual painel ele deve abrir */}
-                <button
-                  data-target={panelId}
-                  class="btn-close-drop relative isolate p-6 flex flex-col max-md:items-end gap-4 before:transition-opacity before:duration-700 before:inset-0 before:absolute before:bg-linear-to-l before:from-third/10 hover:before:opacity-100 before:to-transparent before:opacity-0 justify-center text-center cursor-pointer"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    class="size-14 md:mb-8"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M5.29289 5.29289C5.68342 4.90237 6.31658 4.90237 6.70711 5.29289L12 10.5858L17.2929 5.29289C17.6834 4.90237 18.3166 4.90237 18.7071 5.29289C19.0976 5.68342 19.0976 6.31658 18.7071 6.70711L13.4142 12L18.7071 17.2929C19.0976 17.6834 19.0976 18.3166 18.7071 18.7071C18.3166 19.0976 17.6834 19.0976 17.2929 18.7071L12 13.4142L6.70711 18.7071C6.31658 19.0976 5.68342 19.0976 5.29289 18.7071C4.90237 18.3166 4.90237 17.6834 5.29289 17.2929L10.5858 12L5.29289 6.70711C4.90237 6.31658 4.90237 5.68342 5.29289 5.29289Z"
-                      fill="#0F1729"
-                      class="fill-third"
-                    />
-                  </svg>
-                  <div class="font-title absolute inset-0 md:border-4 border-third z-[-1] md:texture-to-[to_left] bg-third/10 max-md:texture_md" />
-                </button>
-              </div>
-            </>
-          );
-        },
-      )
+            </div>
+          </>
+        );
+      })
     }
   </div>
 
@@ -194,31 +187,25 @@ const drops = await sanityClient.fetch(
   <script>
     // 1. Função de Rotação dos Drops (mantida a sua lógica original)
     function setupDropRotator() {
-      const btnNext = document.getElementById('next-drop');
+      const btnNext = document.getElementById("next-drop");
       if (!btnNext) return;
 
       // Removemos event listeners antigos pra evitar duplicação se o Astro trocar de view
       const newBtn = btnNext.cloneNode(true);
       btnNext.parentNode?.replaceChild(newBtn, btnNext);
 
-      newBtn.addEventListener('click', () => {
-        const dropsLista = document.querySelector(
-          '#drops-list',
-        ) as HTMLElement | null;
+      newBtn.addEventListener("click", () => {
+        const dropsLista = document.querySelector("#drops-list");
         if (!dropsLista) return;
 
-        const dropsFirst = dropsLista.querySelector(
-          '.article',
-        ) as HTMLElement | null;
-        const dropsAdd = dropsLista.querySelector(
-          ':nth-child(3 of .article)',
-        ) as HTMLElement | null;
+        const dropsFirst = dropsLista.querySelector(".article");
+        const dropsAdd = dropsLista.querySelector(":nth-child(3 of .article)");
 
         if (dropsFirst && dropsAdd) {
-          dropsFirst.classList.toggle('ativa_drop');
+          dropsFirst.classList.toggle("ativa_drop");
 
           setTimeout(() => {
-            dropsAdd.classList.toggle('ativa_drop');
+            dropsAdd.classList.toggle("ativa_drop");
             dropsLista.appendChild(dropsFirst);
           }, 1000);
         }
@@ -227,47 +214,47 @@ const drops = await sanityClient.fetch(
 
     // 2. A Mágica de Abrir e Fechar o Artigo Completo
     function setupFullDropToggles() {
-      const openBtns = document.querySelectorAll('.btn-open-drop');
-      const closeBtns = document.querySelectorAll('.btn-close-drop');
+      const openBtns = document.querySelectorAll(".btn-open-drop");
+      const closeBtns = document.querySelectorAll(".btn-close-drop");
 
       // Botão de Abrir
       openBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const targetId = btn.getAttribute('data-target');
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
           if (!targetId) return;
 
           const fullPanelView = document.getElementById(targetId);
           if (fullPanelView) {
             // 1. Faz a animação de deslize
-            fullPanelView.classList.remove('hidden');
-            fullPanelView.classList.add('flex');
+            fullPanelView.classList.remove("hidden");
+            fullPanelView.classList.add("flex");
 
             setTimeout(() => {
-              fullPanelView.classList.remove('popDrop_none');
-              fullPanelView.classList.add('popDrop_full');
+              fullPanelView.classList.remove("popDrop_none");
+              fullPanelView.classList.add("popDrop_full");
             }, 100);
             // 2. Faz a tela do navegador rolar suavemente para o topo do container pai
-            const dropsList = document.getElementById('drops-list');
+            const dropsList = document.getElementById("drops-list");
             if (dropsList) {
               dropsList.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start', // Alinha o topo do container com o topo da tela
+                behavior: "smooth",
+                block: "start", // Alinha o topo do container com o topo da tela
               });
             }
 
             // 3. (Extra) Reseta o scroll interno do texto do artigo para o topo
             // Procura a div que tem o 'overflow-y-auto' dentro do painel aberto
-            const contentArea = fullPanelView.querySelector('.overflow-y-auto');
+            const contentArea = fullPanelView.querySelector(".overflow-y-auto");
             if (contentArea) {
               contentArea.scrollTop = 0;
             }
-            const backDropDrops = document.getElementById('backDropDrops');
+            const backDropDrops = document.getElementById("backDropDrops");
             if (backDropDrops) {
-              backDropDrops.classList.remove('hidden');
-              backDropDrops.classList.remove('backdrop-blur-[0px]');
-              backDropDrops.classList.add('block');
+              backDropDrops.classList.remove("hidden");
+              backDropDrops.classList.remove("backdrop-blur-[0px]");
+              backDropDrops.classList.add("block");
               setTimeout(() => {
-                backDropDrops.classList.add('backdrop-blur-2xl');
+                backDropDrops.classList.add("backdrop-blur-2xl");
               }, 100);
             }
           }
@@ -276,29 +263,29 @@ const drops = await sanityClient.fetch(
 
       // Botão de Fechar
       closeBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const targetId = btn.getAttribute('data-target');
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
           if (!targetId) return;
 
           const fullPanelView = document.getElementById(targetId);
           if (fullPanelView) {
             // 1. Faz a animação de deslize
-            fullPanelView.classList.add('popDrop_none');
-            fullPanelView.classList.remove('popDrop_full');
+            fullPanelView.classList.add("popDrop_none");
+            fullPanelView.classList.remove("popDrop_full");
 
             setTimeout(() => {
-              fullPanelView.classList.remove('flex');
-              fullPanelView.classList.add('hidden');
+              fullPanelView.classList.remove("flex");
+              fullPanelView.classList.add("hidden");
             }, 1000);
           }
 
-          const backDropDrops = document.getElementById('backDropDrops');
+          const backDropDrops = document.getElementById("backDropDrops");
           if (backDropDrops) {
-            backDropDrops.classList.remove('backdrop-blur-2xl');
-            backDropDrops.classList.add('backdrop-blur-[0px]');
+            backDropDrops.classList.remove("backdrop-blur-2xl");
+            backDropDrops.classList.add("backdrop-blur-[0px]");
             setTimeout(() => {
-              backDropDrops.classList.remove('block');
-              backDropDrops.classList.add('hidden');
+              backDropDrops.classList.remove("block");
+              backDropDrops.classList.add("hidden");
             }, 1000);
           }
         });
@@ -309,31 +296,25 @@ const drops = await sanityClient.fetch(
       setupFullDropToggles();
 
       // Setup inicial das classes ativas pro rotacionador
-      const dropsLista = document.querySelector(
-        '#drops-list',
-      ) as HTMLElement | null;
+      const dropsLista = document.querySelector("#drops-list");
       if (dropsLista) {
-        const dropsFirst = dropsLista.querySelector(
-          '.article',
-        ) as HTMLElement | null;
-        const dropsSec = dropsLista.querySelector(
-          ':nth-child(2 of .article)',
-        ) as HTMLElement | null;
+        const dropsFirst = dropsLista.querySelector(".article");
+        const dropsSec = dropsLista.querySelector(":nth-child(2 of .article)");
 
         if (dropsFirst && dropsSec) {
           // Timeout de segurança pra não bater de frente com a animação de montagem do DOM
           setTimeout(() => {
-            dropsFirst.classList.add('ativa_drop');
-            dropsSec.classList.add('ativa_drop');
+            dropsFirst.classList.add("ativa_drop");
+            dropsSec.classList.add("ativa_drop");
           }, 100);
         }
       }
     }
 
     // Executa ao carregar e também garante que funcione com transições de página do Astro
-    document.addEventListener('DOMContentLoaded', init);
-    document.addEventListener('astro:after-swap', init);
+    document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("astro:after-swap", init);
     // Fallback pra garantir execução no primeiro render
-    if (document.readyState !== 'loading') init();
+    if (document.readyState !== "loading") init();
   </script>
 </section>

@@ -1,17 +1,17 @@
 ---
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
-import Deco from '../assets/images/icons/deco.png';
-import Code from '../assets/images/icons/code.png';
-import Hardware from '../assets/images/icons/hardware.png';
-import Machine from '../assets/images/icons/machine.png';
-import Punk from '../assets/images/icons/punk.png';
-import WoodWorking from '../assets/images/icons/woodworking.png';
+import Deco from "../assets/images/icons/deco.png";
+import Code from "../assets/images/icons/code.png";
+import Hardware from "../assets/images/icons/hardware.png";
+import Machine from "../assets/images/icons/machine.png";
+import Punk from "../assets/images/icons/punk.png";
+import WoodWorking from "../assets/images/icons/woodworking.png";
 
 // Recebe o nome do ícone e o tamanho da janela (ex: Size={176})
-const { Icon = 'Deco', Size = 176 } = Astro.props;
+const { Icon = "Deco", Size = 176 } = Astro.props;
 
-const iconMap: Record<string, ImageMetadata> = {
+const iconMap = {
   Deco,
   Code,
   Hardware,
@@ -28,8 +28,8 @@ let max_Y = 6;
 
 // Se o tamanho da grade mudar por ícone, você configura aqui
 switch (Icon) {
-  case 'Code':
-  case 'Hardware':
+  case "Code":
+  case "Hardware":
   default:
     max_X = 4;
     max_Y = 6;
@@ -53,14 +53,14 @@ switch (Icon) {
 
 <script>
   function randomizeSprites() {
-    const targets = document.querySelectorAll('.sprite-target');
+    const targets = document.querySelectorAll(".sprite-target");
 
     targets.forEach((el) => {
       if (el instanceof HTMLElement) {
         // Puxa as configurações que deixamos salvas no HTML (dataset)
-        const maxX = parseInt(el.dataset.maxX || '4', 10);
-        const maxY = parseInt(el.dataset.maxY || '6', 10);
-        const size = parseInt(el.dataset.size || '176', 10);
+        const maxX = parseInt(el.dataset.maxX || "4", 10);
+        const maxY = parseInt(el.dataset.maxY || "6", 10);
+        const size = parseInt(el.dataset.size || "176", 10);
 
         // Sorteia um frame aleatório dentro do limite da grade (0 até max-1)
         const frameX = Math.floor(Math.random() * maxX);
@@ -81,5 +81,5 @@ switch (Icon) {
   randomizeSprites();
 
   // Garante que funcione caso você esteja usando View Transitions do Astro
-  document.addEventListener('astro:after-swap', randomizeSprites);
+  document.addEventListener("astro:after-swap", randomizeSprites);
 </script>

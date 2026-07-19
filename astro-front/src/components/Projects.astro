@@ -1,23 +1,21 @@
 ---
-import type { string } from 'astro:schema';
-import { sanityClient, urlFor } from '../lib/sanity';
+import { urlFor } from "../lib/sanity";
 
-const projetos = await sanityClient.fetch(
-  `*[_type == "projeto"] | order(_modifiedAt desc)`,
-);
+const { projetos = [] } = Astro.props;
 
-const getStatusClass = (status: any) => {
+/** @param {string} status */
+const getStatusClass = (status) => {
   switch (status) {
-    case 'rascunho':
-      return 'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20';
-    case 'concluido':
-      return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-    case 'desenvolvimento':
-      return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-    case 'pausado':
-      return 'bg-rose-500/10 text-rose-400 border-rose-800';
+    case "rascunho":
+      return "bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/20";
+    case "concluido":
+      return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+    case "desenvolvimento":
+      return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+    case "pausado":
+      return "bg-rose-500/10 text-rose-400 border-rose-800";
     default:
-      return 'bg-zinc-800 text-zinc-400';
+      return "bg-zinc-800 text-zinc-400";
   }
 };
 
@@ -27,7 +25,7 @@ const { value = 50, totalLength = 10 } = Astro.props;
 const filledCount = Math.round((value / 100) * totalLength);
 const emptyCount = totalLength - filledCount;
 
-const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
+const progressBar = `[${"█".repeat(filledCount)}${"░".repeat(emptyCount)}]`;
 ---
 
 <section
@@ -52,14 +50,8 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
   </div>
   {
     projetos.map(
-      (proj: {
-        mainImage: any;
-        title_pt: string;
-        categorias: string[]; // Tipado corretamente como array de strings
-        status: string;
-        progresso: number; // Trocado de unknown para number para a matemática da barra funcionar
-        slug: { current: any };
-      }) => {
+      /** @param {{ progresso?: number; slug?: { current?: string }; title_pt?: string; status?: string; categorias?: string[]; mainImage?: unknown }} proj */
+      (proj) => {
         // --- CONFIGURAÇÃO DA BARRA ASCII DINÂMICA ---
         const tamanhoTotalBarra = 10; // Define o tamanho visual da barra (ex: 10 caracteres)
         const porcentagem = proj.progresso || 0;
@@ -75,7 +67,7 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
         const blocosVazios = Math.max(0, tamanhoTotalBarra - blocosCheios);
 
         // Monta a string da barra: [█████░░░░░]
-        const barraAscii = `[${'█'.repeat(blocosCheios)}${'░'.repeat(blocosVazios)}]`;
+        const barraAscii = `[${"█".repeat(blocosCheios)}${"░".repeat(blocosVazios)}]`;
 
         return (
           <article class="group relative  isolate  ">
@@ -89,35 +81,35 @@ const progressBar = `[${'█'.repeat(filledCount)}${'░'.repeat(emptyCount)}]`;
               <span
                 class={`px-2.5 py-0.5 w-fit my-4 ml-4 border-4 ${getStatusClass(proj.status)} font-medium capitalize`}
               >
-                {proj.status === 'concluido'
-                  ? 'Concluído'
-                  : proj.status === 'desenvolvimento'
-                    ? 'Em Progresso'
-                    : proj.status === 'rascunho'
-                      ? 'Rascunho'
-                      : 'Pausado'}
+                {proj.status === "concluido"
+                  ? "Concluído"
+                  : proj.status === "desenvolvimento"
+                    ? "Em Progresso"
+                    : proj.status === "rascunho"
+                      ? "Rascunho"
+                      : "Pausado"}
               </span>
               <code class="font-mono text-second text-lg md:text-xl lg:text-lg xl:text-2xl px-0 py-1 inline-block whitespace-nowrap">
-                {barraAscii} {porcentagem}%{''}
+                {barraAscii} {porcentagem}%{""}
               </code>
               <div class="ml-2 w-11/12 overflow-hidden self-baseline py-4 mask-marquee">
                 {proj.categorias && proj.categorias.length > 0 ? (
                   /* O container flex agora ganha a animação 'animate-marquee' */
                   <ul class="flex flex-row whitespace-nowrap list-none animate-marquee w-max uppercase tracking-wider font-light">
                     {/* BLOCO 1: Renderiza original */}
-                    {proj.categorias.map((categoria: string) => (
+                    {proj.categorias.map((categoria) => (
                       <li class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block">
-                        #{categoria || 'Nada'}
+                        #{categoria || "Nada"}
                       </li>
                     ))}
 
                     {/* BLOCO 2: Duplicado idêntico para criar o efeito infinito visual */}
-                    {proj.categorias.map((categoria: string) => (
+                    {proj.categorias.map((categoria) => (
                       <li
                         class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block"
                         aria-hidden="true"
                       >
-                        #{categoria || 'Nada'}
+                        #{categoria || "Nada"}
                       </li>
                     ))}
                   </ul>
