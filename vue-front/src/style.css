@@ -1,1 +1,49 @@
 @import "tailwindcss";
+
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700&display=swap");
+
+@theme {
+  --font-serif: "Bodoni Moda", serif;
+  --font-slab: "Roboto Slab", serif;
+  --font-sans: "Inter", sans-serif;
+  --font-title: "Big Shoulders", sans-serif;
+
+  --hue-rotate-6: 74;
+  --hue-rotate-7: 330;
+  --hue-rotate-8: 180;
+  --hue-rotate-0: 43;
+
+  --color-primary: hsl(var(--hue-rotate-1), 100%, 60%);
+  --color-second: hsl(var(--hue-rotate-2), 100%, 60%);
+  --color-third: hsl(var(--hue-rotate-3), 100%, 60%);
+  --color-fourth: hsl(var(--hue-rotate-4), 100%, 60%);
+
+  --animate-marquee: marquee 10s linear infinite;
+
+  /* Escala de tipografia fluida usando a matemática do Utopia */
+  --text-fluid-sm: clamp(0.8333rem, 0.7711rem + 0.3111vw, 1rem);
+  --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
+  --text-fluid-title: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
+  --text-fluid-hero: clamp(2.5rem, 1.5rem + 5vw, 6rem);
+  --text-fluid-hero: clamp(2.5rem, 1.5rem + 5vw, 6rem);
+  --text-fluid-sidebar: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
+
+  --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
+  --size-fluid-icon: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    } /* Move exatamente metade, criando o looping infinito */
+  }
+}
+
+body {
+  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden;
+}
+
+/* Os keyframes e classes do SideScroller continuam aqui embaixo... */

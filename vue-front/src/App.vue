@@ -6,6 +6,7 @@ import Drops from "./components/Drops.vue";
 import Projects from "./components/Projects.vue";
 import Wiki from "./components/Wiki.vue";
 import ArtBoard from "./components/ArtBoard.vue";
+import SideScroller from "./components/SideScroller.vue";
 
 const projetos = ref([]);
 const drops = ref([]);
@@ -35,7 +36,9 @@ onMounted(async () => {
 
 <template>
   <!-- O flex aqui separa a barra lateral do resto do conteúdo -->
-  <div class="flex min-h-screen bg-zinc-950 text-zinc-100 font-mono">
+  <div
+    class="md:min-w-3xl : md:max-w-7xl bg-amber-800 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
+  >
     <!-- Sua barra decorativa colada na esquerda -->
     <SideScroller />
 
