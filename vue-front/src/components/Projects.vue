@@ -18,7 +18,9 @@ const getAsciiBar = (percent) => {
 
 <template>
   <section class="flex flex-col gap-6">
-    <h2 class="text-2xl font-bold text-zinc-500 mb-4">// PROJETOS_ATIVOS</h2>
+    <h2 class="glitch text-2xl font-bold text-zinc-500 mb-4" data>
+      // PROJETOS_ATIVOS
+    </h2>
 
     <article
       v-for="proj in projetos"

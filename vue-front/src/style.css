@@ -1,7 +1,7 @@
-@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700&display=swap");
 
 @import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700&display=swap");
+@import "tailwindcss";
 
 @theme {
   --font-serif: "Bodoni Moda", serif;
@@ -9,10 +9,10 @@
   --font-sans: "Inter", sans-serif;
   --font-title: "Big Shoulders", sans-serif;
 
-  --hue-rotate-6: 74;
-  --hue-rotate-7: 330;
-  --hue-rotate-8: 180;
-  --hue-rotate-0: 43;
+  --hue-rotate-1: 74;
+  --hue-rotate-2: 330;
+  --hue-rotate-3: 180;
+  --hue-rotate-4: 43;
 
   --color-primary: hsl(var(--hue-rotate-1), 100%, 60%);
   --color-second: hsl(var(--hue-rotate-2), 100%, 60%);
@@ -30,7 +30,41 @@
   --text-fluid-sidebar: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
 
   --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
-  --size-fluid-icon: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
+
+  --size-icon-sm: clamp(
+    0.75rem,
+    -0.9375rem + 3.5156vw,
+    1.875rem
+  ); /* ~12px a 30px */
+  --size-icon-md: clamp(1rem, -1.25rem + 4.6875vw, 2.5rem); /* ~16px a 40px */
+  --size-icon-lg: clamp(
+    1.25rem,
+    -1.5625rem + 5.8594vw,
+    3.125rem
+  ); /* ~20px a 50px */
+  --size-icon: clamp(
+    1.5rem,
+    -1.875rem + 7.0313vw,
+    3.75rem
+  ); /* ~24px a 60px (Sua Base) */
+  --size-icon-xl: clamp(2rem, -2.5rem + 9.375vw, 5rem); /* ~32px a 80px */
+  --size-icon-2xl: clamp(
+    2.5rem,
+    -3.125rem + 11.7188vw,
+    6.25rem
+  ); /* ~40px a 100px */
+  --size-icon-3xl: clamp(
+    3rem,
+    -3.75rem + 14.0625vw,
+    7.5rem
+  ); /* ~48px a 120px */
+  --size-icon-4xl: clamp(4rem, -5rem + 18.75vw, 10rem); /* ~64px a 160px */
+  --size-icon-5xl: clamp(
+    5rem,
+    -6.25rem + 23.4375vw,
+    12.5rem
+  ); /* ~80px a 200px */
+  --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem); /* ~96px a 240px */
 
   @keyframes marquee {
     0% {
@@ -43,7 +77,107 @@
 }
 
 body {
-  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden;
+  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-cover bg-fixed bg-center;
 }
 
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */
+
+.pop_01 {
+  filter: var(--img-hue-1);
+}
+.pop_02 {
+  filter: var(--img-hue-2);
+}
+.pop_03 {
+  filter: var(--img-hue-3);
+}
+.pop_04 {
+  filter: var(--img-hue-4);
+}
+
+.glitch,
+.glitch::after {
+  color: var(--color-primary);
+  outline: transparent;
+  position: relative;
+}
+
+.glitch::after {
+  --slice-0: inset(50% 50% 50% 50%);
+  --slice-1: inset(80% -6px 0 0);
+  --slice-2: inset(50% -6px 30% 0);
+  --slice-3: inset(10% -6px 85% 0);
+  --slice-4: inset(40% -6px 43% 0);
+  --slice-5: inset(80% -6px 5% 0);
+  content: " (source: " attr(dataTitle) ") ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  clip-path: var(--slice-0);
+}
+
+.glitch:hover::after {
+  animation: 1s glitch;
+  animation-timing-function: steps(2, end);
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: var(--slice-1);
+    transform: translate(-20px, -10px);
+  }
+
+  10% {
+    clip-path: var(--slice-3);
+    transform: translate(10px, 10px);
+  }
+
+  20% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 10px);
+  }
+
+  30% {
+    clip-path: var(--slice-3);
+    transform: translate(0px, 5px);
+  }
+
+  40% {
+    clip-path: var(--slice-2);
+    transform: translate(-5px, 0px);
+  }
+
+  50% {
+    clip-path: var(--slice-3);
+    transform: translate(5px, 0px);
+  }
+
+  60% {
+    clip-path: var(--slice-4);
+    transform: translate(5px, 10px);
+  }
+
+  70% {
+    clip-path: var(--slice-2);
+    transform: translate(-10px, 10px);
+  }
+
+  80% {
+    clip-path: var(--slice-5);
+    transform: translate(20px, -10px);
+  }
+
+  90% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 0px);
+  }
+
+  100% {
+    clip-path: var(--slice-1);
+    transform: translate(0);
+  }
+}

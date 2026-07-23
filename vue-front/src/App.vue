@@ -13,9 +13,33 @@ const drops = ref([]);
 const documentos = ref([]);
 const posts = ref([]);
 
-// Substitua o onMounted do seu App.vue por este aqui:
+// Mapeamento e sorteio das cores/filtros dinâmicos
+const setupRandomTheme = () => {
+  const originalHues = [74, 330, 186, 43];
+  const filterMap = {
+    74: "brightness(0) saturate(100%) invert(86%) sepia(97%) saturate(447%) hue-rotate(22deg) brightness(105%) contrast(121%)",
+    330: "brightness(0) saturate(100%) invert(16%) sepia(81%) saturate(5968%) hue-rotate(322deg) brightness(99%) contrast(110%)",
+    186: "brightness(0) saturate(100%) invert(73%) sepia(50%) saturate(3689%) hue-rotate(143deg) brightness(102%) contrast(112%)",
+    43: "brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(527%) hue-rotate(340deg) brightness(105%) contrast(97%)",
+  };
+
+  const shuffledHues = [...originalHues].sort(() => Math.random() - 0.5);
+  const root = document.documentElement;
+
+  shuffledHues.forEach((hue, index) => {
+    root.style.setProperty(`--hue-rotate-${index + 1}`, `${hue}deg`);
+    const filterValue = filterMap[hue];
+    if (filterValue) {
+      root.style.setProperty(`--img-hue-${index + 1}`, filterValue);
+    }
+  });
+};
 
 onMounted(async () => {
+  // 1. Executa a lógica de cores assim que o componente entra na tela
+  setupRandomTheme();
+
+  // 2. Busca os dados no Sanity
   try {
     const data = await sanityClient.fetch(`{
       "projetos": *[_type == "projeto"],
@@ -24,12 +48,12 @@ onMounted(async () => {
       "artboard": *[_type == "artboard"] | order(timestamp desc)
     }`);
 
-    projetos.value = data.projetos;
-    drops.value = data.drops;
-    documentos.value = data.wiki;
-    posts.value = data.artboard;
+    projetos.value = data.projetos || [];
+    drops.value = data.drops || [];
+    documentos.value = data.wiki || [];
+    posts.value = data.artboard || [];
   } catch (error) {
-    console.error("Erro ao buscar dados:", error);
+    console.error("Erro ao buscar dados do Sanity:", error);
   }
 });
 </script>
@@ -37,7 +61,7 @@ onMounted(async () => {
 <template>
   <!-- O flex aqui separa a barra lateral do resto do conteúdo -->
   <div
-    class="md:min-w-3xl : md:max-w-7xl bg-amber-800 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
+    class="md:min-w-3xl : md:max-w-7xl bg-zinc-950/75 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
     <!-- Sua barra decorativa colada na esquerda -->
     <SideScroller />
