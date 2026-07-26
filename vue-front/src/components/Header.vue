@@ -10,7 +10,7 @@ import Icon from "./Icon.vue";
     class="relative w-full flex flex-col gap-[clamp(1.25rem,0.6667rem+2.9167vw,3rem)] justify-between items-start py-6 border-b border-zinc-800"
   >
     <GlitchTitle
-      class="relative aloha [&_.glitch-overlay_h1]:text-zinc-800 [&_.glitch-overlay_h1]:bg-primary [&_.glitch-overlay_h1]:drop-shadow-none"
+      class="[animation-delay:1500ms] relative aloha [&_.glitch-overlay_h1]:text-zinc-800 [&_.glitch-overlay_h1]:bg-primary [&_.glitch-overlay_h1]:drop-shadow-none"
       tag-glitch="div"
       :min-delay="5000"
       :max-delay="10000"
