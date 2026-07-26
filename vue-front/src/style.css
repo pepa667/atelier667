@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&display=swap");
 
 @import url("./styles/sideBar.css");
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:opsz,wght@0,14,400;&family=Roboto+Slab:wght@400&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -31,15 +31,39 @@
 
   --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
 
-  --size-icon-sm: clamp(0.75rem, -0.9375rem + 3.5156vw, 1.875rem); /* ~12px a 30px */
+  --size-icon-sm: clamp(
+    0.75rem,
+    -0.9375rem + 3.5156vw,
+    1.875rem
+  ); /* ~12px a 30px */
   --size-icon-md: clamp(1rem, -1.25rem + 4.6875vw, 2.5rem); /* ~16px a 40px */
-  --size-icon-lg: clamp(1.25rem, -1.5625rem + 5.8594vw, 3.125rem); /* ~20px a 50px */
-  --size-icon: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem); /* ~24px a 60px (Sua Base) */
+  --size-icon-lg: clamp(
+    1.25rem,
+    -1.5625rem + 5.8594vw,
+    3.125rem
+  ); /* ~20px a 50px */
+  --size-icon: clamp(
+    1.5rem,
+    -1.875rem + 7.0313vw,
+    3.75rem
+  ); /* ~24px a 60px (Sua Base) */
   --size-icon-xl: clamp(2rem, -2.5rem + 9.375vw, 5rem); /* ~32px a 80px */
-  --size-icon-2xl: clamp(2.5rem, -3.125rem + 11.7188vw, 6.25rem); /* ~40px a 100px */
-  --size-icon-3xl: clamp(3rem, -3.75rem + 14.0625vw, 7.5rem); /* ~48px a 120px */
+  --size-icon-2xl: clamp(
+    2.5rem,
+    -3.125rem + 11.7188vw,
+    6.25rem
+  ); /* ~40px a 100px */
+  --size-icon-3xl: clamp(
+    3rem,
+    -3.75rem + 14.0625vw,
+    7.5rem
+  ); /* ~48px a 120px */
   --size-icon-4xl: clamp(4rem, -5rem + 18.75vw, 10rem); /* ~64px a 160px */
-  --size-icon-5xl: clamp(5rem, -6.25rem + 23.4375vw, 12.5rem); /* ~80px a 200px */
+  --size-icon-5xl: clamp(
+    5rem,
+    -6.25rem + 23.4375vw,
+    12.5rem
+  ); /* ~80px a 200px */
   --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem); /* ~96px a 240px */
 
   @keyframes marquee {
