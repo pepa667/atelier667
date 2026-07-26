@@ -17,7 +17,9 @@ import Icon from "./Icon.vue";
         class="scroll-side-bar text-fluid-base *:inline-block whitespace-nowrap list-none py-fluid-base [&>li]:before:content-['_//_'] [&>li]:before:text-zinc-200 italic font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline [&>li:nth-child(1n)]:text-primary [&>li:nth-child(2n)]:text-second [&>li:nth-child(3n)]:text-third [&>li:nth-child(4n)]:text-fourth"
       >
         <!-- Chamando o Icon.vue do jeito Vue -->
-        <Icon name="maker" class="pop_01 size-icon mx-4" />
+        <li>
+          <Icon name="maker" class="pop_01 size-icon mx-4" />
+        </li>
 
         <li>Software</li>
         <li>Hardware</li>
@@ -31,7 +33,9 @@ import Icon from "./Icon.vue";
         <li>Ilustração</li>
         <li class="after:content-['_//_'] after:text-zinc-200">Modelagem</li>
 
-        <Icon name="maker" class="pop_01 size-icon mx-4" />
+        <li>
+          <Icon name="maker" class="pop_01 size-icon mx-4" />
+        </li>
       </ol>
     </div>
   </aside>

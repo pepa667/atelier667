@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, useSlots } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 const props = defineProps({
   tagGlitch: {
@@ -58,8 +58,6 @@ const shuffleSlicesAndTransforms = () => {
     "--ty-5": `${getRandomOffset(-8, 8)}px`,
   };
 };
-
-// Dentro do GlitchTitle.vue
 
 const triggerGlitch = () => {
   isPlaying.value = false;

@@ -27,44 +27,19 @@
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
   --text-fluid-title: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
   --text-fluid-hero: clamp(2.5rem, 1.5rem + 5vw, 6rem);
-  --text-fluid-hero: clamp(2.5rem, 1.5rem + 5vw, 6rem);
   --text-fluid-sidebar: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
 
   --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
 
-  --size-icon-sm: clamp(
-    0.75rem,
-    -0.9375rem + 3.5156vw,
-    1.875rem
-  ); /* ~12px a 30px */
+  --size-icon-sm: clamp(0.75rem, -0.9375rem + 3.5156vw, 1.875rem); /* ~12px a 30px */
   --size-icon-md: clamp(1rem, -1.25rem + 4.6875vw, 2.5rem); /* ~16px a 40px */
-  --size-icon-lg: clamp(
-    1.25rem,
-    -1.5625rem + 5.8594vw,
-    3.125rem
-  ); /* ~20px a 50px */
-  --size-icon: clamp(
-    1.5rem,
-    -1.875rem + 7.0313vw,
-    3.75rem
-  ); /* ~24px a 60px (Sua Base) */
+  --size-icon-lg: clamp(1.25rem, -1.5625rem + 5.8594vw, 3.125rem); /* ~20px a 50px */
+  --size-icon: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem); /* ~24px a 60px (Sua Base) */
   --size-icon-xl: clamp(2rem, -2.5rem + 9.375vw, 5rem); /* ~32px a 80px */
-  --size-icon-2xl: clamp(
-    2.5rem,
-    -3.125rem + 11.7188vw,
-    6.25rem
-  ); /* ~40px a 100px */
-  --size-icon-3xl: clamp(
-    3rem,
-    -3.75rem + 14.0625vw,
-    7.5rem
-  ); /* ~48px a 120px */
+  --size-icon-2xl: clamp(2.5rem, -3.125rem + 11.7188vw, 6.25rem); /* ~40px a 100px */
+  --size-icon-3xl: clamp(3rem, -3.75rem + 14.0625vw, 7.5rem); /* ~48px a 120px */
   --size-icon-4xl: clamp(4rem, -5rem + 18.75vw, 10rem); /* ~64px a 160px */
-  --size-icon-5xl: clamp(
-    5rem,
-    -6.25rem + 23.4375vw,
-    12.5rem
-  ); /* ~80px a 200px */
+  --size-icon-5xl: clamp(5rem, -6.25rem + 23.4375vw, 12.5rem); /* ~80px a 200px */
   --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem); /* ~96px a 240px */
 
   @keyframes marquee {
@@ -93,10 +68,10 @@ body {
 }
 
 main div section > div {
-  @apply border-2 border-t-30 relative border-second/30 before:absolute before:bg-[url(./assets/images/fadeOut.gif)] before:w-full before:h-11.5 before:left-0 before:-top-7.5 before:bg-position-[center_bottom] before:bg-size-[4px_40px] before:-scale-y-100;
+  @apply border-2 border-t-30 relative border-primary/70 before:absolute before:bg-[url(./assets/images/fadeOut.gif)] before:w-full before:h-11.5 before:left-0 before:-top-7.5 before:bg-position-[center_bottom] before:bg-size-[4px_40px] before:-scale-y-100;
 }
 main div section > h2 {
-  @apply border-2 border-b-30 border-t-0 border-second/50 text-2xl font-bold text-primary/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
+  @apply border-2 border-b-30 border-t-0 border-primary/70 text-2xl font-bold text-primary/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
 }
 
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */

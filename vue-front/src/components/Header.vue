@@ -21,7 +21,7 @@ import Icon from "./Icon.vue";
         <Icon name="maker" class="pop_01 size-icon-4xl mx-4" />
       </div>
       <h1
-        class="relative font-title text-[clamp(4rem,12vw,10rem)] inline-block text-[color-mix(in_srgb,var(--color-primary)_50%,var(--color-zinc-800))] leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-second),-4px_-4px_0px_var(--color-third)]"
+        class="relative font-title text-[clamp(4rem,12vw,10rem)] inline-block text-[color-mix(in_srgb,var(--color-primary)_90%,var(--color-zinc-800))] leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-second),-4px_-4px_0px_var(--color-third)]"
       >
         <span class="animate-pulse [animation-duration:1000ms]">|</span
         >Atelier667

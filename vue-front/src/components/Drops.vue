@@ -1,7 +1,7 @@
 <script setup>
 import GlitchTitle from "./GlitchTitle.vue";
 
-import { ref } from "vue";
+import { ref, watch, nextTick } from "vue";
 
 defineProps({
   drops: {
@@ -12,6 +12,17 @@ defineProps({
 
 const dropAberto = ref(null); // Guarda o dado do drop
 const isFechando = ref(false); // Controla a classe da animação de saída
+const closeBtn = ref(null);
+
+// Quando abrir, foca o botão de fechar para acessibilidade
+watch(dropAberto, async (val) => {
+  if (val) {
+    await nextTick();
+    if (closeBtn.value && typeof closeBtn.value.focus === "function") {
+      closeBtn.value.focus();
+    }
+  }
+});
 
 const abrirDrop = (drop) => {
   dropAberto.value = drop;
@@ -35,6 +46,9 @@ const fecharDrop = () => {
   <!-- Modal FullView do Drop Aberto -->
   <div
     v-if="dropAberto"
+    role="dialog"
+    aria-modal="true"
+    :aria-label="`Detalhes do drop ${dropAberto?.title || ''}`"
     class="absolute col-span-full top-0 left-0 w-full h-auto transition-all duration-1000 opacity-0 scale-50 bg-zinc-950 z-50 p-8 border border-zinc-800"
     :class="
       !isFechando ? 'top-20 scale-100 opacity-100' : 'top-0 opacity-0 scale-50'
@@ -42,6 +56,7 @@ const fecharDrop = () => {
   >
     <!-- 'opacity-100 scale-100': !isFechando, -->
     <button
+      ref="closeBtn"
       @click="fecharDrop"
       class="text-zinc-500 hover:text-white font-mono text-sm mb-8 uppercase border border-zinc-800 px-4 py-2"
     >

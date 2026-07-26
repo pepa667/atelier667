@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, computed, useAttrs } from "vue";
 
 // O Vite já resolve essas importações de imagem como URLs prontas
 import Maker from "../assets/images/icons/maker.png";
@@ -10,8 +10,10 @@ import Machine from "../assets/images/icons/machine.png";
 import Punk from "../assets/images/icons/punk.png";
 import WoodWorking from "../assets/images/icons/woodworking.png";
 
+const attrs = useAttrs();
+
 const props = defineProps({
-  // No Vue, propriedades com letra minúscula são a norma (mas aceitamos qualquer coisa)
+  // No Vue, propriedades com letra minúscula são a norma
   icon: {
     type: String,
     default: "Deco",
@@ -19,10 +21,6 @@ const props = defineProps({
   size: {
     type: Number,
     default: null,
-  },
-  class: {
-    type: String,
-    default: "",
   },
 });
 
@@ -94,7 +92,8 @@ onMounted(() => {
 
 <template>
   <div
-    :class="['relative overflow-hidden aspect-square', props.class]"
+    v-bind="attrs"
+    :class="['relative overflow-hidden aspect-square', attrs.class]"
     :style="containerStyle"
   >
     <img
