@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&display=swap");
 
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
+@import url("./styles/sideBar.css");
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto+Slab:wght@100..900&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -74,10 +75,28 @@
       transform: translateX(-50%);
     } /* Move exatamente metade, criando o looping infinito */
   }
+  @keyframes pulse {
+    50% {
+      opacity: 1;
+    }
+    51% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 }
 
 body {
-  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-cover bg-fixed bg-center;
+  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-contain bg-fixed bg-center;
+}
+
+main div section > div {
+  @apply border-2 border-t-30 relative border-second/30 before:absolute before:bg-[url(./assets/images/fadeOut.gif)] before:w-full before:h-11.5 before:left-0 before:-top-7.5 before:bg-position-[center_bottom] before:bg-size-[4px_40px] before:-scale-y-100;
+}
+main div section > h2 {
+  @apply border-2 border-b-30 border-t-0 border-second/50 text-2xl font-bold text-primary/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
 }
 
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */
@@ -93,91 +112,4 @@ body {
 }
 .pop_04 {
   filter: var(--img-hue-4);
-}
-
-.glitch,
-.glitch::after {
-  color: var(--color-primary);
-  outline: transparent;
-  position: relative;
-}
-
-.glitch::after {
-  --slice-0: inset(50% 50% 50% 50%);
-  --slice-1: inset(80% -6px 0 0);
-  --slice-2: inset(50% -6px 30% 0);
-  --slice-3: inset(10% -6px 85% 0);
-  --slice-4: inset(40% -6px 43% 0);
-  --slice-5: inset(80% -6px 5% 0);
-  content: " (source: " attr(dataTitle) ") ";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  clip-path: var(--slice-0);
-}
-
-.glitch:hover::after {
-  animation: 1s glitch;
-  animation-timing-function: steps(2, end);
-}
-
-@keyframes glitch {
-  0% {
-    clip-path: var(--slice-1);
-    transform: translate(-20px, -10px);
-  }
-
-  10% {
-    clip-path: var(--slice-3);
-    transform: translate(10px, 10px);
-  }
-
-  20% {
-    clip-path: var(--slice-1);
-    transform: translate(-10px, 10px);
-  }
-
-  30% {
-    clip-path: var(--slice-3);
-    transform: translate(0px, 5px);
-  }
-
-  40% {
-    clip-path: var(--slice-2);
-    transform: translate(-5px, 0px);
-  }
-
-  50% {
-    clip-path: var(--slice-3);
-    transform: translate(5px, 0px);
-  }
-
-  60% {
-    clip-path: var(--slice-4);
-    transform: translate(5px, 10px);
-  }
-
-  70% {
-    clip-path: var(--slice-2);
-    transform: translate(-10px, 10px);
-  }
-
-  80% {
-    clip-path: var(--slice-5);
-    transform: translate(20px, -10px);
-  }
-
-  90% {
-    clip-path: var(--slice-1);
-    transform: translate(-10px, 0px);
-  }
-
-  100% {
-    clip-path: var(--slice-1);
-    transform: translate(0);
-  }
 }

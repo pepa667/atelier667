@@ -1,4 +1,6 @@
 <script setup>
+import GlitchTitle from "./GlitchTitle.vue";
+
 defineProps({
   documentos: {
     type: Array,
@@ -8,8 +10,8 @@ defineProps({
 </script>
 
 <template>
-  <section class="py-8">
-    <h2 class="text-2xl font-bold text-zinc-500 mb-4">// WIKI_DOCS</h2>
+  <section class="col-span-full lg:col-span-1">
+    <GlitchTitle>// WIKI_DOCS</GlitchTitle>
     <div class="grid gap-4">
       <article
         v-for="doc in documentos"

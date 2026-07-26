@@ -7,6 +7,7 @@ import Projects from "./components/Projects.vue";
 import Wiki from "./components/Wiki.vue";
 import ArtBoard from "./components/ArtBoard.vue";
 import SideScroller from "./components/SideScroller.vue";
+import GlitchTitle from "./components/GlitchTitle.vue";
 
 const projetos = ref([]);
 const drops = ref([]);
@@ -33,6 +34,21 @@ const setupRandomTheme = () => {
       root.style.setProperty(`--img-hue-${index + 1}`, filterValue);
     }
   });
+
+  const glitch = root.querySelectorAll(".glitch");
+  glitch.forEach((el) => {
+    const getRandomMs = (min = 100, max = 5000) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+    el.classList.remove("glitchPlay");
+    const randomDelay = getRandomMs(1000, 5000);
+    setTimeout(() => {
+      el.classList.add("glitchPlay");
+    }, randomDelay);
+  });
+
+  //     el.classList.add("[--glitch-delay:2s]");
+  //   });
 };
 
 onMounted(async () => {
@@ -61,24 +77,37 @@ onMounted(async () => {
 <template>
   <!-- O flex aqui separa a barra lateral do resto do conteúdo -->
   <div
-    class="md:min-w-3xl : md:max-w-7xl bg-zinc-950/75 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
+    class="md:min-w-3xl relative md:max-w-7xl bg-zinc-950/40 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
+    <!-- bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.75)_50%)] bg-size-[100%_4px] -->
     <!-- Sua barra decorativa colada na esquerda -->
+    <div class="absolute w-full left-0 top-0 h-full backdrop-blur-xl"></div>
     <SideScroller />
 
     <!-- O resto do site respira aqui do lado direito -->
-    <main class="flex-1 p-8 overflow-x-hidden">
+    <main
+      class="relative ml-[clamp(-0.5rem,-4rem+13.3333vw,8rem)] flex-1 p-8 overflow-x-hidden"
+    >
       <Header class="mb-12" />
+      <ArtBoard :posts="posts" class="absolute right-4 top-2" />
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div
+        class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 [&>section>*]:pop_04"
+      >
         <Drops :drops="drops" />
         <Projects :projetos="projetos" />
-      </div>
-      Táporra!!!
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <Wiki :documentos="documentos" />
-        <ArtBoard :posts="posts" />
       </div>
     </main>
   </div>
+  <GlitchTitle
+    tag-glitch="footer"
+    class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)]"
+  >
+    <div
+      class="absolute opacity-50 text-2xl font-bold text-second w-svw h-56 bg-[url(assets/images/fadeOut.gif)] pop_02"
+    >
+      :::
+    </div>
+  </GlitchTitle>
 </template>
