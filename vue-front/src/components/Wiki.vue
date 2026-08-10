@@ -12,11 +12,11 @@ defineProps({
 <template>
   <section class="col-span-full lg:col-span-1">
     <GlitchTitle>// WIKI_DOCS</GlitchTitle>
-    <div class="grid gap-4">
+    <div class="grid gap-4 h-full">
       <article
         v-for="doc in documentos"
         :key="doc._id"
-        class="border-l-2 border-zinc-700 pl-4 py-2 hover:border-white transition-colors"
+        class="border-l-2 border-zinc-700 pl-4 py-2 hover:border-white transition-colors h-full"
       >
         <h3 class="text-lg font-bold">{{ doc.title }}</h3>
         <p class="text-zinc-400 text-sm">{{ doc.subtitle }}</p>

@@ -10,6 +10,8 @@
   --font-sans: "Inter", sans-serif;
   --font-title: "Big Shoulders", sans-serif;
 
+  --breakpoint-3xl: 105rem; /* 1600px */
+
   --hue-rotate-1: 74;
   --hue-rotate-2: 330;
   --hue-rotate-3: 180;
@@ -42,7 +44,7 @@
     -1.5625rem + 5.8594vw,
     3.125rem
   ); /* ~20px a 50px */
-  --size-icon: clamp(
+  --size-icon-base: clamp(
     1.5rem,
     -1.875rem + 7.0313vw,
     3.75rem
@@ -88,7 +90,8 @@
 }
 
 body {
-  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-contain bg-fixed bg-center;
+  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden;
+  /* @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-contain bg-fixed bg-center; */
 }
 
 main div section > div {
@@ -97,7 +100,9 @@ main div section > div {
 main div section > h2 {
   @apply border-2 border-b-30 border-t-0 border-primary/70 text-2xl font-bold text-primary/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
 }
-
+main > ol > li {
+  @apply border border-primary;
+}
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */
 
 .pop_01 {
@@ -111,4 +116,25 @@ main div section > h2 {
 }
 .pop_04 {
   filter: var(--img-hue-4);
+}
+
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.video-background video {
+  width: 100%;
+  height: 100%;
+  /* Use 'cover' to keep aspect ratio or 'fill' to force stretch */
+  object-fit: cover;
+
+  /* Forces the browser to use nearest-neighbor scaling, preventing blur */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }

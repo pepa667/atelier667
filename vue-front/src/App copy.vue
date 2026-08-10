@@ -1,11 +1,11 @@
 <script setup>
-import { ref, onMounted, computed, defineAsyncComponent } from "vue";
+import { ref, onMounted, defineAsyncComponent } from "vue";
 
-// Componentes estáticos críticos
+// Componentes críticos e pequenos permanecem síncronos
 import Header from "./components/Header.vue";
 import SideScroller from "./components/SideScroller.vue";
 
-// 🚀 LAZY LOADING
+// 🚀 LAZY LOADING: Componentes divididos em chunks separados
 const Drops = defineAsyncComponent(() => import("./components/Drops.vue"));
 const Projects = defineAsyncComponent(
   () => import("./components/Projects.vue"),
@@ -23,46 +23,7 @@ const drops = ref([]);
 const documentos = ref([]);
 const posts = ref([]);
 
-// 🎯 COMPUTED: Define quantos spans de coluna/linha cada card ocupa no Grid
-const feedUnificado = computed(() => {
-  const listDrops = drops.value.map((item) => ({
-    ...item,
-    _type: "drop",
-    // 1 Coluna / 1 Linha
-    gridSpan: "col-span-1 row-span-1",
-    date: new Date(item.timestamp || item._updatedAt || 0),
-  }));
-
-  const listWiki = documentos.value.map((item) => ({
-    ...item,
-    _type: "documento",
-    // 1 Coluna / 1 Linha
-    gridSpan: "col-span-1 row-span-1",
-    date: new Date(item.timestamp || item._updatedAt || 0),
-  }));
-
-  const listProjects = projetos.value.map((item) => ({
-    ...item,
-    _type: "projeto",
-    // 2 Colunas / 1 Linha (Largo)
-    gridSpan: "col-span-1 sm:col-span-2 row-span-1",
-    date: new Date(item._updatedAt || item.timestamp || 0),
-  }));
-
-  const listPosts = posts.value.map((item) => ({
-    ...item,
-    _type: "artboard",
-    // 2 Colunas / 2 Linhas (Alto e Largo)
-    gridSpan: "col-span-1 sm:col-span-2 row-span-2",
-    date: new Date(item.timestamp || item._updatedAt || 0),
-  }));
-
-  return [...listDrops, ...listProjects, ...listWiki, ...listPosts].sort(
-    (a, b) => b.date - a.date,
-  );
-});
-
-// Lógica de temas/glitches mantida...
+// Mapeamento e sorteio das cores/filtros dinâmicos
 const setupRandomTheme = () => {
   const originalHues = [74, 330, 186, 43];
   const filterMap = {
@@ -83,6 +44,7 @@ const setupRandomTheme = () => {
     }
   });
 
+  // Otimização de timers usando requestIdleCallback para não brigar com o FCP do Lighthouse
   if ("requestIdleCallback" in window) {
     requestIdleCallback(() => triggerGlitches());
   } else {
@@ -105,8 +67,10 @@ const triggerGlitches = () => {
 };
 
 onMounted(async () => {
+  // 1. Executa a lógica de cores assim que o componente entra na tela
   setupRandomTheme();
 
+  // 2. Busca os dados no Sanity com import dinâmico (não infla o index.js inicial)
   try {
     const { sanityClient } = await import("./sanity.js");
     const data = await sanityClient.fetch(`{
@@ -127,49 +91,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- max-w-full ou max-w-[1920px] pra dar espaço para as 6 colunas abrirem sem sufocar -->
   <div
-    class="md:min-w-3xl relative max-w-[1920px] bg-zinc-900 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
+    class="md:min-w-3xl relative md:max-w-10/12 bg-zinc-950/40 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
     <div class="absolute w-full left-0 top-0 h-full backdrop-blur-xl"></div>
     <SideScroller />
 
     <main
-      class="relative ml-[clamp(-0.5rem,-4rem+13.3333vw,2rem)] flex-1 p-8 overflow-x-hidden"
+      class="relative ml-[clamp(-0.5rem,-4rem+13.3333vw,8rem)] flex-1 p-8 overflow-x-hidden"
     >
       <Header class="mb-12" />
 
-      <!-- 🚀 GRID DENSE: Preenche TODOS os buracos automaticamente -->
-      <ol
-        class="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-7 3xl:grid-cols-9 auto-rows-[minmax(180px,auto)] grid-flow-dense gap-4 w-full [&>li>*]:pop_04"
+      <div
+        class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 [&>section>*]:pop_04"
       >
-        <li
-          v-for="item in feedUnificado"
-          :key="item._id || item.title_pt || item.title"
-          :class="['flex flex-col h-full w-full', item.gridSpan]"
-        >
-          <Drops
-            v-if="item._type === 'drop'"
-            :drops="[item]"
-            class="h-full flex-1"
-          />
-          <Projects
-            v-else-if="item._type === 'projeto'"
-            :projetos="[item]"
-            class="h-full flex-1"
-          />
-          <Wiki
-            v-else-if="item._type === 'documento'"
-            :documentos="[item]"
-            class="h-full flex-1"
-          />
-          <ArtBoard
-            v-else-if="item._type === 'artboard'"
-            :posts="[item]"
-            class="h-full flex-1"
-          />
-        </li>
-      </ol>
+        <Drops :drops="drops" />
+        <Projects :projetos="projetos" />
+        <Wiki :documentos="documentos" />
+        <ArtBoard :posts="posts" />
+      </div>
     </main>
   </div>
 

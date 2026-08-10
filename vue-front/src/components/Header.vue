@@ -10,7 +10,7 @@ import Icon from "./Icon.vue";
     class="relative w-full flex flex-col gap-[clamp(1.25rem,0.6667rem+2.9167vw,3rem)] justify-between items-start py-6 border-b border-zinc-800"
   >
     <GlitchTitle
-      class="[animation-delay:1500ms] relative aloha [&_.glitch-overlay_h1]:text-zinc-800 [&_.glitch-overlay_h1]:bg-primary [&_.glitch-overlay_h1]:drop-shadow-none"
+      class="[animation-delay:1500ms] relative aloha [&_.glitch-overlay_h1]:text-zinc-200 [&_.glitch-overlay_h1]:bg-zinc-900 [&_.glitch-overlay_h1]:drop-shadow-none"
       tag-glitch="div"
       :min-delay="5000"
       :max-delay="10000"
@@ -21,7 +21,7 @@ import Icon from "./Icon.vue";
         <Icon name="maker" class="pop_01 size-icon-4xl mx-4" />
       </div>
       <h1
-        class="relative font-title text-[clamp(4rem,12vw,10rem)] inline-block text-[color-mix(in_srgb,var(--color-primary)_90%,var(--color-zinc-800))] leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-second),-4px_-4px_0px_var(--color-third)]"
+        class="relative font-title text-[clamp(4rem,12vw,10rem)] inline-block text-zinc-200 leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-second),-4px_-4px_0px_var(--color-third)]"
       >
         <span
           class="animate-pulse [animation-duration:1000ms] [animation-delay:1500ms]"

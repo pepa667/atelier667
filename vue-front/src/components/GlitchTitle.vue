@@ -123,31 +123,31 @@ onUnmounted(() => {
     clip-path: var(--slice-1);
     transform: translate(var(--tx-1), var(--ty-1));
   }
-  10% {
+  5% {
     clip-path: var(--slice-3);
     transform: translate(var(--tx-2), var(--ty-2));
   }
-  20% {
+  30% {
     clip-path: var(--slice-1);
     transform: translate(var(--tx-3), var(--ty-3));
   }
-  30% {
+  45% {
     clip-path: var(--slice-3);
     transform: translate(var(--tx-4), var(--ty-4));
   }
-  40% {
+  48% {
     clip-path: var(--slice-2);
     transform: translate(var(--tx-5), var(--ty-5));
   }
-  50% {
+  53% {
     clip-path: var(--slice-3);
     transform: translate(var(--tx-1), var(--ty-4));
   }
-  60% {
+  70% {
     clip-path: var(--slice-4);
     transform: translate(var(--tx-3), var(--ty-2));
   }
-  70% {
+  78% {
     clip-path: var(--slice-2);
     transform: translate(var(--tx-2), var(--ty-5));
   }
@@ -155,7 +155,7 @@ onUnmounted(() => {
     clip-path: var(--slice-5);
     transform: translate(var(--tx-4), var(--ty-1));
   }
-  90% {
+  85% {
     clip-path: var(--slice-1);
     transform: translate(var(--tx-5), var(--ty-3));
   }

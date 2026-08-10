@@ -19,13 +19,15 @@ const getAsciiBar = (percent) => {
 </script>
 
 <template>
+  sss
   <section>
     <GlitchTitle>// PROJETOS_ATIVOS</GlitchTitle>
     <div class="flex flex-col gap-4">
+      aaa
       <article
         v-for="proj in projetos"
         :key="proj.title_pt"
-        class="border border-zinc-800 p-6 bg-zinc-900/30 relative overflow-hidden"
+        class="border border-zinc-800 p-6 bg-zinc-900/30 relative overflow-hidden h-full flex flex-col justify-between"
       >
         <header class="mb-4">
           <h3 class="text-xl font-bold text-zinc-100 uppercase">
