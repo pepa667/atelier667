@@ -106,7 +106,7 @@ onUnmounted(() => {
 
 <style scoped>
 .glitch-overlay {
-  color: var(--color-zinc-800);
+  color: var(--color-zinc-100);
   will-change: transform, clip-path;
   opacity: 0;
   z-index: 10;
@@ -116,6 +116,7 @@ onUnmounted(() => {
 .glitch-overlay.is-glitching {
   opacity: 1;
   animation: glitch 1s steps(2, end) forwards;
+  background-color: var(--color-zinc-900);
 }
 
 @keyframes glitch {

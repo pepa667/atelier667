@@ -89,6 +89,23 @@
   }
 }
 
+@utility texture {
+  mask-image: url(./assets/images/texture.gif);
+  -webkit-mask-image: url(./assets/images/texture.gif);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-position: var(--mask-pos, 0% 0%);
+  mask-size: 200px 125px;
+  -webkit-mask-size: 200px 125px;
+}
+/* @utility texture {
+  mask-image: url(./assets/images/fade-tb.gif);
+  -webkit-mask-image: url(./assets/images/fade-tb.gif);
+  -webkit-mask-position: 0% 50%;
+  mask-position: 0% 50%;
+  mask-size: 8px 244px;
+  -webkit-mask-size: 8px 244px;
+} */
+
 body {
   @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden;
   /* @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-contain bg-fixed bg-center; */
@@ -101,7 +118,7 @@ main div section > h2 {
   @apply border-2 border-b-30 border-t-0 border-primary/70 text-2xl font-bold text-primary/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
 }
 main > ol > li {
-  @apply border border-primary;
+  @apply z-10 border-y-2 border-x-2 border-transparent border-primary p-2;
 }
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */
 
@@ -118,23 +135,27 @@ main > ol > li {
   filter: var(--img-hue-4);
 }
 
-.video-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.video-background video {
+/* Test SVG glitch */
+.glitch-container::before,
+.glitch-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  /* Use 'cover' to keep aspect ratio or 'fill' to force stretch */
-  object-fit: cover;
+  border: 2px solid var(--color-primary); /* Your container border */
+  /* padding: 20px; */
+  color: #fff;
+  z-index: -1;
+  /* filter: url(#glitch-border); */
 
-  /* Forces the browser to use nearest-neighbor scaling, preventing blur */
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+  /* Trigger the glitch on hover, or keep it constant */
+}
+.container-glitching::after {
+  left: -2px;
+}
+.container-glitching::before,
+.container-glitching::after {
+  /* animation: glitch-trigger 2s steps(1) forwards; */
+  filter: url(#glitch-border);
 }
