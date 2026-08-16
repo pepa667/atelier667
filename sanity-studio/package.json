@@ -17,6 +17,7 @@
   "dependencies": {
     "@sanity/locale-pt-br": "^1.1.33",
     "@sanity/vision": "^6.5.0",
+    "fluid-tailwindcss": "^1.1.7",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "sanity": "^6.5.0",

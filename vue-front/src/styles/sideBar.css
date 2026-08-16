@@ -1,0 +1,38 @@
+@supports (animation-timeline: scroll()) {
+  @keyframes side-bar {
+    from {
+      transform: translateY(calc(100% - 100svh));
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
+
+  @keyframes bGgg {
+    0% {
+      background-position-x: 0;
+    }
+    100% {
+      background-position-x: 100%;
+    } /* Move exatamente metade, criando o looping infinito */
+  }
+
+  .scroll-side-bar {
+    animation-name: side-bar;
+    animation-fill-mode: both;
+    /* Monitora o scroll da página inteira */
+    animation-timeline: scroll(root);
+    /* O efeito começa em 0px de scroll e termina quando scrollar 400px */
+    animation-range: 0% 100%;
+  }
+  .scrollBG {
+    background-size: auto;
+    background-position-x: 0%;
+    animation-name: bGgg;
+    animation-fill-mode: both;
+    /* Monitora o scroll da página inteira */
+    animation-timeline: scroll(root);
+    /* O efeito começa em 0px de scroll e termina quando scrollar 400px */
+    animation-range: 0% 100%;
+  }
+}
