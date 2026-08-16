@@ -30,13 +30,17 @@
   --animate-marquee: marquee 10s linear infinite;
 
   /* Escala de tipografia fluida usando a matemática do Utopia */
-  --text-fluid-sm: clamp(0.8333rem, 0.7711rem + 0.3111vw, 1rem);
+
+  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,12—20&p=size */
+  --text-fluid-sm: clamp(0.75rem, 0.6346rem + 0.5128vw, 1.25rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
   --text-fluid-title: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
-  --text-fluid-sidebar: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
 
-  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,64—300&p=icon */
-  --text-fluid-hero: clamp(4rem, 0.5962rem + 15.1282cqi, 18.75rem);
+  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,20—48&p=size */
+  --text-fluid-sidebar: clamp(1.25rem, 0.8462rem + 1.7949vw, 3rem);
+
+  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,64—256&p=size */
+  --text-fluid-hero: clamp(3rem, 1rem + 12.3077vw, 16rem);
 
   --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
 
@@ -82,9 +86,9 @@
   --pcx-url-tl: url(./assets/images/textures/dither-tl.gif);
   --pcx-url-br: url(./assets/images/textures/dither-br.gif);
   --pcx-url-bl: url(./assets/images/textures/dither-bl.gif);
-  --pcx-url-min: url(./assets/images/textures/grunge-min.gif);
-  --pcx-url-md: url(./assets/images/textures/grunge-md.gif);
-  --pcx-url-full: url(./assets/images/textures/grunge-full.gif);
+  --pcx-url-grunge-min: url(./assets/images/textures/grunge-min.gif);
+  --pcx-url-grunge-md: url(./assets/images/textures/grunge-md.gif);
+  --pcx-url-grunge-full: url(./assets/images/textures/grunge-full.gif);
 
   @keyframes marquee {
     0% {
@@ -107,31 +111,6 @@
   }
 }
 
-/* @utility texture {
-  mask-image: url(./assets/images/textures/lite.gif);
-  -webkit-mask-image: url(./assets/images/lites/lite.gif);
-  -webkit-mask-position: var(--mask-pos, 0% 0%);
-  mask-position: var(--mask-pos, 0% 0%);
-  mask-size: 200px 125px;
-  -webkit-mask-size: 200px 125px;
-} */
-/* @utility texture-full {
-  mask-image: url(./assets/images/textures/full.gif);
-  -webkit-mask-image: url(./assets/images/textures/full.gif);
-  -webkit-mask-position: 0% 50%;
-  mask-position: 0% 50%;
-  mask-size: 8px 244px;
-  -webkit-mask-size: 8px 244px;
-} */
-/* @utility texture-radial {
-  mask-image: url(./assets/images/textures/radial.gif);
-  -webkit-mask-image: url(./assets/images/textures/radial.gif);
-  -webkit-mask-position: var(--mask-pos, 0% 0%);
-  mask-position: var(--mask-pos, 0% 0%);
-  -webkit-mask-position: var(--mask-pos, 0% 0%);
-  mask-size: auto;
-  -webkit-mask-size: auto;
-} */
 @utility pcx-* {
   --pcx-url: --value(--pcx-url-*);
 
@@ -142,29 +121,34 @@
   -webkit-mask-position: var(--mask-pos, 0% 0%);
   mask-size: auto;
   -webkit-mask-size: auto;
-  /* IMPEDE O BLUR / DESFOQUE AO AMPLIAR */
   image-rendering: pixelated;
   image-rendering: crisp-edges; /* Fallback para Firefox/Webkit antigos */
 }
 
 body {
-  @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden;
-  /* @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-contain bg-fixed bg-center; */
+  @apply bg-black text-zinc-300 font-mono antialiased overflow-x-hidden;
 }
 
-/* main div section > h2 {
-  @apply border-30 border-b-30 border-t-0 border-main-a-dark text-2xl font-bold text-main-a/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
-} */
+header > *::before {
+  @apply absolute  inset-0 border-b-main-d-dark/25 w-[300dvh] -bottom-3 left-[-20dvh];
+}
+header > * {
+  @apply relative;
+}
+
 main > ol > li {
-  @apply z-10 border-y border-x p-4;
+  @apply border-y border-x p-4;
 }
 
 .card-projeto {
-  @apply border border-main-a-dark;
+  @apply border border-main-a-dark/40;
 }
-.card-projeto::after,
-.card-projeto::before {
-  @apply border-2 border-main-a-dark pcx-full;
+.card-projeto .card-bg {
+  @apply bg-main-a-dark/5;
+}
+.card-projeto .card-glitch-1,
+.card-projeto .card-glitch-2 {
+  @apply border-2 border-main-a-dark/40;
 }
 .card-projeto .deco-tr,
 .card-projeto .deco-bl {
@@ -172,11 +156,14 @@ main > ol > li {
 }
 
 .card-drop {
-  @apply border border-main-b-dark;
+  @apply border border-main-b-dark/40;
 }
-.card-drop::after,
-.card-drop::before {
-  @apply border-2 border-main-b-dark pcx-full;
+.card-drop .card-bg {
+  @apply bg-main-b-dark/5;
+}
+.card-drop .card-glitch-1,
+.card-drop .card-glitch-2 {
+  @apply border-2 border-main-b-dark/40;
 }
 .card-drop .deco-tr,
 .card-drop .deco-bl {
@@ -184,11 +171,14 @@ main > ol > li {
 }
 
 .card-artboard {
-  @apply border border-main-c-dark;
+  @apply border border-main-c-dark/40;
 }
-.card-artboard::after,
-.card-artboard::before {
-  @apply border-2 border-main-c-dark pcx-full;
+.card-artboard .card-bg {
+  @apply bg-main-c-dark/5;
+}
+.card-artboard .card-glitch-1,
+.card-artboard .card-glitch-2 {
+  @apply border-2 border-main-c-dark/40;
 }
 .card-artboard .deco-tr,
 .card-artboard .deco-bl {
@@ -196,16 +186,26 @@ main > ol > li {
 }
 
 .card-documento {
-  @apply border border-main-d-dark;
+  @apply border border-main-d-dark/40;
 }
-.card-documento::after,
-.card-documento::before {
-  @apply border-2 border-main-d-dark pcx-full;
+.card-documento .card-bg {
+  @apply bg-main-d-dark/5;
+}
+.card-documento .card-glitch-1,
+.card-documento .card-glitch-2 {
+  @apply border-2 border-main-d-dark/40;
 }
 .card-documento .deco-tr,
 .card-documento .deco-bl {
   @apply border-main-b;
 }
+
+/* .card-glitch-1 {
+  @apply pcx-grunge-full;
+}
+.card-glitch-2 {
+  @apply pcx-grunge-md;
+} */
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */
 .pop_01 {
   filter: var(--img-hue-1);
@@ -221,23 +221,15 @@ main > ol > li {
 }
 
 /* Test SVG glitch */
-.glitch-container::before,
-.glitch-container::after {
-  content: "";
+.card-glitch-1,
+.card-glitch-2 {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+  width: 101%;
+  height: 101%;
+  /* z-index: -1; */
   /* filter: url(#glitch-border); */
-
-  /* Trigger the glitch on hover, or keep it constant */
 }
-.container-glitching::after {
+.card-glitch-2 {
   left: -2px;
-}
-.container-glitching::before,
-.container-glitching::after {
-  /* animation: glitch-trigger 2s steps(1) forwards; */
-  filter: url(#glitch-border);
 }

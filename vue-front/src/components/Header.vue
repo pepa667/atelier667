@@ -7,40 +7,26 @@ import Icon from "./Icon.vue";
 
 <template>
   <header
-    class="relative w-full flex flex-col gap-[clamp(1.25rem,0.6667rem+2.9167vw,3rem)] justify-between items-start py-6 border-b border-zinc-800"
+    class="relative w-full flex flex-col gap-[clamp(1.25rem,0.6667rem+2.9167vw,3rem)] justify-between items-start py-6 border-b-2 border-zinc-700 *:before:border-b-2"
   >
-    <GlitchTitle
-      class="[animation-delay:1500ms] relative aloha [&_.glitch-overlay_h1]:text-zinc-200 [&_.glitch-overlay_h1]:bg-zinc-900 [&_.glitch-overlay_h1]:drop-shadow-none"
-      tag-glitch="div"
-      :min-delay="5000"
-      :max-delay="10000"
+    <h1
+      class="font-serif italic text-fluid-hero inline-block text-[color-mix(in_srgb,var(--color-main-a)_50%,white_100%)] leading-[0.7] my-2 lg:my-4"
     >
-      <div
-        class="absolute -right-10 -bottom-4 md:-right-20 md:-bottom-8 pop_01"
-      >
-        <Icon name="maker" class="pop_01 size-icon-6xl mx-4" />
-      </div>
-      <h1
-        class="absolute font-title text-fluid-hero inline-block text-main-a-dark top-0 left-0 leading-none my-2 lg:my-4"
-      >
-        <span>|</span>Atelier667
-      </h1>
-      <h1
-        class="relative font-title text-fluid-hero inline-block text-zinc-200 leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-main-b),-4px_-4px_0px_var(--color-main-c)] pcx-bt mask-bottom mask-[auto_85%] opacity-80 [image-rendering:auto]"
-      >
-        <span
-          class="animate-pulse [animation-duration:1000ms] [animation-delay:1500ms]"
-          >|</span
-        >Atelier667
-      </h1>
+      <span
+        class="absolute w-[150%] h-5/12 bg-main-c-dark/50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:pcx-grunge-full -z-1 [--mask-pos:20%_30%]"
+      ></span>
+      Atelier<span class="text-main-b">667</span>.
+    </h1>
 
-      <p class="text-sm text-main-b font-mono md:before:content-['__']">
-        &nbsp;&nbsp;System // Active
-      </p>
-    </GlitchTitle>
+    <p
+      class="text-fluid-sm text-main-b font-mono ml-[clamp(1.25rem,0.3846rem+3.8462vw,5rem)]"
+    >
+      System // Active
+    </p>
     <!-- Seu menu de navegação ou botão de menu entra aqui -->
-    <nav class="flex gap-4 font-mono text-sm md:before:content-['__']">
-      &nbsp;&nbsp;
+    <nav
+      class="flex gap-4 font-mono text-fluid-sm ml-[clamp(2.5rem,0.7692rem+7.6923vw,10rem)]"
+    >
       <a href="#" class="hover:text-white transition-colors font-title"
         >/Drops</a
       >

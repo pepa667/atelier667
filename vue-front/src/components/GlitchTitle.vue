@@ -6,19 +6,14 @@ const props = defineProps({
     type: String,
     default: "h2",
   },
-  minDelay: {
-    type: Number,
-    default: 3000,
-  },
-  maxDelay: {
-    type: Number,
-    default: 9000,
-  },
 });
 
 const isPlaying = ref(false);
 const sliceStyles = ref({});
+const containerRef = ref(null);
+let sectionTarget = null;
 let timeoutId = null;
+let observer = null;
 
 const getRandomOffset = (min = -25, max = 25) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -60,13 +55,13 @@ const shuffleSlicesAndTransforms = () => {
 };
 
 const triggerGlitch = () => {
+  if (timeoutId) clearTimeout(timeoutId);
+
   isPlaying.value = false;
 
-  // Convertemos com Number() por garantia
-  const min = Number(props.minDelay) || 5000;
-  const max = Number(props.maxDelay) || 8000;
+  const delay = Math.floor(Math.random() * (2000 - 50 + 1)) + 50;
 
-  const delay = Math.floor(Math.random() * (max - min + 1)) + min;
+  sliceStyles.value = shuffleSlicesAndTransforms();
 
   timeoutId = setTimeout(() => {
     isPlaying.value = true;
@@ -74,22 +69,53 @@ const triggerGlitch = () => {
 };
 
 const handleAnimationEnd = () => {
-  triggerGlitch();
+  isPlaying.value = false;
 };
 
 onMounted(() => {
-  sliceStyles.value = shuffleSlicesAndTransforms();
-  triggerGlitch();
+  if (!containerRef.value) return;
+
+  // Localiza a section pai
+  sectionTarget = containerRef.value.closest("section") || containerRef.value;
+
+  // Adiciona o mouseenter na section inteira
+  sectionTarget.addEventListener("mouseenter", triggerGlitch);
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        const isMobile = window.innerWidth < 500;
+
+        if (entry.isIntersecting && isMobile) {
+          triggerGlitch();
+        }
+      });
+    },
+    {
+      root: null,
+      rootMargin: "-40% 0px -40% 0px", // Centro da tela no mobile
+      threshold: 0,
+    },
+  );
+
+  observer.observe(sectionTarget);
 });
 
 onUnmounted(() => {
   if (timeoutId) clearTimeout(timeoutId);
+  if (observer) observer.disconnect();
+  if (sectionTarget) {
+    sectionTarget.removeEventListener("mouseenter", triggerGlitch);
+  }
 });
 </script>
 
 <template>
-  <component :is="tagGlitch" class="select-text relative">
-    <!-- Camada do Glitch duplicando o slot com efeito visual -->
+  <component
+    :is="tagGlitch"
+    ref="containerRef"
+    class="select-text relative inline-block"
+  >
     <span
       aria-hidden="true"
       class="glitch-overlay absolute top-0 left-0 text-zinc-800 pointer-events-none select-none z-10"
@@ -99,7 +125,7 @@ onUnmounted(() => {
     >
       <slot />
     </span>
-    <!-- Slot principal para renderizar o cursor + texto do usuário -->
+
     <slot />
   </component>
 </template>

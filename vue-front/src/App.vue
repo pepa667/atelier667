@@ -2,15 +2,18 @@
 import {
   ref,
   onMounted,
-  onUnmounted,
   computed,
   watch,
+  nextTick,
   defineAsyncComponent,
 } from "vue";
 
 // Componentes estáticos
 import Header from "./components/Header.vue";
 import SideScroller from "./components/SideScroller.vue";
+import GlitchWrapper from "./components/GlitchWrapper.vue";
+
+import applyRandomMaskPositions from "./utils/maskRandomizer.js";
 
 // Lazy loading
 const Drops = defineAsyncComponent(() => import("./components/Drops.vue"));
@@ -86,95 +89,19 @@ const setupRandomTheme = () => {
   });
 };
 
-// 🎯 LÓGICA DE GLITCH & JITTER CORRIGIDA
-const activeGlitchId = ref(null);
-const currentSeed = ref(1);
-const currentFreq = ref(2);
-const currentScale = ref(15);
-const freqPow = [1, 10, 100, 1000];
-const randomDelay = ref(200);
-
-let delayTimeoutId = null;
-let durationTimeoutId = null;
-let jitterIntervalId = null;
-let isGlitchScheduled = false;
-
-const stopJitter = () => {
-  if (jitterIntervalId) {
-    clearInterval(jitterIntervalId);
-    jitterIntervalId = null;
-  }
-};
-
-const startJitter = () => {
-  stopJitter();
-  jitterIntervalId = setInterval(() => {
-    currentSeed.value = Math.floor(Math.random() * 1000);
-    currentScale.value = Math.floor(Math.random() * (10 - 5 + 1)) + 5;
-    currentFreq.value =
-      Math.random() *
-      0.001 *
-      freqPow[Math.floor(Math.random() * freqPow.length)];
-    randomDelay.value = Math.floor(Math.random() * 500);
-    console.log(randomDelay.value);
-  }, randomDelay.value);
-};
-
-const stopGlitch = () => {
-  stopJitter();
-  activeGlitchId.value = null;
-  isGlitchScheduled = false;
-
-  // Limpa o duration timeout se existir
-  if (durationTimeoutId) {
-    clearTimeout(durationTimeoutId);
-    durationTimeoutId = null;
-  }
-
-  // Chama o próximo glitch
-  triggerGlitch();
-};
-
-const triggerGlitch = () => {
-  if (isGlitchScheduled || !feedUnificado.value.length) return;
-
-  isGlitchScheduled = true;
-
-  if (delayTimeoutId) clearTimeout(delayTimeoutId);
-
-  // Intervalo aleatório ENTRE glitches (ex: 800ms a 2500ms)
-  const delay = Math.floor(Math.random() * (7000 - 4000 + 1)) + 4000;
-
-  delayTimeoutId = setTimeout(() => {
-    const randomIndex = Math.floor(Math.random() * feedUnificado.value.length);
-    const selectedItem = feedUnificado.value[randomIndex];
-
-    activeGlitchId.value =
-      selectedItem._id || selectedItem.title_pt || selectedItem.title;
-
-    startJitter();
-
-    // Duração do EFEITO ATIVO (ex: 300ms a 600ms de surto)
-    const glitchDuration = Math.floor(Math.random() * (2000 - 800 + 1)) + 800;
-
-    durationTimeoutId = setTimeout(() => {
-      stopGlitch();
-    }, glitchDuration);
-  }, delay);
-};
-
-// Dispara o glitch assim que os dados chegarem
+// Reage a atualizações no feed re-injetando as variáveis CSS das máscaras
 watch(
-  () => feedUnificado.value.length,
-  (newLength) => {
-    if (newLength > 0 && !activeGlitchId.value && !isGlitchScheduled) {
-      triggerGlitch();
-    }
+  () => feedUnificado.value,
+  async () => {
+    await nextTick();
+    applyRandomMaskPositions();
   },
+  { deep: true, immediate: true },
 );
 
 onMounted(async () => {
   setupRandomTheme();
+  applyRandomMaskPositions();
 
   try {
     const { sanityClient } = await import("./sanity.js");
@@ -193,21 +120,14 @@ onMounted(async () => {
     console.error("Erro ao buscar dados do Sanity:", error);
   }
 });
-
-onUnmounted(() => {
-  if (delayTimeoutId) clearTimeout(delayTimeoutId);
-  if (durationTimeoutId) clearTimeout(durationTimeoutId);
-  stopJitter();
-});
 </script>
 
 <template>
-  <!-- max-w-full ou max-w-[1920px] pra dar espaço para as 6 colunas abrirem sem sufocar -->
   <div
     class="md:min-w-3xl relative max-w-[1920px] text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
     <div
-      class="absolute w-full left-0 top-0 h-full backdrop-blur-xl bg-main-c-dark/7 pcx-full"
+      class="absolute w-full left-0 top-0 h-full backdrop-blur-xl bg-main-c-dark/7 pcx-grunge-full"
     ></div>
     <SideScroller />
 
@@ -216,35 +136,33 @@ onUnmounted(() => {
     >
       <Header class="mb-12" />
 
-      <!-- 🚀 GRID DENSE: Preenche TODOS os buracos automaticamente -->
+      <!-- 🚀 GRID DENSE -->
       <ol
-        class="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 auto-rows-[minmax(180px,auto)] grid-flow-dense gap-6 w-full [&>li>*]:pop_04"
+        class="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 auto-rows-[minmax(180px,auto)] grid-flow-dense gap-12 w-full [&>li>*]:pop_04"
       >
         <li
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'flex flex-col h-full w-full relative glitch-container after:pcx-full before:pcx-md',
+            'flex flex-col h-full w-full relative',
             item.gridSpan,
             {
-              'container-glitching':
-                activeGlitchId === (item._id || item.title_pt || item.title),
-            },
-            {
               'card-projeto': item._type === 'projeto',
-            },
-            {
               'card-drop': item._type === 'drop',
-            },
-            {
               'card-artboard': item._type === 'artboard',
-            },
-            {
               'card-documento': item._type === 'documento',
             },
           ]"
-          @animationend="handleAnimationEnd"
         >
+          <div
+            class="card-bg absolute inset-0 w-full h-full pcx-grunge-full"
+          ></div>
+          <!-- Glitch isolado apenas nos layers de fundo -->
+          <GlitchWrapper>
+            <div class="card-glitch-1 pcx-grunge-full"></div>
+            <div class="card-glitch-2 pcx-grunge-md"></div>
+          </GlitchWrapper>
+
           <span
             class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200%] [--mask-pos:bottom_left]"
             >&nbsp;</span
@@ -253,75 +171,29 @@ onUnmounted(() => {
             class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200%] [--mask-pos:top_right]"
             >&nbsp;</span
           >
-          <Drops
-            v-if="item._type === 'drop'"
-            :drops="[item]"
-            class="h-full flex-1"
-          />
-          <Projects
-            v-else-if="item._type === 'projeto'"
-            :projetos="[item]"
-            class="h-full flex-1"
-          />
-          <Wiki
-            v-else-if="item._type === 'documento'"
-            :documentos="[item]"
-            class="h-full flex-1"
-          />
-          <ArtBoard
-            v-else-if="item._type === 'artboard'"
-            :posts="[item]"
-            class="h-full flex-1"
-          />
+          <div class="relative inset-0 w-full h-full">
+            <Drops
+              v-if="item._type === 'drop'"
+              :drops="[item]"
+              class="h-full flex-1"
+            />
+            <Projects
+              v-else-if="item._type === 'projeto'"
+              :projetos="[item]"
+              class="h-full flex-1"
+            />
+            <Wiki
+              v-else-if="item._type === 'documento'"
+              :documentos="[item]"
+              class="h-full flex-1"
+            />
+            <ArtBoard
+              v-else-if="item._type === 'artboard'"
+              :posts="[item]"
+              class="h-full flex-1"
+            />
+          </div>
         </li>
-        <svg style="position: absolute; width: 0; height: 0" aria-hidden="true">
-          <defs>
-            <filter
-              id="glitch-border"
-              x="-100%"
-              y="-20%"
-              width="300%"
-              height="140%"
-            >
-              <!-- 1. Generate sharp, blocky horizontal rectangles -->
-              <feTurbulence
-                type="fractalNoise"
-                :baseFrequency="`0.0 ${currentFreq}`"
-                :seed="currentSeed"
-                numOctaves="1"
-                result="noise"
-              />
-
-              <!-- 2. Keep noise in RED, clear GREEN to neutral mid-gray (0.5), sharpen ALPHA -->
-              <feColorMatrix
-                type="matrix"
-                values="10 0 0 0 -4.5
-                0 10 0 0 -4.5
-                0 0 10 0 -4.5
-                0 0 0 1 0"
-                in="noise"
-                result="sharp-blocks"
-              />
-
-              <!-- 3. Stretch the noise horizontally (Cria os traços/linhas esticadas na horizontal) -->
-              <feMorphology
-                operator="dilate"
-                :radius="`${currenatScale * 10 || 500} 20`"
-                in="sharp-blocks"
-                result="stretched-blocks"
-              />
-
-              <!-- 4. Displace horizontally using the horizontally stretched blocks -->
-              <feDisplacementMap
-                in="SourceGraphic"
-                in2="stretched-blocks"
-                :scale="currentScale"
-                xChannelSelector="R"
-                yChannelSelector="G"
-              />
-            </filter>
-          </defs>
-        </svg>
       </ol>
     </main>
   </div>
@@ -331,7 +203,7 @@ onUnmounted(() => {
     class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)]"
   >
     <div
-      class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/textures/dither-bt.gif)] pop_02 pcx-full mask-cover"
+      class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/textures/dither-bt.gif)] pop_02 pcx-grunge-full mask-cover"
     >
       :::
     </div>
