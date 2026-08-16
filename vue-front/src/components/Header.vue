@@ -18,10 +18,15 @@ import Icon from "./Icon.vue";
       <div
         class="absolute -right-10 -bottom-4 md:-right-20 md:-bottom-8 pop_01"
       >
-        <Icon name="maker" class="pop_01 size-icon-4xl mx-4" />
+        <Icon name="maker" class="pop_01 size-icon-6xl mx-4" />
       </div>
       <h1
-        class="relative font-title text-[clamp(4rem,12vw,10rem)] inline-block text-zinc-200 leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-second),-4px_-4px_0px_var(--color-third)]"
+        class="absolute font-title text-fluid-hero inline-block text-main-a-dark top-0 left-0 leading-none my-2 lg:my-4"
+      >
+        <span>|</span>Atelier667
+      </h1>
+      <h1
+        class="relative font-title text-fluid-hero inline-block text-zinc-200 leading-none my-2 lg:my-4 drop-shadow-[4px_4px_0px_var(--color-main-b),-4px_-4px_0px_var(--color-main-c)] pcx-bt mask-bottom mask-[auto_85%] opacity-80 [image-rendering:auto]"
       >
         <span
           class="animate-pulse [animation-duration:1000ms] [animation-delay:1500ms]"
@@ -29,7 +34,7 @@ import Icon from "./Icon.vue";
         >Atelier667
       </h1>
 
-      <p class="text-sm text-second font-mono md:before:content-['__']">
+      <p class="text-sm text-main-b font-mono md:before:content-['__']">
         &nbsp;&nbsp;System // Active
       </p>
     </GlitchTitle>

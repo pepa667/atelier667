@@ -115,10 +115,10 @@ onMounted(async () => {
 
   <GlitchTitle
     tag-glitch="footer"
-    class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)]"
+    class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)]"
   >
     <div
-      class="absolute opacity-50 text-2xl font-bold text-second w-svw h-56 bg-[url(assets/images/fadeOut.gif)] pop_02"
+      class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/fadeOut.gif)] pop_02"
     >
       :::
     </div>

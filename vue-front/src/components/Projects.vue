@@ -53,14 +53,14 @@ const getAsciiBar = (percent) => {
             <li
               v-for="cat in proj.categorias"
               :key="cat"
-              class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block"
+              class="text-xs bg-main-b/10 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
             >
               #{{ cat }}
             </li>
             <li
               v-for="(cat, idx) in proj.categorias"
               :key="`dup-${idx}`"
-              class="text-xs bg-second/10 text-second mx-2 my-1 py-2 px-3 border rounded border-second inline-block"
+              class="text-xs bg-main-b/10 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
             >
               #{{ cat }}
             </li>

@@ -14,7 +14,7 @@ import Icon from "./Icon.vue";
         class="absolute bg-[url(./assets/images/pattern.png)] bg-size-[2px] bg-zinc-950/40 hover:opacity-0 -inset-1 z-50 transition-opacity duration-700"
       ></div>
       <ol
-        class="scroll-side-bar text-fluid-base *:inline-block whitespace-nowrap list-none py-fluid-base [&>li]:before:content-['_//_'] [&>li]:before:text-zinc-200 italic font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline [&>li:nth-child(1n)]:text-primary [&>li:nth-child(2n)]:text-second [&>li:nth-child(3n)]:text-third [&>li:nth-child(4n)]:text-fourth"
+        class="scroll-side-bar text-fluid-base *:inline-block whitespace-nowrap list-none py-fluid-base [&>li]:before:content-['_//_'] [&>li]:before:text-zinc-200 italic font-serif tracking-wider [writing-mode:vertical-lr] rotate-180 self-baseline [&>li:nth-child(1n)]:text-main-a [&>li:nth-child(2n)]:text-main-b [&>li:nth-child(3n)]:text-main-c [&>li:nth-child(4n)]:text-main-d"
       >
         <li>
           <Icon name="maker" class="pop_01 size-icon-base inline-block mx-2" />

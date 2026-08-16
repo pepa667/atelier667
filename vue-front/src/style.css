@@ -17,10 +17,15 @@
   --hue-rotate-3: 180;
   --hue-rotate-4: 43;
 
-  --color-primary: hsl(var(--hue-rotate-1), 100%, 60%);
-  --color-second: hsl(var(--hue-rotate-2), 100%, 60%);
-  --color-third: hsl(var(--hue-rotate-3), 100%, 60%);
-  --color-fourth: hsl(var(--hue-rotate-4), 100%, 60%);
+  --color-main-a: hsl(var(--hue-rotate-1), 100%, 60%);
+  --color-main-b: hsl(var(--hue-rotate-2), 100%, 60%);
+  --color-main-c: hsl(var(--hue-rotate-3), 100%, 60%);
+  --color-main-d: hsl(var(--hue-rotate-4), 100%, 60%);
+
+  --color-main-a-dark: hsl(var(--hue-rotate-1), 100%, 35%);
+  --color-main-b-dark: hsl(var(--hue-rotate-2), 100%, 35%);
+  --color-main-c-dark: hsl(var(--hue-rotate-3), 100%, 35%);
+  --color-main-d-dark: hsl(var(--hue-rotate-4), 100%, 35%);
 
   --animate-marquee: marquee 10s linear infinite;
 
@@ -28,8 +33,10 @@
   --text-fluid-sm: clamp(0.8333rem, 0.7711rem + 0.3111vw, 1rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
   --text-fluid-title: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
-  --text-fluid-hero: clamp(2.5rem, 1.5rem + 5vw, 6rem);
   --text-fluid-sidebar: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
+
+  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,64—300&p=icon */
+  --text-fluid-hero: clamp(4rem, 0.5962rem + 15.1282cqi, 18.75rem);
 
   --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
 
@@ -68,6 +75,17 @@
   ); /* ~80px a 200px */
   --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem); /* ~96px a 240px */
 
+  --pcx-url-tb: url(./assets/images/textures/dither-tb.gif);
+  --pcx-url-bt: url(./assets/images/textures/dither-bt.gif);
+  --pcx-url-radial: url(./assets/images/textures/dither-radial.gif);
+  --pcx-url-tr: url(./assets/images/textures/dither-tr.gif);
+  --pcx-url-tl: url(./assets/images/textures/dither-tl.gif);
+  --pcx-url-br: url(./assets/images/textures/dither-br.gif);
+  --pcx-url-bl: url(./assets/images/textures/dither-bl.gif);
+  --pcx-url-min: url(./assets/images/textures/grunge-min.gif);
+  --pcx-url-md: url(./assets/images/textures/grunge-md.gif);
+  --pcx-url-full: url(./assets/images/textures/grunge-full.gif);
+
   @keyframes marquee {
     0% {
       transform: translateX(0%);
@@ -89,39 +107,106 @@
   }
 }
 
-@utility texture {
-  mask-image: url(./assets/images/texture.gif);
-  -webkit-mask-image: url(./assets/images/texture.gif);
+/* @utility texture {
+  mask-image: url(./assets/images/textures/lite.gif);
+  -webkit-mask-image: url(./assets/images/lites/lite.gif);
   -webkit-mask-position: var(--mask-pos, 0% 0%);
   mask-position: var(--mask-pos, 0% 0%);
   mask-size: 200px 125px;
   -webkit-mask-size: 200px 125px;
-}
-/* @utility texture {
-  mask-image: url(./assets/images/fade-tb.gif);
-  -webkit-mask-image: url(./assets/images/fade-tb.gif);
+} */
+/* @utility texture-full {
+  mask-image: url(./assets/images/textures/full.gif);
+  -webkit-mask-image: url(./assets/images/textures/full.gif);
   -webkit-mask-position: 0% 50%;
   mask-position: 0% 50%;
   mask-size: 8px 244px;
   -webkit-mask-size: 8px 244px;
 } */
+/* @utility texture-radial {
+  mask-image: url(./assets/images/textures/radial.gif);
+  -webkit-mask-image: url(./assets/images/textures/radial.gif);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-position: var(--mask-pos, 0% 0%);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-size: auto;
+  -webkit-mask-size: auto;
+} */
+@utility pcx-* {
+  --pcx-url: --value(--pcx-url-*);
+
+  mask-image: var(--pcx-url);
+  -webkit-mask-image: var(--pcx-url);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-position: var(--mask-pos, 0% 0%);
+  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-size: auto;
+  -webkit-mask-size: auto;
+  /* IMPEDE O BLUR / DESFOQUE AO AMPLIAR */
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* Fallback para Firefox/Webkit antigos */
+}
 
 body {
   @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden;
   /* @apply bg-zinc-950 text-zinc-100 font-mono antialiased overflow-x-hidden bg-[url(assets/images/background.jpg)] bg-contain bg-fixed bg-center; */
 }
 
-main div section > div {
-  @apply border-2 border-t-30 relative border-primary/70 before:absolute before:bg-[url(./assets/images/fadeOut.gif)] before:w-full before:h-11.5 before:left-0 before:-top-7.5 before:bg-position-[center_bottom] before:bg-size-[4px_40px] before:-scale-y-100;
-}
-main div section > h2 {
-  @apply border-2 border-b-30 border-t-0 border-primary/70 text-2xl font-bold text-primary/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
-}
+/* main div section > h2 {
+  @apply border-30 border-b-30 border-t-0 border-main-a-dark text-2xl font-bold text-main-a/90 mb-4 p-4 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)] after:absolute after:bg-[url(./assets/images/fadeOut.gif)] after:w-full after:h-11.5 after:left-0 after:-bottom-7.5 after:bg-position-[center_75%];
+} */
 main > ol > li {
-  @apply z-10 border-y-2 border-x-2 border-transparent border-primary p-2;
+  @apply z-10 border-y border-x p-4;
+}
+
+.card-projeto {
+  @apply border border-main-a-dark;
+}
+.card-projeto::after,
+.card-projeto::before {
+  @apply border-2 border-main-a-dark pcx-full;
+}
+.card-projeto .deco-tr,
+.card-projeto .deco-bl {
+  @apply border-main-c;
+}
+
+.card-drop {
+  @apply border border-main-b-dark;
+}
+.card-drop::after,
+.card-drop::before {
+  @apply border-2 border-main-b-dark pcx-full;
+}
+.card-drop .deco-tr,
+.card-drop .deco-bl {
+  @apply border-main-d;
+}
+
+.card-artboard {
+  @apply border border-main-c-dark;
+}
+.card-artboard::after,
+.card-artboard::before {
+  @apply border-2 border-main-c-dark pcx-full;
+}
+.card-artboard .deco-tr,
+.card-artboard .deco-bl {
+  @apply border-main-a;
+}
+
+.card-documento {
+  @apply border border-main-d-dark;
+}
+.card-documento::after,
+.card-documento::before {
+  @apply border-2 border-main-d-dark pcx-full;
+}
+.card-documento .deco-tr,
+.card-documento .deco-bl {
+  @apply border-main-b;
 }
 /* Os keyframes e classes do SideScroller continuam aqui embaixo... */
-
 .pop_01 {
   filter: var(--img-hue-1);
 }
@@ -143,9 +228,6 @@ main > ol > li {
   inset: 0;
   width: 100%;
   height: 100%;
-  border: 2px solid var(--color-primary); /* Your container border */
-  /* padding: 20px; */
-  color: #fff;
   z-index: -1;
   /* filter: url(#glitch-border); */
 

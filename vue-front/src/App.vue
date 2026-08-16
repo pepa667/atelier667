@@ -204,9 +204,11 @@ onUnmounted(() => {
 <template>
   <!-- max-w-full ou max-w-[1920px] pra dar espaço para as 6 colunas abrirem sem sufocar -->
   <div
-    class="md:min-w-3xl relative max-w-[1920px] bg-zinc-900 text-zinc-100 font-mono mx-auto flex flex-row justify-between"
+    class="md:min-w-3xl relative max-w-[1920px] text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
-    <div class="absolute w-full left-0 top-0 h-full backdrop-blur-xl"></div>
+    <div
+      class="absolute w-full left-0 top-0 h-full backdrop-blur-xl bg-main-c-dark/7 pcx-full"
+    ></div>
     <SideScroller />
 
     <main
@@ -216,23 +218,39 @@ onUnmounted(() => {
 
       <!-- 🚀 GRID DENSE: Preenche TODOS os buracos automaticamente -->
       <ol
-        class="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-7 3xl:grid-cols-9 auto-rows-[minmax(180px,auto)] grid-flow-dense gap-4 w-full [&>li>*]:pop_04"
+        class="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 auto-rows-[minmax(180px,auto)] grid-flow-dense gap-6 w-full [&>li>*]:pop_04"
       >
         <li
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'flex flex-col h-full w-full relative glitch-container after:texture before:texture',
+            'flex flex-col h-full w-full relative glitch-container after:pcx-full before:pcx-md',
             item.gridSpan,
             {
               'container-glitching':
                 activeGlitchId === (item._id || item.title_pt || item.title),
             },
+            {
+              'card-projeto': item._type === 'projeto',
+            },
+            {
+              'card-drop': item._type === 'drop',
+            },
+            {
+              'card-artboard': item._type === 'artboard',
+            },
+            {
+              'card-documento': item._type === 'documento',
+            },
           ]"
           @animationend="handleAnimationEnd"
         >
           <span
-            class="deco absolute w-3/12 h-3/12 border-r-12 border-t-12 border-third/75 -top-1 -right-1.5 texture"
+            class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200%] [--mask-pos:bottom_left]"
+            >&nbsp;</span
+          >
+          <span
+            class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200%] [--mask-pos:top_right]"
             >&nbsp;</span
           >
           <Drops
@@ -258,7 +276,13 @@ onUnmounted(() => {
         </li>
         <svg style="position: absolute; width: 0; height: 0" aria-hidden="true">
           <defs>
-            <filter id="glitch-border">
+            <filter
+              id="glitch-border"
+              x="-100%"
+              y="-20%"
+              width="300%"
+              height="140%"
+            >
               <!-- 1. Generate sharp, blocky horizontal rectangles -->
               <feTurbulence
                 type="fractalNoise"
@@ -279,10 +303,18 @@ onUnmounted(() => {
                 result="sharp-blocks"
               />
 
-              <!-- 3. Displace horizontally (Red shifts X, Green is 0.5 so it does not shift Y) -->
+              <!-- 3. Stretch the noise horizontally (Cria os traços/linhas esticadas na horizontal) -->
+              <feMorphology
+                operator="dilate"
+                :radius="`${currenatScale * 10 || 500} 20`"
+                in="sharp-blocks"
+                result="stretched-blocks"
+              />
+
+              <!-- 4. Displace horizontally using the horizontally stretched blocks -->
               <feDisplacementMap
                 in="SourceGraphic"
-                in2="sharp-blocks"
+                in2="stretched-blocks"
                 :scale="currentScale"
                 xChannelSelector="R"
                 yChannelSelector="G"
@@ -296,10 +328,10 @@ onUnmounted(() => {
 
   <GlitchTitle
     tag-glitch="footer"
-    class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-primary)]"
+    class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)]"
   >
     <div
-      class="absolute opacity-50 text-2xl font-bold text-second w-svw h-56 bg-[url(assets/images/fadeOut.gif)] pop_02"
+      class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/textures/dither-bt.gif)] pop_02 pcx-full mask-cover"
     >
       :::
     </div>
