@@ -1,3 +1,4 @@
+<<<<<<< HEAD:vue-front/eslint.config.js
 import js from "@eslint/js";
 import pluginVue from "eslint-plugin-vue";
 import skipFormatting from "eslint-config-prettier";
@@ -26,6 +27,17 @@ export default [
     rules: {
       // Ajuste suas regras customizadas aqui se precisar
       "vue/multi-word-component-names": "off", // Permite nomes simples como Icon.vue
+=======
+import astroPlugin from 'eslint-plugin-astro';
+import eslintConfigPrettier from 'eslint-config-prettier';
+
+export default [
+  ...astroPlugin.configs.recommended,
+  eslintConfigPrettier,
+  {
+    rules: {
+      // Suas regras adicionais aqui
+>>>>>>> main:astro-front/eslint.config.js
     },
   },
 ];
