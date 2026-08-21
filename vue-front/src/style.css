@@ -112,6 +112,10 @@
   }
 }
 
+@utility container-size {
+  container-type: size;
+}
+
 @utility pcx-* {
   --pcx-url: --value(--pcx-url-*);
 

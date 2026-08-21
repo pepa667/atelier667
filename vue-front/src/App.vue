@@ -156,7 +156,7 @@ onMounted(async () => {
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'flex flex-col relative rounded-md min-h-45',
+            'flex flex-col relative rounded-md min-h-45 group',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
@@ -167,8 +167,27 @@ onMounted(async () => {
           ]"
         >
           <div
-            class="card-bg absolute inset-0 w-full h-full pcx-grunge-lite mask-[800px_auto] -z-10"
+            class="card-bg absolute inset-0 w-full h-full pcx-grunge-lite mask-[800px_auto]"
           ></div>
+
+          <!-- Wrapper com flex-col repassa h-full / flex-1 pro componente renderizado -->
+          <div class="relative inset-0 w-full h-full flex flex-col flex-1">
+            <component
+              :is="componentMap[item._type]"
+              v-bind="
+                item._type === 'drop'
+                  ? { drops: [item] }
+                  : item._type === 'projeto'
+                    ? { projetos: [item] }
+                    : item._type === 'documento'
+                      ? { documentos: [item] }
+                      : item._type === 'artboard'
+                        ? { posts: [item] }
+                        : {}
+              "
+              class="h-full w-full flex-1"
+            />
+          </div>
 
           <!-- Glitch isolado apenas nos layers de fundo -->
           <GlitchWrapper>
@@ -177,25 +196,13 @@ onMounted(async () => {
           </GlitchWrapper>
 
           <span
-            class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200px] [--mask-pos:bottom_left] rounded-md"
+            class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200px] [--mask-pos:bottom_left] rounded-md z-10"
             >&nbsp;</span
           >
           <span
-            class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200px] [--mask-pos:top_right] rounded-md"
+            class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200px] [--mask-pos:top_right] rounded-md z-10"
             >&nbsp;</span
           >
-
-          <!-- Wrapper com flex-col repassa h-full / flex-1 pro componente renderizado -->
-          <div class="relative inset-0 w-full h-full flex flex-col flex-1">
-            <component
-              :is="componentMap[item._type]"
-              :drops="item._type === 'drop' ? [item] : undefined"
-              :projetos="item._type === 'projeto' ? [item] : undefined"
-              :documentos="item._type === 'documento' ? [item] : undefined"
-              :posts="item._type === 'artboard' ? [item] : undefined"
-              class="h-full w-full flex-1"
-            />
-          </div>
         </li>
       </ol>
     </main>
