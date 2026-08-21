@@ -89,6 +89,7 @@
   --pcx-url-grunge-min: url(./assets/images/textures/grunge-min.gif);
   --pcx-url-grunge-md: url(./assets/images/textures/grunge-md.gif);
   --pcx-url-grunge-full: url(./assets/images/textures/grunge-full.gif);
+  --pcx-url-grunge-lite: url(./assets/images/textures/grunge-lite.gif);
 
   @keyframes marquee {
     0% {
@@ -126,7 +127,11 @@
 }
 
 body {
-  @apply bg-black text-zinc-300 font-mono antialiased overflow-x-hidden;
+  @apply bg-black text-zinc-300 font-mono antialiased overflow-x-hidden relative;
+}
+
+#app::before {
+  @apply [content:"_"] absolute inset-0 h-full bg-main-c-dark/25;
 }
 
 header > *::before {
@@ -137,14 +142,23 @@ header > * {
 }
 
 main > ol > li {
-  @apply border-y border-x p-4;
+  @apply border-y border-x p-0;
 }
 
+/* .title-category h2 {
+  @apply z-10;
+} */
+.cards-list section > h2::before {
+  @apply [content:"_"] absolute inset-0 rounded-tl-md rounded-br-2xl -z-1 pcx-grunge-min mask-auto;
+}
 .card-projeto {
   @apply border border-main-a-dark/40;
 }
+.card-projeto section > h2::before {
+  @apply bg-main-a-dark/75;
+}
 .card-projeto .card-bg {
-  @apply bg-main-a-dark/5;
+  @apply bg-main-a-dark/30;
 }
 .card-projeto .card-glitch-1,
 .card-projeto .card-glitch-2 {
@@ -152,14 +166,17 @@ main > ol > li {
 }
 .card-projeto .deco-tr,
 .card-projeto .deco-bl {
-  @apply border-main-c;
+  @apply border-main-c bg-main-c-dark/50;
 }
 
 .card-drop {
   @apply border border-main-b-dark/40;
 }
+.card-drop section > h2::before {
+  @apply bg-main-b-dark/75;
+}
 .card-drop .card-bg {
-  @apply bg-main-b-dark/5;
+  @apply bg-main-b-dark/30;
 }
 .card-drop .card-glitch-1,
 .card-drop .card-glitch-2 {
@@ -167,14 +184,17 @@ main > ol > li {
 }
 .card-drop .deco-tr,
 .card-drop .deco-bl {
-  @apply border-main-d;
+  @apply border-main-d bg-main-d-dark/50;
 }
 
 .card-artboard {
   @apply border border-main-c-dark/40;
 }
+.card-artboard section > h2::before {
+  @apply bg-main-c-dark/75;
+}
 .card-artboard .card-bg {
-  @apply bg-main-c-dark/5;
+  @apply bg-main-c-dark/30;
 }
 .card-artboard .card-glitch-1,
 .card-artboard .card-glitch-2 {
@@ -182,14 +202,17 @@ main > ol > li {
 }
 .card-artboard .deco-tr,
 .card-artboard .deco-bl {
-  @apply border-main-a;
+  @apply border-main-a bg-main-c-dark/50;
 }
 
 .card-documento {
-  @apply border border-main-d-dark/40;
+  @apply border border-main-a-dark/40;
+}
+.card-documento section > h2::before {
+  @apply bg-main-d-dark/75;
 }
 .card-documento .card-bg {
-  @apply bg-main-d-dark/5;
+  @apply bg-main-d-dark/30;
 }
 .card-documento .card-glitch-1,
 .card-documento .card-glitch-2 {
@@ -197,7 +220,7 @@ main > ol > li {
 }
 .card-documento .deco-tr,
 .card-documento .deco-bl {
-  @apply border-main-b;
+  @apply border-main-b bg-main-b-dark/50;
 }
 
 /* .card-glitch-1 {

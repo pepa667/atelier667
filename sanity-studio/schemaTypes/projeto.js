@@ -24,6 +24,26 @@ export default {
       },
       validation: (Rule) => Rule.required(),
     },
+
+    // 🚀 CAMPO ADICIONADO: Banner / Imagem Principal do Projeto
+    {
+      name: 'coverImage',
+      title: 'Banner / Imagem Principal',
+      type: 'image',
+      description: 'Imagem de capa do projeto usada nos cards do feed e no cabeçalho da página.',
+      options: {
+        hotspot: true, // Permite ajustar o foco da imagem direto pelo Studio
+      },
+      fields: [
+        {
+          name: 'alt',
+          title: 'Texto Alternativo (Alt)',
+          type: 'string',
+          description: 'Descrição da imagem para acessibilidade e leitores de tela.',
+        },
+      ],
+    },
+
     {
       name: 'status',
       title: 'Status do Projeto',
@@ -50,7 +70,6 @@ export default {
       type: 'url',
     },
     // 1. CATEGORIAS PREDEFINIDAS (Geram os links vivos de navegação)
-
     {
       name: 'categorias',
       title: 'Categorias Principais do Projeto',

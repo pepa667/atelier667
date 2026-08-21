@@ -9,6 +9,8 @@ import {
 } from "vue";
 
 // Componentes estáticos
+document.getElementById("app")?.classList.add("before:pcx-grunge-lite");
+
 import Header from "./components/Header.vue";
 import SideScroller from "./components/SideScroller.vue";
 import GlitchWrapper from "./components/GlitchWrapper.vue";
@@ -28,37 +30,48 @@ const GlitchTitle = defineAsyncComponent(
   () => import("./components/GlitchTitle.vue"),
 );
 
+// Mapeamento dinâmico de componentes para eliminar v-if/v-else-if
+const componentMap = {
+  drop: Drops,
+  projeto: Projects,
+  documento: Wiki,
+  artboard: ArtBoard,
+};
+
 const projetos = ref([]);
 const drops = ref([]);
 const documentos = ref([]);
 const posts = ref([]);
 
+// COMPUTED: Usa flex-grow e min-widths proporcionais para cobrir 100% da tela
 const feedUnificado = computed(() => {
   const listDrops = drops.value.map((item) => ({
     ...item,
     _type: "drop",
-    gridSpan: "col-span-1 row-span-1",
+    flexStyle: "min-w-[220px] flex-grow flex-shrink-0 basis-[220px]",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
   const listWiki = documentos.value.map((item) => ({
     ...item,
     _type: "documento",
-    gridSpan: "col-span-1 row-span-1",
+    flexStyle: "min-w-[260px] flex-grow flex-shrink-0 basis-[260px]",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
   const listProjects = projetos.value.map((item) => ({
     ...item,
     _type: "projeto",
-    gridSpan: "col-span-1 sm:col-span-2 row-span-1",
+    flexStyle: "min-w-[360px] flex-grow-[1.5] flex-shrink-0 basis-[360px]",
     date: new Date(item._updatedAt || item.timestamp || 0),
   }));
 
   const listPosts = posts.value.map((item) => ({
     ...item,
     _type: "artboard",
-    gridSpan: "col-span-1 sm:col-span-2 row-span-2",
+    // Base mais larga e min-h dobrado pra ocupar 2 linhas
+    flexStyle:
+      "min-w-[420px] flex-grow-[2] flex-shrink-0 basis-[420px] self-stretch",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
@@ -101,7 +114,6 @@ watch(
 
 onMounted(async () => {
   setupRandomTheme();
-  applyRandomMaskPositions();
 
   try {
     const { sanityClient } = await import("./sanity.js");
@@ -127,7 +139,7 @@ onMounted(async () => {
     class="md:min-w-3xl relative max-w-[1920px] text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
     <div
-      class="absolute w-full left-0 top-0 h-full backdrop-blur-xl bg-main-c-dark/7 pcx-grunge-full"
+      class="absolute w-full left-0 top-0 h-full backdrop-blur-xl -z-100"
     ></div>
     <SideScroller />
 
@@ -136,16 +148,16 @@ onMounted(async () => {
     >
       <Header class="mb-12" />
 
-      <!-- 🚀 GRID DENSE -->
+      <!-- 🚀 FLEX JUSTIFICADO -->
       <ol
-        class="relative grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 2xl:grid-cols-6 3xl:grid-cols-7 auto-rows-[minmax(180px,auto)] grid-flow-dense gap-12 w-full [&>li>*]:pop_04"
+        class="cards-list relative flex flex-wrap items-stretch gap-6 w-full [&>li>*]:pop_04"
       >
         <li
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'flex flex-col h-full w-full relative',
-            item.gridSpan,
+            'flex flex-col relative rounded-md min-h-45',
+            item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
               'card-drop': item._type === 'drop',
@@ -155,42 +167,33 @@ onMounted(async () => {
           ]"
         >
           <div
-            class="card-bg absolute inset-0 w-full h-full pcx-grunge-full"
+            class="card-bg absolute inset-0 w-full h-full pcx-grunge-lite mask-[800px_auto] -z-10"
           ></div>
+
           <!-- Glitch isolado apenas nos layers de fundo -->
           <GlitchWrapper>
-            <div class="card-glitch-1 pcx-grunge-full"></div>
-            <div class="card-glitch-2 pcx-grunge-md"></div>
+            <div class="card-glitch-1 pcx-grunge-full rounded-md"></div>
+            <div class="card-glitch-2 pcx-grunge-md rounded-md"></div>
           </GlitchWrapper>
 
           <span
-            class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200%] [--mask-pos:bottom_left]"
+            class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200px] [--mask-pos:bottom_left] rounded-md"
             >&nbsp;</span
           >
           <span
-            class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200%] [--mask-pos:top_right]"
+            class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200px] [--mask-pos:top_right] rounded-md"
             >&nbsp;</span
           >
-          <div class="relative inset-0 w-full h-full">
-            <Drops
-              v-if="item._type === 'drop'"
-              :drops="[item]"
-              class="h-full flex-1"
-            />
-            <Projects
-              v-else-if="item._type === 'projeto'"
-              :projetos="[item]"
-              class="h-full flex-1"
-            />
-            <Wiki
-              v-else-if="item._type === 'documento'"
-              :documentos="[item]"
-              class="h-full flex-1"
-            />
-            <ArtBoard
-              v-else-if="item._type === 'artboard'"
-              :posts="[item]"
-              class="h-full flex-1"
+
+          <!-- Wrapper com flex-col repassa h-full / flex-1 pro componente renderizado -->
+          <div class="relative inset-0 w-full h-full flex flex-col flex-1">
+            <component
+              :is="componentMap[item._type]"
+              :drops="item._type === 'drop' ? [item] : undefined"
+              :projetos="item._type === 'projeto' ? [item] : undefined"
+              :documentos="item._type === 'documento' ? [item] : undefined"
+              :posts="item._type === 'artboard' ? [item] : undefined"
+              class="h-full w-full flex-1"
             />
           </div>
         </li>
@@ -198,14 +201,15 @@ onMounted(async () => {
     </main>
   </div>
 
-  <GlitchTitle
-    tag-glitch="footer"
-    class="relative *:w-svw *:h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)]"
+  <footer
+    class="relative w-svw h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)]"
   >
-    <div
-      class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/textures/dither-bt.gif)] pop_02 pcx-grunge-full mask-cover"
-    >
-      :::
-    </div>
-  </GlitchTitle>
+    <GlitchWrapper :trigger-probability="1">
+      <div
+        class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/textures/dither-bt.gif)] pop_02 pcx-grunge-full mask-cover"
+      >
+        :::
+      </div>
+    </GlitchWrapper>
+  </footer>
 </template>

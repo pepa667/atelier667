@@ -1,12 +1,24 @@
 <script setup>
+import { computed } from "vue";
+import { createImageUrlBuilder } from "@sanity/image-url"; // 🎯 Troca para a named export
+import { sanityClient } from "../sanity.js";
 import GlitchTitle from "./GlitchTitle.vue";
 
-defineProps({
+const props = defineProps({
   projetos: {
     type: Array,
     default: () => [],
   },
 });
+
+const projeto = computed(() => props.projetos[0] || null);
+
+// 🚀 Inicializa usando createImageUrlBuilder
+const builder = createImageUrlBuilder(sanityClient);
+
+const urlFor = (source) => {
+  return source ? builder.image(source).auto("format").fit("max").url() : "";
+};
 
 // Lógica pura de JS pra gerar a barra [████░░]
 const getAsciiBar = (percent) => {
@@ -19,13 +31,13 @@ const getAsciiBar = (percent) => {
 </script>
 
 <template>
-  <section class="relative">
+  <section class="relative w-full h-full">
     <GlitchTitle>// PROJETOS_ATIVOS</GlitchTitle>
     <div class="flex flex-col gap-4">
       <article
         v-for="proj in projetos"
         :key="proj.title_pt"
-        class="border border-zinc-800 p-6 bg-zinc-900/30 relative overflow-hidden h-full flex flex-col justify-between"
+        class="p-6 relative overflow-hidden h-full flex flex-col justify-between"
       >
         <header class="mb-4">
           <h3 class="text-xl font-bold text-zinc-100 uppercase">
@@ -65,6 +77,17 @@ const getAsciiBar = (percent) => {
               #{{ cat }}
             </li>
           </ul>
+        </div>
+        <div
+          class="relative flex-1 w-full aspect-video my-2 bg-zinc-900/60 border border-zinc-800/80 rounded overflow-hidden group flex items-center justify-center"
+        >
+          <!-- Renderiza a primeira imagem do carrossel do Sanity -->
+          <img
+            v-if="proj.images && proj.images.length > 0"
+            :src="urlFor(proj.images[0])"
+            :alt="proj.title"
+            class="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
+          />
         </div>
       </article>
     </div>

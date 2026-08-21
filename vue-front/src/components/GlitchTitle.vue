@@ -114,7 +114,7 @@ onUnmounted(() => {
   <component
     :is="tagGlitch"
     ref="containerRef"
-    class="select-text relative inline-block"
+    class="select-text relative inline-block px-2"
   >
     <span
       aria-hidden="true"
