@@ -12,3 +12,5 @@ dist/
 # Arquivos de ambiente locais (tokens, chaves, etc.)
 .env
 .env.*
+# Local Netlify folder
+.netlify

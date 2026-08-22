@@ -15,6 +15,7 @@ export default defineConfig({
       brotliSize: true,
     }),
   ],
+  base: "/",
   build: {
     // Garante código moderno sem polyfills legados
     target: "esnext",

@@ -17,10 +17,10 @@
   --hue-rotate-3: 180;
   --hue-rotate-4: 43;
 
-  --color-main-a: hsl(var(--hue-rotate-1), 100%, 60%);
-  --color-main-b: hsl(var(--hue-rotate-2), 100%, 60%);
-  --color-main-c: hsl(var(--hue-rotate-3), 100%, 60%);
-  --color-main-d: hsl(var(--hue-rotate-4), 100%, 60%);
+  --color-main-a: hsl(var(--hue-rotate-1), 100%, 70%);
+  --color-main-b: hsl(var(--hue-rotate-2), 100%, 70%);
+  --color-main-c: hsl(var(--hue-rotate-3), 100%, 70%);
+  --color-main-d: hsl(var(--hue-rotate-4), 100%, 70%);
 
   --color-main-a-dark: hsl(var(--hue-rotate-1), 100%, 35%);
   --color-main-b-dark: hsl(var(--hue-rotate-2), 100%, 35%);
@@ -192,7 +192,7 @@ main > ol > li {
 }
 
 .card-artboard {
-  @apply border border-main-c-dark/40;
+  @apply border-0;
 }
 .card-artboard section > h2::before {
   @apply bg-main-c-dark/75;
@@ -202,11 +202,11 @@ main > ol > li {
 }
 .card-artboard .card-glitch-1,
 .card-artboard .card-glitch-2 {
-  @apply border-2 border-main-c-dark/40;
+  @apply border-0;
 }
 .card-artboard .deco-tr,
 .card-artboard .deco-bl {
-  @apply border-main-a bg-main-c-dark/50;
+  @apply border-main-a bg-main-a-dark/50;
 }
 
 .card-documento {

@@ -8,7 +8,8 @@ const props = defineProps({
   triggerTarget: {
     type: String,
     default: "parent",
-    validator: (val) => ["element", "parent", "section"].includes(val),
+    validator: (val) =>
+      ["element", "parent", "section", ".card-item"].includes(val),
   },
   // Chance de ativação (1 = 100%, 0.25 = 25% de chance de ativar)
   triggerProbability: {
@@ -99,6 +100,10 @@ const resolveTargetElement = () => {
 
   if (props.triggerTarget === "section") {
     return wrapperRef.value.closest("section") || wrapperRef.value;
+  }
+
+  if (props.triggerTarget === ".card-item") {
+    return wrapperRef.value.closest(".card-item") || wrapperRef.value;
   }
 
   return wrapperRef.value;

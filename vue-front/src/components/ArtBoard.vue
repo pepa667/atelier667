@@ -1,7 +1,9 @@
 <script setup>
-import { computed } from "vue";
-import { createImageUrlBuilder } from "@sanity/image-url"; // 🎯 Troca para a named export
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "../sanity.js";
+
+import GlitchWrapper from "./GlitchWrapper.vue";
 
 const props = defineProps({
   posts: {
@@ -12,21 +14,60 @@ const props = defineProps({
 
 const post = computed(() => props.posts[0] || null);
 
-// 🚀 Inicializa usando createImageUrlBuilder
 const builder = createImageUrlBuilder(sanityClient);
 
 const urlFor = (source) => {
   return source ? builder.image(source).auto("format").fit("max").url() : "";
 };
+
+// 🎯 Referência do DOM para medir o artigo de forma reativa e segura
+const articleRef = ref(null);
+const articleAspect = ref(1);
+
+let observer = null;
+
+onMounted(() => {
+  if (!articleRef.value) return;
+
+  // ResizeObserver monitora o tamanho do article sem travar a thread de renderização
+  observer = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const { width, height } = entry.contentRect;
+      if (width > 0 && height > 0) {
+        articleAspect.value = height / width;
+      }
+    }
+  });
+
+  observer.observe(articleRef.value);
+});
+
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
+
+// 🎯 Calcula se é Portrait sem consultar o DOM diretamente na Computed
+const isPortrait = computed(() => {
+  const img = post.value?.images?.[0];
+  if (!img?.width || !img?.height) return false;
+
+  const imgAspectRatio = img.height / img.width;
+
+  // Compara o aspect ratio fixo da imagem com o aspect do container capturado pelo observer
+  return imgAspectRatio > articleAspect.value;
+});
 </script>
 
 <template>
   <article
     v-if="post"
-    class="h-full w-full flex flex-col justify-between p-4 relative overflow-hidden"
+    ref="articleRef"
+    class="h-full w-full aspect-video flex flex-col justify-between relative overflow-visible group"
   >
     <!-- Header com Título do Card -->
-    <header class="mb-3 flex items-center justify-between z-10">
+    <header
+      class="mb-3 flex items-center justify-between z-10 pointer-events-none p-4 bg-zinc-700"
+    >
       <h2 class="text-xs font-bold text-main-b tracking-wider uppercase">
         // ARTBOARD_FEED
       </h2>
@@ -35,30 +76,22 @@ const urlFor = (source) => {
       </span>
     </header>
 
-    <!-- Container da Imagem Central (Flex-1 força esticar a altura livre) -->
+    <!-- Container da Imagem Central -->
     <div
-      class="relative flex-1 w-full aspect-video my-2 bg-zinc-900/60 border border-zinc-800/80 rounded overflow-hidden group flex items-center justify-center"
+      class="absolute w-full h-full inset-0 bg-zinc-900/60 overflow-visible group flex items-center justify-center -z-1 transition-transform duration-500 group-hover:scale-105 group-hover:z-20"
     >
-      <!-- Renderiza a primeira imagem do carrossel do Sanity -->
+      <!-- Renderiza a primeira imagem com estouro condicional -->
       <img
         v-if="post.images && post.images.length > 0"
         :src="urlFor(post.images[0])"
         :alt="post.title"
-        class="w-full aspect-square object-cover transition-transform duration-500 group-hover:scale-105"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
+        :class="[
+          isPortrait
+            ? 'w-auto h-auto min-h-full max-h-[calc(100%+3rem)]'
+            : 'h-auto w-auto min-w-full max-w-[calc(100%+3rem)]',
+        ]"
       />
-
-      <!-- Fallback quando não há imagem carregada -->
-      <div v-else class="text-xs text-zinc-600 font-mono">[NO_IMAGE_DATA]</div>
-
-      <!-- Overlay com título e caption ao passar o mouse -->
-      <div
-        class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-4 flex flex-col justify-end text-xs backdrop-blur-sm z-20"
-      >
-        <p class="font-bold text-zinc-100 mb-1">{{ post.title }}</p>
-        <p v-if="post.caption" class="text-zinc-400 line-clamp-3 text-[11px]">
-          {{ post.caption }}
-        </p>
-      </div>
     </div>
 
     <!-- Rodapé: Tags e Link Externo -->
@@ -73,8 +106,7 @@ const urlFor = (source) => {
           #{{ tag }}
         </span>
       </div>
-
-      <!-- Link Externo (se existir) -->
+      <!-- Link Externo -->
       <a
         v-if="post.externalLink"
         :href="post.externalLink"

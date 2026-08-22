@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build:front": "npm --prefix vue-front run build",
+    "deploy": "npm run build:front && gh-pages -d vue-front/dist"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  }
+}

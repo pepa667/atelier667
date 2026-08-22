@@ -48,7 +48,8 @@ const feedUnificado = computed(() => {
   const listDrops = drops.value.map((item) => ({
     ...item,
     _type: "drop",
-    flexStyle: "min-w-[220px] flex-grow flex-shrink-0 basis-[220px]",
+    flexStyle:
+      "min-w-[220px] flex-grow flex-shrink-0 basis-[220px] transition-[flex-grow] duration-500 hover:flex-grow-50",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
@@ -71,7 +72,7 @@ const feedUnificado = computed(() => {
     _type: "artboard",
     // Base mais larga e min-h dobrado pra ocupar 2 linhas
     flexStyle:
-      "min-w-[420px] flex-grow-[2] flex-shrink-0 basis-[420px] self-stretch",
+      "min-w-[390px] flex-grow-[1.25] flex-shrink-0 basis-[390px] self-stretch",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
@@ -117,13 +118,20 @@ onMounted(async () => {
 
   try {
     const { sanityClient } = await import("./sanity.js");
+    // 🎯 Como DEVE FICAR:
     const data = await sanityClient.fetch(`{
-      "projetos": *[_type == "projeto"],
-      "drops": *[_type == "drop"] | order(timestamp desc),
-      "wiki": *[_type == "documento"] | order(timestamp desc),
-      "artboard": *[_type == "artboard"] | order(timestamp desc)
-    }`);
-
+  "projetos": *[_type == "projeto"],
+  "drops": *[_type == "drop"] | order(timestamp desc),
+  "wiki": *[_type == "documento"] | order(timestamp desc),
+  "artboard": *[_type == "artboard"]{
+    ...,
+    "images": images[]{
+      ...,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height
+    }
+  } | order(timestamp desc)
+}`);
     projetos.value = data.projetos || [];
     drops.value = data.drops || [];
     documentos.value = data.wiki || [];
@@ -150,13 +158,13 @@ onMounted(async () => {
 
       <!-- 🚀 FLEX JUSTIFICADO -->
       <ol
-        class="cards-list relative flex flex-wrap items-stretch gap-6 w-full [&>li>*]:pop_04"
+        class="cards-list relative flex flex-wrap items-stretch gap-6 gap-y-18 w-full [&>li>*]:pop_04"
       >
         <li
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'flex flex-col relative rounded-md min-h-45 group',
+            'card-item flex flex-col relative rounded-md min-h-45 group',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
