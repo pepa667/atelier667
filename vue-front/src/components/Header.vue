@@ -17,9 +17,9 @@
     >
       <span
         class="absolute left-0 top-0 drop-shadow-[7px_7px_3px_var(--color-main-a-strong),-7px_-7px_3px_var(--color-main-b-strong)]"
-        >Atelier 667.</span
+        >Atelier 667<b class="font-sans">.</b></span
       >
-      <span class="pcx-grunge-md">Atelier 667.</span>
+      <span class="pcx-grunge-md">Atelier 667<b class="font-sans">.</b></span>
     </h1>
 
     <p
