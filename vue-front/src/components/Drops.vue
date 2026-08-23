@@ -38,9 +38,7 @@ const renderMarkdown = (text) => {
 
         <!-- Conteúdo Renderizado como Markdown -->
         <div
-          v-if="drop.content"
           class="prose prose-invert prose-zinc max-w-none text-zinc-400 text-sm leading-relaxed"
-          v-html="renderMarkdown(drop.content)"
         ></div>
       </article>
     </div>

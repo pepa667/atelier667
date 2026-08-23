@@ -134,6 +134,7 @@ export default {
               title: 'Data/Hora do Log',
               type: 'datetime',
               validation: (Rule) => Rule.required(),
+              initialValue: () => new Date().toISOString(),
             },
             // ADICIONADO: Categorias específicas para este LOG
             {

@@ -12,7 +12,7 @@ export default {
     {
       name: 'content',
       title: 'Conteúdo do Drop (Texto Curto/Markdown)',
-      type: 'markdown',
+      type: 'text',
       validation: (Rule) => Rule.required().max(280),
     },
     {

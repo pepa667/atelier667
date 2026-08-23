@@ -13,7 +13,7 @@ import Icon from "./Icon.vue";
       class="font-serif italic text-fluid-hero inline-block text-[color-mix(in_srgb,var(--color-main-a)_50%,white_100%)] leading-[0.7] my-2 lg:my-4"
     >
       <span
-        class="absolute w-[150%] h-5/12 bg-main-c-dark/50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:pcx-grunge-full -z-1 [--mask-pos:20%_30%]"
+        class="absolute w-[150%] h-5/12 bg-main-c-strong/50 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 md:pcx-grunge-full -z-1 [--mask-pos:20%_30%]"
       ></span>
       Atelier<span class="text-main-b">667</span>.
     </h1>

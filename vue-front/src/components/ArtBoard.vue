@@ -66,38 +66,46 @@ const isPortrait = computed(() => {
   >
     <!-- Header com Título do Card -->
     <header
-      class="mb-3 flex items-center justify-between z-10 pointer-events-none p-4 bg-zinc-700"
+      class="mb-3 flex items-center justify-between pointer-events-none p-4 bg-zinc-950/10 transition-colors duration-700 group-hover:bg-zinc-950/80"
     >
-      <h2 class="text-xs font-bold text-main-b tracking-wider uppercase">
+      <h2
+        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
+      >
         // ARTBOARD_FEED
       </h2>
-      <span v-if="post.timestamp" class="text-[10px] opacity-60 font-mono">
-        {{ new Date(post.timestamp).toLocaleDateString() }}
-      </span>
     </header>
-
+    
     <!-- Container da Imagem Central -->
     <div
-      class="absolute w-full h-full inset-0 bg-zinc-900/60 overflow-visible group flex items-center justify-center -z-1 transition-transform duration-500 group-hover:scale-105 group-hover:z-20"
+    class="absolute w-full h-full inset-0 overflow-visible group flex items-center justify-center -z-1 transition-transform duration-500 group-hover:scale-105"
     >
-      <!-- Renderiza a primeira imagem com estouro condicional -->
-      <img
-        v-if="post.images && post.images.length > 0"
-        :src="urlFor(post.images[0])"
-        :alt="post.title"
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
-        :class="[
-          isPortrait
-            ? 'w-auto h-auto min-h-full max-h-[calc(100%+3rem)]'
-            : 'h-auto w-auto min-w-full max-w-[calc(100%+3rem)]',
-        ]"
+    <!-- Renderiza a primeira imagem com estouro condicional -->
+    <img
+    v-if="post.images && post.images.length > 0"
+    :src="urlFor(post.images[0])"
+    :alt="post.title"
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
+    :class="[
+      isPortrait
+      ? 'w-auto h-auto min-h-full max-h-[calc(100%+3rem)]'
+      : 'h-auto w-auto min-w-full max-w-[calc(100%+3rem)]',
+    ]"
       />
     </div>
-
+    
     <!-- Rodapé: Tags e Link Externo -->
-    <footer class="mt-2 flex items-center justify-between text-[11px] z-10">
+    <footer class="     mb-3 flex items-center justify-between pointer-events-none p-4 bg-zinc-950/10 transition-colors duration-700 group-hover:bg-zinc-950/80"
+    ">
+    <h2
+      class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
+    >
+      {{ post.title || "TITLE" }}
+    </h2>
+      <span v-if="post.timestamp" class="text-[12px] leading-loose bg-black font-mono">
+        {{ post.timestamp || "LOG_DATA" }}
+      </span>
       <!-- Tags -->
-      <div class="flex flex-wrap gap-1">
+      <!-- <div class="flex flex-wrap gap-1">
         <span
           v-for="tag in post.tags"
           :key="tag"
@@ -105,7 +113,7 @@ const isPortrait = computed(() => {
         >
           #{{ tag }}
         </span>
-      </div>
+      </div> -->
       <!-- Link Externo -->
       <a
         v-if="post.externalLink"

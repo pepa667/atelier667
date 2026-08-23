@@ -198,17 +198,13 @@ onMounted(async () => {
           </div>
 
           <!-- Glitch isolado apenas nos layers de fundo -->
-          <GlitchWrapper>
-            <div class="card-glitch-1 pcx-grunge-full rounded-md"></div>
-            <div class="card-glitch-2 pcx-grunge-md rounded-md"></div>
-          </GlitchWrapper>
 
           <span
-            class="deco-tr absolute w-25 h-25 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr mask-[auto_200px] [--mask-pos:bottom_left] rounded-md z-10"
+            class="deco-tr absolute w-2/3 h-4/7 border-r-2 border-t-2 top-0 right-0 pcx-tr mask-size-[100%_100%] [--mask-pos:top_right] rounded-md z-0"
             >&nbsp;</span
           >
           <span
-            class="deco-bl absolute w-25 h-25 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl mask-[auto_200px] [--mask-pos:top_right] rounded-md z-10"
+            class="deco-bl absolute w-2/5 h-7/12 border-l-3 border-b-2 bottom-0 left-0 pcx-bl [--mask-pos:bottom_left] mask-[100%_100%] rounded-md z-10"
             >&nbsp;</span
           >
         </li>

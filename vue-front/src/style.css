@@ -1,7 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&display=swap");
-
 @import url("./styles/sideBar.css");
-@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:opsz,wght@0,14,400;&family=Roboto+Slab:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:opsz,wght@0,14,400&family=Roboto+Slab:wght@400&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -10,253 +8,190 @@
   --font-sans: "Inter", sans-serif;
   --font-title: "Big Shoulders", sans-serif;
 
-  --breakpoint-3xl: 105rem; /* 1600px */
+  --breakpoint-3xl: 105rem;
 
-  --hue-rotate-1: 74;
-  --hue-rotate-2: 330;
-  --hue-rotate-3: 180;
-  --hue-rotate-4: 43;
+  --color-pop-magenta: oklch(64.895% 0.26389 358.718);
+  --color-pop-cyan: oklch(84.417% 0.1457 209.321);
+  --color-pop-lime: oklab(90.824% -0.16022 0.18721);
+  --color-pop-amber: oklch(84.028% 0.17238 84.078);
 
-  --color-main-a: hsl(var(--hue-rotate-1), 100%, 70%);
-  --color-main-b: hsl(var(--hue-rotate-2), 100%, 70%);
-  --color-main-c: hsl(var(--hue-rotate-3), 100%, 70%);
-  --color-main-d: hsl(var(--hue-rotate-4), 100%, 70%);
+  --hue-rotate-1: 327;
+  --hue-rotate-2: 186;
+  --hue-rotate-3: 81;
+  --hue-rotate-4: 46;
 
-  --color-main-a-dark: hsl(var(--hue-rotate-1), 100%, 35%);
-  --color-main-b-dark: hsl(var(--hue-rotate-2), 100%, 35%);
-  --color-main-c-dark: hsl(var(--hue-rotate-3), 100%, 35%);
-  --color-main-d-dark: hsl(var(--hue-rotate-4), 100%, 35%);
+  --hue-rotate-1-strong: 340;
+  --hue-rotate-2-strong: 200;
+  --hue-rotate-3-strong: 120;
+  --hue-rotate-4-strong: 28;
+
+  --color-main-a: hsl(var(--hue-rotate-1) 100% 50%);
+  --color-main-b: hsl(var(--hue-rotate-2) 100% 50%);
+  --color-main-c: hsl(var(--hue-rotate-3) 100% 50%);
+  --color-main-d: hsl(var(--hue-rotate-4) 100% 50%);
+
+  --color-main-a-strong: hsl(var(--hue-rotate-1-strong) 100% 42%);
+  --color-main-b-strong: hsl(var(--hue-rotate-2-strong) 100% 42%);
+  --color-main-c-strong: hsl(var(--hue-rotate-3-strong) 100% 42%);
+  --color-main-d-strong: hsl(var(--hue-rotate-4-strong) 100% 42%);
 
   --animate-marquee: marquee 10s linear infinite;
 
-  /* Escala de tipografia fluida usando a matemática do Utopia */
-
-  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,12—20&p=size */
   --text-fluid-sm: clamp(0.75rem, 0.6346rem + 0.5128vw, 1.25rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
   --text-fluid-title: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
-
-  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,20—48&p=size */
   --text-fluid-sidebar: clamp(1.25rem, 0.8462rem + 1.7949vw, 3rem);
-
-  /* @link https://utopia.fyi/clamp/calculator?a=360,1920,64—256&p=size */
   --text-fluid-hero: clamp(3rem, 1rem + 12.3077vw, 16rem);
 
-  --spaceing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
+  --spacing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
 
-  --size-icon-sm: clamp(
-    0.75rem,
-    -0.9375rem + 3.5156vw,
-    1.875rem
-  ); /* ~12px a 30px */
-  --size-icon-md: clamp(1rem, -1.25rem + 4.6875vw, 2.5rem); /* ~16px a 40px */
-  --size-icon-lg: clamp(
-    1.25rem,
-    -1.5625rem + 5.8594vw,
-    3.125rem
-  ); /* ~20px a 50px */
-  --size-icon-base: clamp(
-    1.5rem,
-    -1.875rem + 7.0313vw,
-    3.75rem
-  ); /* ~24px a 60px (Sua Base) */
-  --size-icon-xl: clamp(2rem, -2.5rem + 9.375vw, 5rem); /* ~32px a 80px */
-  --size-icon-2xl: clamp(
-    2.5rem,
-    -3.125rem + 11.7188vw,
-    6.25rem
-  ); /* ~40px a 100px */
-  --size-icon-3xl: clamp(
-    3rem,
-    -3.75rem + 14.0625vw,
-    7.5rem
-  ); /* ~48px a 120px */
-  --size-icon-4xl: clamp(4rem, -5rem + 18.75vw, 10rem); /* ~64px a 160px */
-  --size-icon-5xl: clamp(
-    5rem,
-    -6.25rem + 23.4375vw,
-    12.5rem
-  ); /* ~80px a 200px */
-  --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem); /* ~96px a 240px */
+  --size-icon-sm: clamp(0.75rem, -0.9375rem + 3.5156vw, 1.875rem);
+  --size-icon-md: clamp(1rem, -1.25rem + 4.6875vw, 2.5rem);
+  --size-icon-lg: clamp(1.25rem, -1.5625rem + 5.8594vw, 3.125rem);
+  --size-icon-base: clamp(1.5rem, -1.875rem + 7.0313vw, 3.75rem);
+  --size-icon-xl: clamp(2rem, -2.5rem + 9.375vw, 5rem);
+  --size-icon-2xl: clamp(2.5rem, -3.125rem + 11.7188vw, 6.25rem);
+  --size-icon-3xl: clamp(3rem, -3.75rem + 14.0625vw, 7.5rem);
+  --size-icon-4xl: clamp(4rem, -5rem + 18.75vw, 10rem);
+  --size-icon-5xl: clamp(5rem, -6.25rem + 23.4375vw, 12.5rem);
+  --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem);
 
-  --pcx-url-tb: url(./assets/images/textures/dither-tb.gif);
-  --pcx-url-bt: url(./assets/images/textures/dither-bt.gif);
-  --pcx-url-radial: url(./assets/images/textures/dither-radial.gif);
-  --pcx-url-tr: url(./assets/images/textures/dither-tr.gif);
-  --pcx-url-tl: url(./assets/images/textures/dither-tl.gif);
-  --pcx-url-br: url(./assets/images/textures/dither-br.gif);
-  --pcx-url-bl: url(./assets/images/textures/dither-bl.gif);
-  --pcx-url-grunge-min: url(./assets/images/textures/grunge-min.gif);
-  --pcx-url-grunge-md: url(./assets/images/textures/grunge-md.gif);
-  --pcx-url-grunge-full: url(./assets/images/textures/grunge-full.gif);
-  --pcx-url-grunge-lite: url(./assets/images/textures/grunge-lite.gif);
+  --pcx-url-tb: url("./assets/images/textures/dither-tb.gif");
+  --pcx-url-bt: url("./assets/images/textures/dither-bt.gif");
+  --pcx-url-radial: url("./assets/images/textures/dither-radial.gif");
+  --pcx-url-tr: url("./assets/images/textures/dither-tr.gif");
+  --pcx-url-tl: url("./assets/images/textures/dither-tl.gif");
+  --pcx-url-br: url("./assets/images/textures/dither-br.gif");
+  --pcx-url-bl: url("./assets/images/textures/dither-bl.gif");
+  --pcx-url-grunge-min: url("./assets/images/textures/grunge-min.gif");
+  --pcx-url-grunge-md: url("./assets/images/textures/grunge-md.gif");
+  --pcx-url-grunge-full: url("./assets/images/textures/grunge-full.gif");
+  --pcx-url-grunge-lite: url("./assets/images/textures/grunge-lite.gif");
 
   @keyframes marquee {
-    0% {
-      transform: translateX(0%);
+    from {
+      transform: translateX(0);
     }
-    100% {
-      transform: translateX(-50%);
-    } /* Move exatamente metade, criando o looping infinito */
-  }
-  @keyframes pulse {
-    50% {
-      opacity: 1;
-    }
-    51% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-}
 
-@utility container-size {
-  container-type: size;
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 @utility pcx-* {
-  --pcx-url: --value(--pcx-url-*);
+  --pcx-mask: --value(--pcx-url-*);
 
-  mask-image: var(--pcx-url);
-  -webkit-mask-image: var(--pcx-url);
-  -webkit-mask-position: var(--mask-pos, 0% 0%);
-  mask-position: var(--mask-pos, 0% 0%);
-  -webkit-mask-position: var(--mask-pos, 0% 0%);
+  mask-image: var(--pcx-mask);
+  -webkit-mask-image: var(--pcx-mask);
+  mask-position: var(--mask-pos, 0 0);
+  -webkit-mask-position: var(--mask-pos, 0 0);
   mask-size: auto;
   -webkit-mask-size: auto;
   image-rendering: pixelated;
-  image-rendering: crisp-edges; /* Fallback para Firefox/Webkit antigos */
+  image-rendering: crisp-edges;
+}
+
+@utility pcx-mix-* {
+  --pcx-mask-1: --value(--pcx-url-*);
+  --pcx-mask-2: --modifier(--pcx-url-*);
+
+  mask-image: var(--pcx-mask-1), var(--pcx-mask-2);
+  -webkit-mask-image: var(--pcx-mask-1), var(--pcx-mask-2);
+  mask-position: var(--mask-pos-1, 0 0), var(--mask-pos-2, 0 0);
+  -webkit-mask-position: var(--mask-pos-1, 0 0), var(--mask-pos-2, 0 0);
+  mask-size: auto;
+  -webkit-mask-size: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 body {
-  @apply bg-black text-zinc-300 font-mono antialiased overflow-x-hidden relative;
+  @apply relative overflow-x-hidden bg-black font-mono text-zinc-300 antialiased;
 }
 
 #app::before {
-  @apply [content:"_"] absolute inset-0 h-full bg-main-c-dark/25;
+  content: "";
+  @apply absolute inset-0 h-full bg-main-c-strong/10;
 }
 
-header > *::before {
-  @apply absolute  inset-0 border-b-main-d-dark/25 w-[300dvh] -bottom-3 left-[-20dvh];
-}
 header > * {
   @apply relative;
 }
 
-main > ol > li {
-  @apply border-y border-x p-0;
+header > *::before {
+  content: "";
+  @apply absolute inset-0 -bottom-3 left-[-20dvh] w-[300dvh] border-b border-main-d-strong/25;
 }
 
-/* .title-category h2 {
-  @apply z-10;
-} */
+main > ol > li {
+  @apply border-x border-y p-0;
+}
+
+.cards-list section > h2 {
+  @apply relative;
+}
+
 .cards-list section > h2::before {
-  @apply [content:"_"] absolute inset-0 rounded-tl-md rounded-br-2xl -z-1 pcx-grunge-min mask-auto;
+  content: "";
+  @apply absolute inset-0 -z-1 rounded-tl-md rounded-br-2xl bg-main-a-strong/75 pcx-grunge-min;
 }
+
+/* Cards */
 .card-projeto {
-  @apply border border-main-a-dark/40;
-}
-.card-projeto section > h2::before {
-  @apply bg-main-a-dark/75;
-}
-.card-projeto .card-bg {
-  @apply bg-main-a-dark/30;
-}
-.card-projeto .card-glitch-1,
-.card-projeto .card-glitch-2 {
-  @apply border-2 border-main-a-dark/40;
-}
-.card-projeto .deco-tr,
-.card-projeto .deco-bl {
-  @apply border-main-c bg-main-c-dark/50;
+  --card-color: var(--color-main-a-strong);
+  --card-deco-color: var(--color-main-c);
 }
 
 .card-drop {
-  @apply border border-main-b-dark/40;
-}
-.card-drop section > h2::before {
-  @apply bg-main-b-dark/75;
-}
-.card-drop .card-bg {
-  @apply bg-main-b-dark/30;
-}
-.card-drop .card-glitch-1,
-.card-drop .card-glitch-2 {
-  @apply border-2 border-main-b-dark/40;
-}
-.card-drop .deco-tr,
-.card-drop .deco-bl {
-  @apply border-main-d bg-main-d-dark/50;
+  --card-color: var(--color-main-b-strong);
+  --card-deco-color: var(--color-main-d);
 }
 
 .card-artboard {
-  @apply border-0;
-}
-.card-artboard section > h2::before {
-  @apply bg-main-c-dark/75;
-}
-.card-artboard .card-bg {
-  @apply bg-main-c-dark/30;
-}
-.card-artboard .card-glitch-1,
-.card-artboard .card-glitch-2 {
-  @apply border-0;
-}
-.card-artboard .deco-tr,
-.card-artboard .deco-bl {
-  @apply border-main-a bg-main-a-dark/50;
+  --card-color: var(--color-main-c-strong);
+  --card-deco-color: var(--color-main-a);
 }
 
 .card-documento {
-  @apply border border-main-a-dark/40;
-}
-.card-documento section > h2::before {
-  @apply bg-main-d-dark/75;
-}
-.card-documento .card-bg {
-  @apply bg-main-d-dark/30;
-}
-.card-documento .card-glitch-1,
-.card-documento .card-glitch-2 {
-  @apply border-2 border-main-d-dark/40;
-}
-.card-documento .deco-tr,
-.card-documento .deco-bl {
-  @apply border-main-b bg-main-b-dark/50;
+  --card-color: var(--color-main-d-strong);
+  --card-deco-color: var(--color-main-b);
 }
 
-/* .card-glitch-1 {
-  @apply pcx-grunge-full;
+.card-projeto,
+.card-drop,
+.card-documento {
+  border: 1.5px solid color-mix(in srgb, var(--card-color) 50%, transparent);
 }
-.card-glitch-2 {
-  @apply pcx-grunge-md;
-} */
-/* Os keyframes e classes do SideScroller continuam aqui embaixo... */
+
+.card-artboard {
+  border: 0;
+}
+
+.card-projeto section > h2::before,
+.card-drop section > h2::before,
+.card-artboard section > h2::before,
+.card-documento section > h2::before {
+  background-color: color-mix(in srgb, var(--card-color) 75%, transparent);
+}
+
+.cards-list .deco-tr,
+.cards-list .deco-bl {
+  border-color: var(--card-deco-color);
+}
+
 .pop_01 {
   filter: var(--img-hue-1);
 }
+
 .pop_02 {
   filter: var(--img-hue-2);
 }
+
 .pop_03 {
   filter: var(--img-hue-3);
 }
+
 .pop_04 {
   filter: var(--img-hue-4);
-}
-
-/* Test SVG glitch */
-.card-glitch-1,
-.card-glitch-2 {
-  position: absolute;
-  inset: 0;
-  width: 101%;
-  height: 101%;
-  /* z-index: -1; */
-  /* filter: url(#glitch-border); */
-}
-.card-glitch-2 {
-  left: -2px;
 }
