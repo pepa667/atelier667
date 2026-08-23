@@ -10,7 +10,7 @@ export default defineConfig({
     // Gera o gráfico visual após o build pra você ver exatamente o que tá pesado
     visualizer({
       filename: "stats.html",
-      open: true, // Abre sozinho no navegador ao buildar
+      open: false, // Abre sozinho no navegador ao buildar
       gzipSize: true,
       brotliSize: true,
     }),
