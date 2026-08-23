@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "../sanity.js";
 import GlitchTitle from "./GlitchTitle.vue";
@@ -95,9 +95,7 @@ const vAspect = {
         </div>
 
         <!-- Categorias -->
-        <div
-          class="ml-2 w-11/12 overflow-hidden self-baseline py-4 mask-marquee"
-        >
+        <div class="ml-2 w-11/12 overflow-hidden self-baseline py-4">
           <ul
             v-if="proj.categorias && proj.categorias.length"
             class="flex flex-row whitespace-nowrap list-none animate-marquee w-max uppercase tracking-wider font-light"
@@ -105,7 +103,7 @@ const vAspect = {
             <li
               v-for="cat in proj.categorias"
               :key="cat"
-              class="text-xs bg-main-b/10 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
+              class="text-xs bg-main-b/25 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
             >
               #{{ cat }}
             </li>

@@ -1,5 +1,5 @@
 @import url("./styles/sideBar.css");
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:opsz,wght@0,14,400&family=Roboto+Slab:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:opsz,wght@14,400&family=Roboto+Slab:wght@400&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -36,12 +36,15 @@
   --color-main-d-strong: hsl(var(--hue-rotate-4-strong) 100% 42%);
 
   --animate-marquee: marquee 10s linear infinite;
+  --animate-sideBar: sideMarquee 100s linear infinite;
 
   --text-fluid-sm: clamp(0.75rem, 0.6346rem + 0.5128vw, 1.25rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
   --text-fluid-title: clamp(1.5rem, 1rem + 2.5vw, 3.5rem);
   --text-fluid-sidebar: clamp(1.25rem, 0.8462rem + 1.7949vw, 3rem);
-  --text-fluid-hero: clamp(3rem, 1rem + 12.3077vw, 16rem);
+  /* --text-fluid-hero: clamp(3rem, 1rem + 12.3077vw, 16rem); */
+  --text-fluid-hero: clamp(4rem, 2.3636rem + 7.2727cqi, 10rem);
+  /* @link https://utopia.fyi/clamp/calculator?a=360,1680,64—160&p=Hero */
 
   --spacing-fluid-sidebar: clamp(0.25rem, -0.875rem + 2.3438vw, 1rem);
 
@@ -75,6 +78,15 @@
 
     to {
       transform: translateX(-50%);
+    }
+  }
+  @keyframes sideMarquee {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(-50%);
     }
   }
 }
@@ -112,7 +124,7 @@ body {
 
 #app::before {
   content: "";
-  @apply absolute inset-0 h-full bg-main-c-strong/10;
+  @apply absolute inset-0 h-full bg-main-c-strong/15;
 }
 
 header > * {
@@ -138,60 +150,60 @@ main > ol > li {
 }
 
 /* Cards */
-.card-projeto {
-  --card-color: var(--color-main-a-strong);
-  --card-deco-color: var(--color-main-c);
-}
-
-.card-drop {
-  --card-color: var(--color-main-b-strong);
-  --card-deco-color: var(--color-main-d);
-}
-
-.card-artboard {
-  --card-color: var(--color-main-c-strong);
-  --card-deco-color: var(--color-main-a);
-}
-
-.card-documento {
-  --card-color: var(--color-main-d-strong);
-  --card-deco-color: var(--color-main-b);
-}
 
 .card-projeto,
 .card-drop,
 .card-documento {
-  border: 1.5px solid color-mix(in srgb, var(--card-color) 50%, transparent);
+  @apply border-[1.5px] border-main-b;
 }
 
 .card-artboard {
   border: 0;
 }
 
-.card-projeto section > h2::before,
+/* .card-projeto section > h2::before,
 .card-drop section > h2::before,
 .card-artboard section > h2::before,
 .card-documento section > h2::before {
   background-color: color-mix(in srgb, var(--card-color) 75%, transparent);
-}
+} */
 
 .cards-list .deco-tr,
 .cards-list .deco-bl {
-  border-color: var(--card-deco-color);
+  @apply border-main-a;
 }
 
-.pop_01 {
+/* .pop_a {
   filter: var(--img-hue-1);
 }
 
-.pop_02 {
+.pop_b {
   filter: var(--img-hue-2);
 }
 
-.pop_03 {
+.pop_c {
   filter: var(--img-hue-3);
 }
 
-.pop_04 {
+.pop_d {
   filter: var(--img-hue-4);
+} */
+.pop_a {
+  filter: brightness(0) saturate(100%) invert(16%) sepia(81%) saturate(5968%)
+    hue-rotate(322deg) brightness(99%) contrast(110%);
+}
+
+.pop_b {
+  filter: brightness(0) saturate(100%) invert(73%) sepia(50%) saturate(3689%)
+    hue-rotate(143deg) brightness(102%) contrast(112%);
+}
+
+.pop_c {
+  filter: brightness(0) saturate(100%) invert(86%) sepia(97%) saturate(447%)
+    hue-rotate(22deg) brightness(105%) contrast(121%);
+}
+
+.pop_d {
+  filter: brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(527%)
+    hue-rotate(340deg) brightness(105%) contrast(97%);
 }

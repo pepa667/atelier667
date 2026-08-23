@@ -1,46 +1,70 @@
 <script setup>
-import GlitchTitle from "./GlitchTitle.vue";
-import { marked } from "marked";
+import { computed } from "vue";
 
-defineProps({
+const props = defineProps({
   drops: {
     type: Array,
     default: () => [],
   },
 });
 
-// Converte a string em Markdown
-const renderMarkdown = (text) => {
-  if (!text) return "";
-  return marked.parse(text);
-};
+const drop = computed(() => props.drops[0] || null);
 </script>
 
 <template>
-  <section class="relative">
-    <GlitchTitle>// DROPS_LOG</GlitchTitle>
-
-    <!-- Grid / Lista de Drops -->
-    <div class="flex flex-col gap-4">
-      <article
-        v-for="drop in drops"
-        :key="drop._id || drop.title"
-        class="border border-zinc-800 p-4 bg-zinc-950/50 hover:border-zinc-700 transition-colors"
+  <article
+    v-if="drop"
+    class="h-full w-full flex flex-col justify-between relative overflow-hidden group"
+  >
+    <header
+      class="mb-3 relative isolation-auto flex items-center justify-between p-4 bg-zinc-950/80 transition-colors duration-700 group-hover:bg-zinc-950/10"
+    >
+      <h2
+        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
       >
-        <header class="mb-3">
-          <span class="text-xs font-mono text-zinc-500 block mb-1">
-            {{ drop.timestamp || "LOG_DATA" }}
-          </span>
-          <h3 class="text-lg font-bold text-zinc-200 uppercase">
-            {{ drop.title }}
-          </h3>
-        </header>
+        // DROPS_LOG
+      </h2>
+    </header>
 
-        <!-- Conteúdo Renderizado como Markdown -->
-        <div
-          class="prose prose-invert prose-zinc max-w-none text-zinc-400 text-sm leading-relaxed"
-        ></div>
-      </article>
+    <div class="w-auto h-full flex gap-8 flex-col justify-between m-3">
+      <h3 class="text-lg font-bold text-zinc-200 uppercase">
+        {{ drop.title }}
+      </h3>
+      <p
+        class="w-full h-full whitespace-pre-line text-sm leading-relaxed text-zinc-300"
+      >
+        {{ drop.content }}
+      </p>
     </div>
-  </section>
+    <footer
+      class="mb-3 flex items-center justify-between p-4 bg-zinc-950/80 transition-colors duration-700 group-hover:bg-zinc-950/10"
+    >
+      <span
+        v-if="drop.timestamp"
+        class="text-[12px] leading-loose bg-black font-mono"
+      >
+        {{ drop.timestamp || "LOG_DATA" }}
+      </span>
+      <!-- Tags -->
+      <!-- <div class="flex flex-wrap gap-1">
+        <span
+          v-for="tag in drop.tags"
+          :key="tag"
+          class="px-1.5 py-0.5 bg-zinc-800/80 text-zinc-400 text-[9px] uppercase rounded border border-zinc-700/50"
+        >
+          #{{ tag }}
+        </span>
+      </div> -->
+      <!-- Link Externo -->
+      <!-- <a
+        v-if="drop.externalLink"
+        :href="drop.externalLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-main-a hover:underline text-[10px] font-bold flex items-center gap-1 ml-2"
+      >
+        LINK ↗
+      </a> -->
+    </footer>
+  </article>
 </template>

@@ -3,8 +3,6 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "../sanity.js";
 
-import GlitchWrapper from "./GlitchWrapper.vue";
-
 const props = defineProps({
   posts: {
     type: Array,
@@ -66,7 +64,7 @@ const isPortrait = computed(() => {
   >
     <!-- Header com Título do Card -->
     <header
-      class="mb-3 flex items-center justify-between pointer-events-none p-4 bg-zinc-950/10 transition-colors duration-700 group-hover:bg-zinc-950/80"
+      class="mb-3 relative isolation-auto flex items-center justify-between p-4 bg-zinc-950/80 transition-colors duration-700 group-hover:bg-zinc-950/10"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
@@ -74,34 +72,39 @@ const isPortrait = computed(() => {
         // ARTBOARD_FEED
       </h2>
     </header>
-    
+
     <!-- Container da Imagem Central -->
-    <div
-    class="absolute w-full h-full inset-0 overflow-visible group flex items-center justify-center -z-1 transition-transform duration-500 group-hover:scale-105"
-    >
     <!-- Renderiza a primeira imagem com estouro condicional -->
-    <img
-    v-if="post.images && post.images.length > 0"
-    :src="urlFor(post.images[0])"
-    :alt="post.title"
-    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
-    :class="[
-      isPortrait
-      ? 'w-auto h-auto min-h-full max-h-[calc(100%+3rem)]'
-      : 'h-auto w-auto min-w-full max-w-[calc(100%+3rem)]',
-    ]"
-      />
-    </div>
-    
-    <!-- Rodapé: Tags e Link Externo -->
-    <footer class="     mb-3 flex items-center justify-between pointer-events-none p-4 bg-zinc-950/10 transition-colors duration-700 group-hover:bg-zinc-950/80"
-    ">
-    <h2
-      class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
+    <a
+      href="#"
+      class="isolate absolute w-full h-full overflow-visible group flex -z-1 items-center justify-center transition-transform duration-500 group-hover:scale-115 group-hover:z-1"
     >
-      {{ post.title || "TITLE" }}
-    </h2>
-      <span v-if="post.timestamp" class="text-[12px] leading-loose bg-black font-mono">
+      <img
+        v-if="post.images && post.images.length > 0"
+        :src="urlFor(post.images[0])"
+        :alt="post.title"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
+        :class="[
+          isPortrait
+            ? 'w-auto h-auto min-h-full max-h-[calc(100%+5rem)]'
+            : 'h-auto w-auto min-w-full max-w-[calc(100%+5rem)]',
+        ]"
+      />
+    </a>
+
+    <!-- Rodapé: Tags e Link Externo -->
+    <footer
+      class="mb-3 flex items-center justify-between p-4 bg-zinc-950/80 transition-colors duration-700 group-hover:bg-zinc-950/10"
+    >
+      <h2
+        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
+      >
+        {{ post.title || "TITLE" }}
+      </h2>
+      <span
+        v-if="post.timestamp"
+        class="text-[12px] leading-loose bg-black font-mono"
+      >
         {{ post.timestamp || "LOG_DATA" }}
       </span>
       <!-- Tags -->

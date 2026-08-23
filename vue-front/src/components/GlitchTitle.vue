@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 
-const props = defineProps({
+defineProps({
   tagGlitch: {
     type: String,
     default: "h2",

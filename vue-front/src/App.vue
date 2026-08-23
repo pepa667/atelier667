@@ -26,10 +26,6 @@ const Wiki = defineAsyncComponent(() => import("./components/Wiki.vue"));
 const ArtBoard = defineAsyncComponent(
   () => import("./components/ArtBoard.vue"),
 );
-const GlitchTitle = defineAsyncComponent(
-  () => import("./components/GlitchTitle.vue"),
-);
-
 // Mapeamento dinâmico de componentes para eliminar v-if/v-else-if
 const componentMap = {
   drop: Drops,
@@ -83,25 +79,51 @@ const feedUnificado = computed(() => {
 
 // Temas
 const setupRandomTheme = () => {
-  const originalHues = [74, 330, 186, 43];
-  const filterMap = {
-    74: "brightness(0) saturate(100%) invert(86%) sepia(97%) saturate(447%) hue-rotate(22deg) brightness(105%) contrast(121%)",
-    330: "brightness(0) saturate(100%) invert(16%) sepia(81%) saturate(5968%) hue-rotate(322deg) brightness(99%) contrast(110%)",
-    186: "brightness(0) saturate(100%) invert(73%) sepia(50%) saturate(3689%) hue-rotate(143deg) brightness(102%) contrast(112%)",
-    43: "brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(527%) hue-rotate(340deg) brightness(105%) contrast(97%)",
-  };
+  const palettes = [
+    {
+      hue: 327,
+      strongHue: 340,
+      filter:
+        "brightness(0) saturate(100%) invert(16%) sepia(81%) saturate(5968%) hue-rotate(322deg) brightness(99%) contrast(110%)",
+    },
+    {
+      hue: 186,
+      strongHue: 200,
+      filter:
+        "brightness(0) saturate(100%) invert(73%) sepia(50%) saturate(3689%) hue-rotate(143deg) brightness(102%) contrast(112%)",
+    },
+    {
+      hue: 81,
+      strongHue: 120,
+      filter:
+        "brightness(0) saturate(100%) invert(86%) sepia(97%) saturate(447%) hue-rotate(22deg) brightness(105%) contrast(121%)",
+    },
+    {
+      hue: 46,
+      strongHue: 28,
+      filter:
+        "brightness(0) saturate(100%) invert(72%) sepia(87%) saturate(527%) hue-rotate(340deg) brightness(105%) contrast(97%)",
+    },
+  ];
 
-  const shuffledHues = [...originalHues].sort(() => Math.random() - 0.5);
+  // Fisher-Yates: embaralhamento uniforme
+  for (let i = palettes.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [palettes[i], palettes[j]] = [palettes[j], palettes[i]];
+  }
+
   const root = document.documentElement;
 
-  shuffledHues.forEach((hue, index) => {
-    root.style.setProperty(`--hue-rotate-${index + 1}`, `${hue}deg`);
-    const filterValue = filterMap[hue];
-    if (filterValue) {
-      root.style.setProperty(`--img-hue-${index + 1}`, filterValue);
-    }
+  palettes.forEach(({ hue, strongHue, filter }, index) => {
+    const position = index + 1;
+
+    root.style.setProperty(`--hue-rotate-${position}`, hue);
+    root.style.setProperty(`--hue-rotate-${position}-strong`, strongHue);
+    root.style.setProperty(`--img-hue-${position}`, filter);
   });
 };
+
+// setupRandomTheme();
 
 // Reage a atualizações no feed re-injetando as variáveis CSS das máscaras
 watch(
@@ -114,7 +136,7 @@ watch(
 );
 
 onMounted(async () => {
-  setupRandomTheme();
+  // setupRandomTheme();
 
   try {
     const { sanityClient } = await import("./sanity.js");
@@ -146,9 +168,6 @@ onMounted(async () => {
   <div
     class="md:min-w-3xl relative max-w-[1920px] text-zinc-100 font-mono mx-auto flex flex-row justify-between"
   >
-    <div
-      class="absolute w-full left-0 top-0 h-full backdrop-blur-xl -z-100"
-    ></div>
     <SideScroller />
 
     <main
@@ -200,11 +219,11 @@ onMounted(async () => {
           <!-- Glitch isolado apenas nos layers de fundo -->
 
           <span
-            class="deco-tr absolute w-2/3 h-4/7 border-r-2 border-t-2 top-0 right-0 pcx-tr mask-size-[100%_100%] [--mask-pos:top_right] rounded-md z-0"
+            class="deco-tr pointer-events-none absolute w-2/3 h-4/7 border-r-4 border-t-4 -top-0.5 -right-0.5 pcx-tr [--mask-pos:10px_-10px] mask-size-[100%_100%] mask-no-repeat rounded-md"
             >&nbsp;</span
           >
           <span
-            class="deco-bl absolute w-2/5 h-7/12 border-l-3 border-b-2 bottom-0 left-0 pcx-bl [--mask-pos:bottom_left] mask-[100%_100%] rounded-md z-10"
+            class="deco-bl pointer-events-none absolute w-2/5 h-7/12 border-l-4 border-b-4 -bottom-0.5 -left-0.5 pcx-bl [--mask-pos:-10px_10px] mask-size-[100%_100%] mask-no-repeat rounded-md"
             >&nbsp;</span
           >
         </li>
