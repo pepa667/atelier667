@@ -3,7 +3,7 @@ const applyRandomMaskPositions = () => {
   const pcxMixElements = document.querySelectorAll('[class*="pcx-mix-"]');
 
   const getRandomPos = () =>
-    `${Math.floor(Math.random() * 100) * 10}% ${Math.floor(Math.random() * 100) * 10}%`;
+    `${Math.floor(Math.random() * 100) * 1}% ${Math.floor(Math.random() * 100) * 1}%`;
 
   pcxElements.forEach((el) => {
     // getComputedStyle pega o valor final compilado, venha do CSS ou de inline style

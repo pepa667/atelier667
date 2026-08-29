@@ -63,21 +63,9 @@ const isPortrait = computed(() => {
     class="h-full w-full aspect-video flex flex-col justify-between relative overflow-visible group"
   >
     <!-- Header com Título do Card -->
-    <header
-      class="mb-3 relative isolation-auto flex items-center justify-between p-4 bg-zinc-950/80 transition-colors duration-700 group-hover:bg-zinc-950/10"
-    >
-      <h2
-        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
-      >
-        // ARTBOARD_FEED
-      </h2>
-    </header>
-
-    <!-- Container da Imagem Central -->
-    <!-- Renderiza a primeira imagem com estouro condicional -->
     <a
       href="#"
-      class="isolate absolute w-full h-full overflow-visible group flex -z-1 items-center justify-center transition-transform duration-500 group-hover:scale-115 group-hover:z-1"
+      class="absolute w-full h-full overflow-visible group flex items-center justify-center transition-transform duration-500 group-hover:scale-115"
     >
       <img
         v-if="post.images && post.images.length > 0"
@@ -92,9 +80,22 @@ const isPortrait = computed(() => {
       />
     </a>
 
+    <header
+      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80"
+    >
+      <h2
+        class="text-sm font-bold text-main-b leading-loose tracking-wider uppercase"
+      >
+        // ARTBOARD_FEED
+      </h2>
+    </header>
+
+    <!-- Container da Imagem Central -->
+    <!-- Renderiza a primeira imagem com estouro condicional -->
+
     <!-- Rodapé: Tags e Link Externo -->
     <footer
-      class="mb-3 flex items-center justify-between p-4 bg-zinc-950/80 transition-colors duration-700 group-hover:bg-zinc-950/10"
+      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"

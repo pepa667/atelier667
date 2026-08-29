@@ -37,6 +37,7 @@
 
   --animate-marquee: marquee 10s linear infinite;
   --animate-sideBar: sideMarquee 100s linear infinite;
+  --animate-cardGlich: card-glitch 0.05s linear infinite;
 
   --text-fluid-sm: clamp(0.75rem, 0.6346rem + 0.5128vw, 1.25rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
@@ -71,6 +72,8 @@
   --pcx-url-grunge-full: url("./assets/images/textures/grunge-full.gif");
   --pcx-url-grunge-lite: url("./assets/images/textures/grunge-lite.gif");
 
+  --spacing-card: clamp(220px, 165.4545px + 15.1515cqi, 420px);
+
   @keyframes marquee {
     from {
       transform: translateX(0);
@@ -87,6 +90,52 @@
 
     to {
       transform: translateY(-50%);
+    }
+  }
+  @keyframes card-glitch {
+    0% {
+      clip-path: inset(20% 0 70% 0);
+      transform: translate(-4px, -2px);
+    }
+    10% {
+      clip-path: inset(60% 0 10% 0);
+      transform: translate(400px, 2px);
+    }
+    20% {
+      clip-path: inset(45% 0 45% 0);
+      transform: translate(-200px, 4px);
+    }
+    30% {
+      clip-path: inset(80% 0 5% 0);
+      transform: translate(300px, -3px);
+    }
+    40% {
+      clip-path: inset(10% 0 80% 0);
+      transform: translate(-500px, 2px);
+    }
+    50% {
+      clip-path: inset(55% 0 30% 0);
+      transform: translate(500px, -4px);
+    }
+    60% {
+      clip-path: inset(30% 0 60% 0);
+      transform: translate(-100px, 5px);
+    }
+    70% {
+      clip-path: inset(75% 0 15% 0);
+      transform: translate(400px, -2px);
+    }
+    80% {
+      clip-path: inset(15% 0 75% 0);
+      transform: translate(-300px, 1px);
+    }
+    90% {
+      clip-path: inset(85% 0 5% 0);
+      transform: translate(200px, -5px);
+    }
+    100% {
+      clip-path: inset(5% 0 85% 0);
+      transform: translate(-400px, 3px);
     }
   }
 }
@@ -127,39 +176,45 @@ body {
   @apply absolute inset-0 h-full bg-main-c-strong/15;
 }
 
-header > * {
+main > header > * {
   @apply relative;
-}
-
-header > *::before {
-  content: "";
-  @apply absolute inset-0 -bottom-3 left-[-20dvh] w-[300dvh] border-b border-main-d-strong/25;
 }
 
 main > ol > li {
   @apply border-x border-y p-0;
 }
 
-.cards-list section > h2 {
-  @apply relative;
+.card-item header h2 {
+  @apply text-main-c-strong;
 }
-
-.cards-list section > h2::before {
-  content: "";
-  @apply absolute inset-0 -z-1 rounded-tl-md rounded-br-2xl bg-main-a-strong/75 pcx-grunge-min;
+.card-item article div {
+  @apply border-l-4 border-main-c-strong pl-2 ml-4;
 }
-
+.card-item article div > * {
+  @apply border-l-2 border-main-c-strong pl-1;
+}
+.card-item div h3 {
+  @apply text-main-c text-sm font-mono;
+}
+.card-item div h4 {
+  @apply text-main-c text-xs font-mono;
+}
 /* Cards */
 
-.card-projeto,
-.card-drop,
-.card-documento {
-  @apply border-[1.5px] border-main-b;
+.card-item {
+  @apply border-[1.5px] border-main-b  w-full sm:w-auto;
+}
+.card-deco {
+  border: none;
+}
+.card-deco .deco-tr,
+.card-deco .deco-bl {
+  display: none;
 }
 
-.card-artboard {
+/* .card-artboard {
   border: 0;
-}
+} */
 
 /* .card-projeto section > h2::before,
 .card-drop section > h2::before,
@@ -167,11 +222,6 @@ main > ol > li {
 .card-documento section > h2::before {
   background-color: color-mix(in srgb, var(--card-color) 75%, transparent);
 } */
-
-.cards-list .deco-tr,
-.cards-list .deco-bl {
-  @apply border-main-a;
-}
 
 /* .pop_a {
   filter: var(--img-hue-1);
