@@ -177,8 +177,19 @@
   }
 }
 
+@utility image-render-pixelated {
+  image-rendering: pixelated;
+  /* Fallback for Safari/WebKit to guarantee crispness */
+  image-rendering: -webkit-optimize-contrast;
+}
+
 body {
-  @apply relative overflow-x-hidden bg-black font-mono text-zinc-300 antialiased;
+  @apply relative overflow-x-hidden bg-black font-mono text-zinc-300 antialiased scroll-smooth;
+}
+
+img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 #app::before {

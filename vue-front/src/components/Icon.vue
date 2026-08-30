@@ -93,12 +93,12 @@ onMounted(() => {
 <template>
   <div
     v-bind="attrs"
-    :class="['relative overflow-hidden aspect-square', attrs.class]"
+    :class="['relative overflow-hidden aspect-square ', attrs.class]"
     :style="containerStyle"
   >
     <img
       :src="activeIcon"
-      class="absolute max-w-none rendering-pixelated"
+      class="absolute max-w-none image-render-pixelated rendering-pixelated rendering-crisp crisp-edges"
       :style="imageStyle"
       :alt="`Ícone de ${normalizedIcon}`"
     />

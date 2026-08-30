@@ -31,7 +31,7 @@ const drop = computed(() => props.drops[0] || null);
         {{ drop.title }}
       </h3>
       <p
-        class="w-full whitespace-pre-line text-sm max-h-8 overflow-hidden leading-relaxed text-zinc-300 min-h-inherit group-hover:max-h-128 min-h-full transition-[max-height] duration-1000 delay-100 ease-in"
+        class="w-full whitespace-pre-line text-sm max-h-8 overflow-hidden leading-relaxed text-zinc-300 min-h-inherit group-hover:max-h-128 group-[&.onView]:max-h-128 min-h-full transition-[max-height] duration-1000 delay-100 ease-in"
       >
         {{ drop.content }}
       </p>

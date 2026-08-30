@@ -33,19 +33,31 @@ const DECORATIVE_CARDS = [
     _id: "dec-1",
     _type: "decorativo",
     title: "GLITCH_MODULE",
-    flexStyle: "grow-1 basis-auto sm:basis-[180px]",
+    flexStyle: "grow-1 basis-auto sm:basis-[88px]",
   },
   {
     _id: "dec-2",
     _type: "decorativo",
     title: "SYS_STATUS_OK",
-    flexStyle: "grow-1 basis-auto sm:basis-[180px]",
+    flexStyle: "grow-1 basis-auto sm:basis-[88px]",
   },
   {
     _id: "dec-3",
     _type: "decorativo",
     title: "SYSTEM_OVERRIDE",
-    flexStyle: "grow-1 basis-auto sm:basis-[200px]",
+    flexStyle: "grow-1 basis-auto sm:basis-[80px]",
+  },
+  {
+    _id: "dec-4",
+    _type: "decorativo",
+    title: "SYSTEM_OVERRIDE",
+    flexStyle: "grow-1 basis-auto sm:basis-[80px]",
+  },
+  {
+    _id: "dec-5",
+    _type: "decorativo",
+    title: "SYSTEM_OVERRIDE",
+    flexStyle: "grow-1 basis-auto sm:basis-[80px]",
   },
 ];
 
@@ -90,8 +102,7 @@ const feedUnificado = computed(() => {
   const listPosts = posts.value.map((item) => ({
     ...item,
     _type: "artboard",
-    flexStyle:
-      "flex-grow-[1.5] flex-shrink-0 basis-auto sm:basis-[320px] self-stretch",
+    flexStyle: "flex-grow-[1.5] basis-auto sm:basis-[320px] ",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
@@ -181,20 +192,21 @@ onMounted(async () => {
 
       <!-- 🚀 FLEX JUSTIFICADO -->
       <ol
-        class="cards-list @container relative flex [flex-wrap:balance] items-stretch w-full gap-8 space-y-4"
+        class="cards-list @container relative flex [flex-wrap:balance] items-stretch w-full gap-8 space-y-4 self-stretch"
       >
         <li
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'card-item  flex flex-col  relative @min-lg:max-w-[45svw] @min-2xl:max-w-[30svw] @min-6xl:max-w-[20svw]  min-h-45 group transition-[transform,flex-grow]  duration-700 ',
+            'card-item  flex flex-col shrink-0  relative grow min-h-45 group lg:max-w-4/12 transition-[transform,flex-grow]  duration-700 ',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
               'card-drop': item._type === 'drop',
               'card-artboard': item._type === 'artboard',
               'card-documento': item._type === 'documento',
-              'card-deco': item._type === 'decorativo',
+              'card-deco w-full h-auto self-center':
+                item._type === 'decorativo',
             },
           ]"
         >
@@ -205,8 +217,8 @@ onMounted(async () => {
             v-mobile-observe="{
               activeClass: 'onView',
               hoverClass: 'fake-hover',
-              threshold: 0.5,
-              rootMargin: '-35% 0px',
+              threshold: 0.4,
+              rootMargin: '-30% 0px',
             }"
             :is="componentMap[item._type]"
             v-bind="
