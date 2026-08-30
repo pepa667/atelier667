@@ -1,1 +1,0 @@
-import{c as e,d as t,l as n,m as r,n as i}from"./index-CJ8lDbQB.js";var a={key:0,class:`h-full w-full border-0`},o={__name:`DecorativeCard`,props:{decos:{type:Array,default:()=>[]}},setup(o){return(s,c)=>o.decos&&o.decos[0]?(r(),n(`div`,a,[t(i,{icon:`punk`,class:`mb-4 pop_c w-full`})])):e(``,!0)}};export{o as default};
