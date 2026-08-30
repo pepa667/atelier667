@@ -176,13 +176,13 @@ onMounted(async () => {
 
       <!-- 🚀 FLEX JUSTIFICADO -->
       <ol
-        class="cards-list @container relative flex [flex-wrap:balance] items-stretch gap-y-18 w-full [&>li>*]:pop_04 columns-1 sm:columns-2 lg:columns-7 gap-4 space-y-4"
+        class="cards-list @container relative flex [flex-wrap:balance] items-stretch w-full gap-8 space-y-4"
       >
         <li
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'card-item flex flex-col relative rounded-md min-h-45 group transition-[transform,flex-grow]  duration-700',
+            'card-item sm:max-w-card flex flex-col relative  min-h-45 group transition-[transform,flex-grow]  duration-700',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
@@ -194,33 +194,26 @@ onMounted(async () => {
           ]"
         >
           <!-- Wrapper com flex-col repassa h-full / flex-1 pro componente renderizado -->
-          <div class="relative inset-0 w-full h-auto flex flex-col flex-1">
-            <div
-              class="absolute overflow-hidden inset-0 w-full h-full drop-shadow-[5px_1px_0_var(--color-main-b)] opacity-5 transition-opacity duration-100 group-hover:opacity-40 group-hover:duration-5000"
-            >
-              <div
-                class="relative w-full h-full pcx-grunge-full bg-[color-mix(in_srgb,var(--color-main-a)_75%,var(--color-black))] group-hover:animate-cardGlich"
-              ></div>
-            </div>
 
-            <component
-              :is="componentMap[item._type]"
-              v-bind="
-                item._type === 'drop'
-                  ? { drops: [item] }
-                  : item._type === 'projeto'
-                    ? { projetos: [item] }
-                    : item._type === 'documento'
-                      ? { documentos: [item] }
-                      : item._type === 'artboard'
-                        ? { posts: [item] }
-                        : item._type === 'decorativo'
-                          ? { decos: [item] }
-                          : {}
-              "
-              class="h-auto w-full flex-1"
-            />
-          </div>
+          <!-- <div class="relative inset-0 w-full h-auto flex flex-col flex-1"> -->
+          <component
+            :is="componentMap[item._type]"
+            v-bind="
+              item._type === 'drop'
+                ? { drops: [item] }
+                : item._type === 'projeto'
+                  ? { projetos: [item] }
+                  : item._type === 'documento'
+                    ? { documentos: [item] }
+                    : item._type === 'artboard'
+                      ? { posts: [item] }
+                      : item._type === 'decorativo'
+                        ? { decos: [item] }
+                        : {}
+            "
+            class="h-auto w-full flex-1"
+          />
+          <!-- </div> -->
 
           <!-- Glitch isolado apenas nos layers de fundo -->
 
@@ -245,15 +238,9 @@ onMounted(async () => {
     </main>
   </div>
 
-  <footer
-    class="relative w-svw h-56 [&_.glitch-overlay]:bg-black [&_.glitch-overlay]:shadow-[inset_0.2em_1rem_var(--color-main-a)]"
-  >
+  <footer class="absolute w-full h-56 bottom-0">
     <GlitchWrapper :trigger-probability="1">
-      <div
-        class="absolute opacity-50 text-2xl font-bold text-main-b w-svw h-56 bg-[url(assets/images/textures/dither-bt.gif)] pop_02 pcx-grunge-full mask-cover"
-      >
-        :::
-      </div>
+      <div class="absolute inset-0 pcx-bt bg-pink-700 pop_d">:::</div>
     </GlitchWrapper>
   </footer>
 </template>

@@ -92,50 +92,39 @@
       transform: translateY(-50%);
     }
   }
-  @keyframes card-glitch {
+  @keyframes wiggleGlitch {
     0% {
-      clip-path: inset(20% 0 70% 0);
-      transform: translate(-4px, -2px);
+      -webkit-transform: skewX(24deg);
     }
     10% {
-      clip-path: inset(60% 0 10% 0);
-      transform: translate(400px, 2px);
+      -webkit-transform: skewX(-8deg);
     }
     20% {
-      clip-path: inset(45% 0 45% 0);
-      transform: translate(-200px, 4px);
+      -webkit-transform: skewX(55deg);
     }
     30% {
-      clip-path: inset(80% 0 5% 0);
-      transform: translate(300px, -3px);
+      -webkit-transform: skewX(-90deg);
     }
     40% {
-      clip-path: inset(10% 0 80% 0);
-      transform: translate(-500px, 2px);
+      -webkit-transform: skewX(29deg);
     }
     50% {
-      clip-path: inset(55% 0 30% 0);
-      transform: translate(500px, -4px);
+      -webkit-transform: skewX(-90deg);
     }
     60% {
-      clip-path: inset(30% 0 60% 0);
-      transform: translate(-100px, 5px);
+      -webkit-transform: skewX(3deg);
     }
     70% {
-      clip-path: inset(75% 0 15% 0);
-      transform: translate(400px, -2px);
+      -webkit-transform: skewX(-2deg);
     }
     80% {
-      clip-path: inset(15% 0 75% 0);
-      transform: translate(-300px, 1px);
+      -webkit-transform: skewX(1deg);
     }
     90% {
-      clip-path: inset(85% 0 5% 0);
-      transform: translate(200px, -5px);
+      -webkit-transform: skewX(10deg);
     }
     100% {
-      clip-path: inset(5% 0 85% 0);
-      transform: translate(-400px, 3px);
+      -webkit-transform: skewX(0deg);
     }
   }
 }
@@ -165,6 +154,25 @@
   -webkit-mask-size: auto;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+}
+@utility wiggle-glitch {
+  filter: drop-shadow(
+      2px 2px 0px var(--tw-drop-shadow-color, var(--color-main-a-strong))
+    )
+    drop-shadow(
+      -2px -2px 0px var(--tw-drop-shadow-color, var(--color-main-b-strong))
+    );
+  transition: filter 50ms;
+  &:hover {
+    animation: wiggleGlitch 100ms 8;
+    filter: drop-shadow(
+        35px 27px 0px var(--tw-drop-shadow-color, var(--color-main-a-strong))
+      )
+      drop-shadow(
+        -47px -17px 0px var(--tw-drop-shadow-color, var(--color-main-b-strong))
+      );
+    transition: filter 700ms;
+  }
 }
 
 body {

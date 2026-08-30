@@ -81,7 +81,7 @@ const isPortrait = computed(() => {
     </a>
 
     <header
-      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80"
+      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 transition-colors duration-700"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose tracking-wider uppercase"
@@ -95,7 +95,7 @@ const isPortrait = computed(() => {
 
     <!-- Rodapé: Tags e Link Externo -->
     <footer
-      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80"
+      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 transition-colors duration-700"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
