@@ -5,12 +5,6 @@ const props = defineProps({
   // 'element': escuta os eventos no próprio GlitchWrapper
   // 'parent': escuta no elemento pai direto (ex: o <li>)
   // 'section': busca a <section> mais próxima
-  triggerTarget: {
-    type: String,
-    default: "parent",
-    validator: (val) =>
-      ["element", "parent", "section", ".card-item"].includes(val),
-  },
   // Chance de ativação (1 = 100%, 0.25 = 25% de chance de ativar)
   triggerProbability: {
     type: Number,
@@ -18,20 +12,24 @@ const props = defineProps({
   },
   minDuration: { type: Number, default: 1000 },
   maxDuration: { type: Number, default: 2500 },
+  // Define qual tag será renderizada
+  tag: {
+    type: String,
+    default: "figure", // Pode ser 'article', 'aside', 'main', 'figure', 'span', etc.
+  },
 });
 
 const isGlitching = ref(false);
 const wrapperRef = ref(null);
+let mutationObserver = null;
 
 const currentSeed = ref(1);
-const currentFreq = ref(2);
-const currentScale = ref(15);
-const freqPow = [1, 10, 100, 1000];
-const randomDelay = ref(150);
+const currentFreq = ref(1);
+const currentScale = ref(1);
+const randomDelay = ref(1);
 
 const filterId = `glitch-filter-${Math.random().toString(36).substring(2, 9)}`;
 
-let targetElement = null;
 let durationTimeoutId = null;
 let jitterIntervalId = null;
 let observer = null;
@@ -46,13 +44,10 @@ const stopJitter = () => {
 const startJitter = () => {
   stopJitter();
   jitterIntervalId = setInterval(() => {
-    currentSeed.value = Math.floor(Math.random() * 1000);
-    currentScale.value = Math.floor(Math.random() * (20 - 5 + 1)) + 5;
-    currentFreq.value =
-      Math.random() *
-      0.0001 *
-      freqPow[Math.floor(Math.random() * freqPow.length)];
-    randomDelay.value = Math.floor(Math.random() * 20) + 5;
+    currentSeed.value = Math.floor(Math.random() * 1000000);
+    currentScale.value = 35;
+    currentFreq.value = Math.random() * 0.0001 * 7500;
+    randomDelay.value = Math.floor(Math.random() * 75) + 1;
   }, randomDelay.value);
 };
 
@@ -87,67 +82,55 @@ const triggerGlitch = () => {
 };
 
 // Resolução do elemento alvo com base na prop
-const resolveTargetElement = () => {
-  if (!wrapperRef.value) return null;
-
-  if (props.triggerTarget === "element") {
-    return wrapperRef.value;
-  }
-
-  if (props.triggerTarget === "parent") {
-    return wrapperRef.value.parentElement || wrapperRef.value;
-  }
-
-  if (props.triggerTarget === "section") {
-    return wrapperRef.value.closest("section") || wrapperRef.value;
-  }
-
-  if (props.triggerTarget === ".card-item") {
-    return wrapperRef.value.closest(".card-item") || wrapperRef.value;
-  }
-
-  return wrapperRef.value;
-};
 
 onMounted(() => {
-  targetElement = resolveTargetElement();
-  if (!targetElement) return;
+  const el = wrapperRef.value;
+  if (!el) return;
 
-  // Mouseover / Mouseenter no Desktop
-  targetElement.addEventListener("mouseenter", triggerGlitch);
+  // 1. Mouseenter padrão no desktop
+  el.addEventListener("mouseenter", triggerGlitch);
 
-  // IntersectionObserver para Mobile (Viewport)
-  observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        const isMobile = window.innerWidth < 768;
+  // 2. Procura pelo ancestral que recebe a classe .onView
+  const targetParent = el.closest(".onView") || el.parentElement;
 
-        if (entry.isIntersecting && isMobile) {
-          triggerGlitch();
+  if (targetParent) {
+    // Valida imediatamente caso já tenha a classe na montagem
+    if (targetParent.classList.contains("onView")) {
+      triggerGlitch();
+    }
+
+    // Observa alterações nas classes do elemento pai (Mobile Observer)
+    mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "class") {
+          const hasOnView = targetParent.classList.contains("onView");
+          if (hasOnView) {
+            triggerGlitch();
+          }
         }
       });
-    },
-    {
-      root: null,
-      rootMargin: "100% 0px 100% 0px",
-      threshold: 0,
-    },
-  );
+    });
 
-  observer.observe(targetElement);
+    mutationObserver.observe(targetParent, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  } // observer.observe(wrapperRef.value);
 });
 
 onUnmounted(() => {
-  stopGlitch();
-  if (observer) observer.disconnect();
-  if (targetElement) {
-    targetElement.removeEventListener("mouseenter", triggerGlitch);
+  if (wrapperRef.value) {
+    wrapperRef.value.removeEventListener("mouseenter", triggerGlitch);
+  }
+  if (mutationObserver) {
+    mutationObserver.disconnect();
   }
 });
 </script>
 
 <template>
-  <div
+  <component
+    :is="tag"
     ref="wrapperRef"
     class="glitch-wrapper absolute inset-0 inline-block w-full h-full"
     :style="{
@@ -158,38 +141,45 @@ onUnmounted(() => {
 
     <svg style="position: absolute; width: 0; height: 0" aria-hidden="true">
       <defs>
-        <filter :id="filterId" x="-100%" y="-20%" width="300%" height="140%">
+        <filter :id="filterId" x="-50%" y="0%" width="200%" height="100%">
+          <!-- Ruído focado em linhas horizontais -->
           <feTurbulence
             type="fractalNoise"
-            :baseFrequency="`0.0 ${currentFreq}`"
+            :baseFrequency="`0.001 ${currentFreq || 0.05}`"
             :seed="currentSeed"
             numOctaves="1"
             result="noise"
           />
+
+          <!-- Binariza o canal R para cortes secos e remove variação dos outros canais -->
           <feColorMatrix
             type="matrix"
-            values="10 0 0 0 -4.5
-                    0 10 0 0 -4.5
-                    0 0 10 0 -4.5
-                    0 0 0 1 0"
+            values="50 0 0 0 -25
+                  0  0 0 0   0
+                  0  0 0 0   0
+                  0  0 0 1   0"
             in="noise"
             result="sharp-blocks"
           />
+
+          <!-- Estica o ruído na horizontal sem achatar verticalmente -->
           <feMorphology
             operator="dilate"
-            :radius="`${currentScale * 10 || 500} 20`"
+            :radius="`${currentScale * 5 || 100} 0`"
             in="sharp-blocks"
             result="stretched-blocks"
           />
+
+          <!-- Displacement travado estritamente no eixo X -->
           <feDisplacementMap
             in="SourceGraphic"
             in2="stretched-blocks"
             :scale="currentScale"
             xChannelSelector="R"
-            yChannelSelector="G"
+            yChannelSelector="A"
           />
         </filter>
       </defs>
     </svg>
-  </div>
+  </component>
 </template>

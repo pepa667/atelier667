@@ -163,6 +163,8 @@
       -2px -2px 0px var(--tw-drop-shadow-color, var(--color-main-b-strong))
     );
   transition: filter 50ms;
+
+  .onView &,
   &:hover {
     animation: wiggleGlitch 100ms 8;
     filter: drop-shadow(

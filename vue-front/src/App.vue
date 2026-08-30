@@ -83,7 +83,7 @@ const feedUnificado = computed(() => {
   const listProjects = projetos.value.map((item) => ({
     ...item,
     _type: "projeto",
-    flexStyle: "flex-grow-[1.5] basis-auto sm:basis-[360px]",
+    flexStyle: "flex-grow-[1.25] basis-auto sm:basis-[300px]",
     date: new Date(item._updatedAt || item.timestamp || 0),
   }));
 
@@ -91,7 +91,7 @@ const feedUnificado = computed(() => {
     ...item,
     _type: "artboard",
     flexStyle:
-      "flex-grow-[2] flex-shrink-0 basis-auto sm:basis-[390px] self-stretch",
+      "flex-grow-[1.5] flex-shrink-0 basis-auto sm:basis-[320px] self-stretch",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
@@ -111,9 +111,13 @@ const feedUnificado = computed(() => {
 
   sortedFeed.forEach((item, index) => {
     result.push(item);
+    const iconInterval = Math.floor(Math.random() * 3) + 2;
 
     // Insere a cada 3 itens se ainda houver decorativos na fila
-    if ((index + 1) % 4 === 0 && decIndex < DECORATIVE_CARDS.length) {
+    if (
+      (index + 1) % iconInterval === 0 &&
+      decIndex < DECORATIVE_CARDS.length
+    ) {
       result.push(DECORATIVE_CARDS[decIndex]);
       decIndex++;
     }
@@ -123,6 +127,7 @@ const feedUnificado = computed(() => {
 });
 
 // Temas
+// Função que gerencia o estado do "touch-hover"
 
 // Reage a atualizações no feed re-injetando as variáveis CSS das máscaras
 watch(
@@ -150,9 +155,9 @@ onMounted(async () => {
           ...,
           "width": asset->metadata.dimensions.width,
           "height": asset->metadata.dimensions.height
-        }
-      } | order(timestamp desc)
-    }`);
+          }
+          } | order(timestamp desc)
+          }`);
     projetos.value = data.projetos || [];
     drops.value = data.drops || [];
     documentos.value = data.wiki || [];
@@ -182,7 +187,7 @@ onMounted(async () => {
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'card-item sm:max-w-card flex flex-col relative  min-h-45 group transition-[transform,flex-grow]  duration-700',
+            'card-item  flex flex-col  relative @min-lg:max-w-[45svw] @min-2xl:max-w-[30svw] @min-6xl:max-w-[20svw]  min-h-45 group transition-[transform,flex-grow]  duration-700 ',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
@@ -197,6 +202,12 @@ onMounted(async () => {
 
           <!-- <div class="relative inset-0 w-full h-auto flex flex-col flex-1"> -->
           <component
+            v-mobile-observe="{
+              activeClass: 'onView',
+              hoverClass: 'fake-hover',
+              threshold: 0.5,
+              rootMargin: '-35% 0px',
+            }"
             :is="componentMap[item._type]"
             v-bind="
               item._type === 'drop'

@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "../sanity.js";
+import GlitchWrapper from "./GlitchWrapper.vue";
 
 const props = defineProps({
   posts: {
@@ -63,28 +64,30 @@ const isPortrait = computed(() => {
     class="h-full w-full aspect-video flex flex-col justify-between relative overflow-visible group"
   >
     <!-- Header com Título do Card -->
-    <a
-      href="#"
-      class="absolute w-full h-full overflow-visible group flex items-center justify-center transition-transform duration-500 group-hover:scale-115"
-    >
-      <img
-        v-if="post.images && post.images.length > 0"
-        :src="urlFor(post.images[0])"
-        :alt="post.title"
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
-        :class="[
-          isPortrait
-            ? 'w-auto h-auto min-h-full max-h-[calc(100%+5rem)]'
-            : 'h-auto w-auto min-w-full max-w-[calc(100%+5rem)]',
-        ]"
-      />
-    </a>
+    <GlitchWrapper is="figure" :trigger-probability="0.33">
+      <a
+        href="#"
+        class="absolute w-full h-full overflow-visible flex items-center justify-center transition-transform duration-500 group-hover:scale-115 group-[.onView]:scale-115"
+      >
+        <img
+          v-if="post.images && post.images.length > 0"
+          :src="urlFor(post.images[0])"
+          :alt="post.title"
+          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
+          :class="[
+            isPortrait
+              ? 'w-auto h-auto min-h-full max-h-[calc(100%+5rem)]'
+              : 'h-auto w-auto min-w-full max-w-[calc(100%+5rem)]',
+          ]"
+        />
+      </a>
+    </GlitchWrapper>
 
     <header
-      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 transition-colors duration-700"
+      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 group-[.onView]:bg-zinc-950/25 transition-colors duration-700"
     >
       <h2
-        class="text-sm font-bold text-main-b leading-loose tracking-wider uppercase"
+        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
       >
         // ARTBOARD_FEED
       </h2>
@@ -95,7 +98,7 @@ const isPortrait = computed(() => {
 
     <!-- Rodapé: Tags e Link Externo -->
     <footer
-      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 transition-colors duration-700"
+      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 group-[.onView]:bg-zinc-950/25 transition-colors duration-700"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
