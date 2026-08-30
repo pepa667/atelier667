@@ -1,1 +1,0 @@
-import{f as e,h as t,l as n,r,u as i}from"./index-DVWKzgR9.js";var a={key:0,class:`h-full w-full border-0 wiggle-glitch`},o={__name:`DecorativeCard`,props:{decos:{type:Array,default:()=>[]}},setup(o){return(s,c)=>o.decos&&o.decos[0]?(t(),i(`div`,a,[e(r,{icon:`punk`,class:`mb-4 pop_c w-full wiggle-glitch`})])):n(``,!0)}};export{o as default};
