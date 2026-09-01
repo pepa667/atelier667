@@ -1,0 +1,1 @@
+import{c as e,h as t,r as n,s as r,u as i}from"./index-DcQbxhyo.js";var a={key:0,class:`relative h-fit max-w-[50svw] border-0 wiggle-glitch`},o={__name:`BumpCard`,props:{bumps:{type:Array,default:()=>[]}},setup(o){return(s,c)=>o.bumps&&o.bumps[0]?(t(),e(`div`,a,[i(n,{icon:`punk`,class:`pop_c`})])):r(``,!0)}};export{o as default};
