@@ -1,5 +1,5 @@
 @import url("./styles/sideBar.css");
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,6,600&family=Inter:opsz,wght@14,400&family=Roboto+Slab:wght@400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,20,600&family=Inter:opsz,wght@14,400&family=Roboto+Slab:wght@400&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -74,59 +74,71 @@
 
   --spacing-card: clamp(220px, 165.4545px + 15.1515cqi, 420px);
 
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
+@keyframes sideMarquee {
+  from {
+    transform: translateY(0);
+  }
 
-    to {
-      transform: translateX(-50%);
-    }
+  to {
+    transform: translateY(-50%);
   }
-  @keyframes sideMarquee {
-    from {
-      transform: translateY(0);
+}
+@keyframes wiggleGlitch {
+  0% {
+    -webkit-transform: skewX(24deg);
+  }
+  10% {
+    -webkit-transform: skewX(-8deg);
+  }
+  20% {
+    -webkit-transform: skewX(55deg);
+  }
+  30% {
+    -webkit-transform: skewX(-90deg);
+  }
+  40% {
+    -webkit-transform: skewX(29deg);
+  }
+  50% {
+    -webkit-transform: skewX(-90deg);
     }
+  60% {
+    -webkit-transform: skewX(3deg);
+  }
+  70% {
+    -webkit-transform: skewX(-2deg);
+  }
+  80% {
+    -webkit-transform: skewX(1deg);
+  }
+  90% {
+    -webkit-transform: skewX(10deg);
+  }
+  100% {
+    -webkit-transform: skewX(0deg);
+  }
+}
+}
 
-    to {
-      transform: translateY(-50%);
-    }
-  }
-  @keyframes wiggleGlitch {
-    0% {
-      -webkit-transform: skewX(24deg);
-    }
-    10% {
-      -webkit-transform: skewX(-8deg);
-    }
-    20% {
-      -webkit-transform: skewX(55deg);
-    }
-    30% {
-      -webkit-transform: skewX(-90deg);
-    }
-    40% {
-      -webkit-transform: skewX(29deg);
-    }
-    50% {
-      -webkit-transform: skewX(-90deg);
-    }
-    60% {
-      -webkit-transform: skewX(3deg);
-    }
-    70% {
-      -webkit-transform: skewX(-2deg);
-    }
-    80% {
-      -webkit-transform: skewX(1deg);
-    }
-    90% {
-      -webkit-transform: skewX(10deg);
-    }
-    100% {
-      -webkit-transform: skewX(0deg);
-    }
-  }
+.project-categories {
+display: flex;
+width: max-content;
+min-width: max-content;
+will-change: transform;
+}
+
+.project-categories.animate-marquee {
+animation: marquee 14s linear infinite;
+}
+
+@keyframes marquee {
+from {
+  transform: translateX(0);
+}
+
+to {
+  transform: translateX(-50%);
+}
 }
 
 @utility pcx-* {
@@ -208,29 +220,29 @@ main > ol > li {
 .card-item header h2 {
   @apply text-main-c-strong;
 }
-.card-item article div {
+/* .card-item article div {
   @apply border-l-4 border-main-c-strong pl-2 ml-4;
 }
 .card-item article div > * {
   @apply border-l-2 border-main-c-strong pl-1;
-}
-.card-item div h3 {
+} */
+.card-item h3 {
   @apply text-main-c text-sm font-mono;
 }
-.card-item div h4 {
+.card-item h4 {
   @apply text-main-c text-xs font-mono;
 }
 /* Cards */
 
 .card-item {
-  @apply border-[1.5px] border-main-b  w-full sm:w-auto;
+  @apply border-2 border-main-b  w-full sm:w-auto;
 }
-.card-deco {
-  border: none;
+.card-bump {
+  @apply border-0;
 }
-.card-deco .deco-tr,
-.card-deco .deco-bl {
-  display: none;
+.card-bump .deco-tr,
+.card-bump .deco-bl {
+  @apply hidden;
 }
 
 /* .card-artboard {

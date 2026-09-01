@@ -5,13 +5,13 @@ import { sanityClient } from "../sanity.js";
 import GlitchWrapper from "./GlitchWrapper.vue";
 
 const props = defineProps({
-  posts: {
+  arts: {
     type: Array,
     default: () => [],
   },
 });
 
-const post = computed(() => props.posts[0] || null);
+const art = computed(() => props.arts[0] || null);
 
 const builder = createImageUrlBuilder(sanityClient);
 
@@ -47,7 +47,7 @@ onUnmounted(() => {
 
 // 🎯 Calcula se é Portrait sem consultar o DOM diretamente na Computed
 const isPortrait = computed(() => {
-  const img = post.value?.images?.[0];
+  const img = art.value?.images?.[0];
   if (!img?.width || !img?.height) return false;
 
   const imgAspectRatio = img.height / img.width;
@@ -59,20 +59,20 @@ const isPortrait = computed(() => {
 
 <template>
   <article
-    v-if="post"
+    v-if="art"
     ref="articleRef"
     class="h-full w-full aspect-video flex flex-col justify-between relative overflow-visible group"
   >
     <!-- Header com Título do Card -->
-    <GlitchWrapper is="figure" :trigger-probability="0.33">
+    <GlitchWrapper is="figure" :trigger-probability="0.15">
       <a
         href="#"
         class="absolute w-full h-full overflow-visible flex items-center justify-center transition-transform duration-500 group-hover:scale-115 group-[.onView]:scale-115"
       >
         <img
-          v-if="post.images && post.images.length > 0"
-          :src="urlFor(post.images[0])"
-          :alt="post.title"
+          v-if="art.images && art.images.length > 0"
+          :src="urlFor(art.images[0])"
+          :alt="art.title"
           class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 object-cover"
           :class="[
             isPortrait
@@ -84,7 +84,7 @@ const isPortrait = computed(() => {
     </GlitchWrapper>
 
     <header
-      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 group-[.onView]:bg-zinc-950/25 transition-colors duration-700"
+      class="mb-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:opacity-50 group-[.onView]:opacity-50 transition-opacity duration-700"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
@@ -98,23 +98,23 @@ const isPortrait = computed(() => {
 
     <!-- Rodapé: Tags e Link Externo -->
     <footer
-      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:bg-zinc-950/25 group-[.onView]:bg-zinc-950/25 transition-colors duration-700"
+      class="mt-3 relative flex items-center justify-between p-4 bg-zinc-950/80 group-hover:opacity-50 group-[.onView]:opacity-50 transition-opacity duration-700"
     >
       <h2
         class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
       >
-        {{ post.title || "TITLE" }}
+        {{ art.title || "TITLE" }}
       </h2>
       <span
-        v-if="post.timestamp"
+        v-if="art.timestamp"
         class="text-[12px] leading-loose bg-black font-mono"
       >
-        {{ post.timestamp || "LOG_DATA" }}
+        {{ art.timestamp || "LOG_DATA" }}
       </span>
       <!-- Tags -->
       <!-- <div class="flex flex-wrap gap-1">
         <span
-          v-for="tag in post.tags"
+          v-for="tag in art.tags"
           :key="tag"
           class="px-1.5 py-0.5 bg-zinc-800/80 text-zinc-400 text-[9px] uppercase rounded border border-zinc-700/50"
         >
@@ -123,8 +123,8 @@ const isPortrait = computed(() => {
       </div> -->
       <!-- Link Externo -->
       <a
-        v-if="post.externalLink"
-        :href="post.externalLink"
+        v-if="art.externalLink"
+        :href="art.externalLink"
         target="_blank"
         rel="noopener noreferrer"
         class="text-main-a hover:underline text-[10px] font-bold flex items-center gap-1 ml-2"

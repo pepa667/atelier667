@@ -23,41 +23,18 @@ const Wiki = defineAsyncComponent(() => import("./components/Wiki.vue"));
 const ArtBoard = defineAsyncComponent(
   () => import("./components/ArtBoard.vue"),
 );
-const DecorativeCard = defineAsyncComponent(
-  () => import("./components/DecorativeCard.vue"),
+const BumpCard = defineAsyncComponent(
+  () => import("./components/BumpCard.vue"),
 );
 // Componente inline simples para renderizar o card decorativo no mapeamento
 
-const DECORATIVE_CARDS = [
+const bump_card = [
   {
-    _id: "dec-1",
-    _type: "decorativo",
+    _id: "bump-card",
+    _type: "bump",
     title: "GLITCH_MODULE",
-    flexStyle: "grow-1 basis-auto sm:basis-[88px]",
-  },
-  {
-    _id: "dec-2",
-    _type: "decorativo",
-    title: "SYS_STATUS_OK",
-    flexStyle: "grow-1 basis-auto sm:basis-[88px]",
-  },
-  {
-    _id: "dec-3",
-    _type: "decorativo",
-    title: "SYSTEM_OVERRIDE",
-    flexStyle: "grow-1 basis-auto sm:basis-[80px]",
-  },
-  {
-    _id: "dec-4",
-    _type: "decorativo",
-    title: "SYSTEM_OVERRIDE",
-    flexStyle: "grow-1 basis-auto sm:basis-[80px]",
-  },
-  {
-    _id: "dec-5",
-    _type: "decorativo",
-    title: "SYSTEM_OVERRIDE",
-    flexStyle: "grow-1 basis-auto sm:basis-[80px]",
+    flexStyle:
+      "grow-1 basis-auto sm:basis-[88px] bg-rose border-8 border-main-c-strong",
   },
 ];
 
@@ -67,21 +44,20 @@ const componentMap = {
   projeto: Projects,
   documento: Wiki,
   artboard: ArtBoard,
-  decorativo: DecorativeCard,
+  bump: BumpCard,
 };
 
 const projetos = ref([]);
 const drops = ref([]);
 const documentos = ref([]);
-const posts = ref([]);
+const arts = ref([]);
 
 // COMPUTED: Unifica o feed, ordena e intercala cards decorativos
 const feedUnificado = computed(() => {
   const listDrops = drops.value.map((item) => ({
     ...item,
     _type: "drop",
-    flexStyle:
-      "grow-1 basis-auto sm:basis-[220px] transition-[flex-basis] duration-500 hover:flex-grow-50",
+    flexStyle: "grow-1 sm:basis-[220px] hover:flex-grow-50 ",
     date: new Date(item.timestamp || item._updatedAt || 0),
   }));
 
@@ -95,11 +71,11 @@ const feedUnificado = computed(() => {
   const listProjects = projetos.value.map((item) => ({
     ...item,
     _type: "projeto",
-    flexStyle: "flex-grow-[1.25] basis-auto sm:basis-[300px]",
+    flexStyle: "flex-grow-[1.7] basis-auto sm:basis-[390px]",
     date: new Date(item._updatedAt || item.timestamp || 0),
   }));
 
-  const listPosts = posts.value.map((item) => ({
+  const listArts = arts.value.map((item) => ({
     ...item,
     _type: "artboard",
     flexStyle: "flex-grow-[1.5] basis-auto sm:basis-[320px] ",
@@ -111,7 +87,7 @@ const feedUnificado = computed(() => {
     ...listDrops,
     ...listProjects,
     ...listWiki,
-    ...listPosts,
+    ...listArts,
   ].sort((a, b) => b.date - a.date);
 
   if (!sortedFeed.length) return [];
@@ -125,12 +101,8 @@ const feedUnificado = computed(() => {
     const iconInterval = Math.floor(Math.random() * 3) + 2;
 
     // Insere a cada 3 itens se ainda houver decorativos na fila
-    if (
-      (index + 1) % iconInterval === 0 &&
-      decIndex < DECORATIVE_CARDS.length
-    ) {
-      result.push(DECORATIVE_CARDS[decIndex]);
-      decIndex++;
+    if ((index + 1) % iconInterval === 0) {
+      result.push(bump_card[0]);
     }
   });
 
@@ -172,7 +144,7 @@ onMounted(async () => {
     projetos.value = data.projetos || [];
     drops.value = data.drops || [];
     documentos.value = data.wiki || [];
-    posts.value = data.artboard || [];
+    arts.value = data.artboard || [];
   } catch (error) {
     console.error("Erro ao buscar dados do Sanity:", error);
   }
@@ -198,15 +170,15 @@ onMounted(async () => {
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'card-item  flex flex-col shrink-0  relative grow min-h-45 group lg:max-w-4/12 transition-[transform,flex-grow]  duration-700 ',
+            'card-item  flex flex-col shrink-0  relative grow group lg:max-w-4/12 transition-[transform,flex-grow] duration-1000 ease-in-out',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
               'card-drop': item._type === 'drop',
               'card-artboard': item._type === 'artboard',
               'card-documento': item._type === 'documento',
-              'card-deco w-full h-auto self-center':
-                item._type === 'decorativo',
+              'card-bump max-h-1/2 self-center items-center':
+                item._type === 'bump',
             },
           ]"
         >
@@ -229,9 +201,9 @@ onMounted(async () => {
                   : item._type === 'documento'
                     ? { documentos: [item] }
                     : item._type === 'artboard'
-                      ? { posts: [item] }
-                      : item._type === 'decorativo'
-                        ? { decos: [item] }
+                      ? { arts: [item] }
+                      : item._type === 'bump'
+                        ? { bumps: [item] }
                         : {}
             "
             class="h-auto w-full flex-1"

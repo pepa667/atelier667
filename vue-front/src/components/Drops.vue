@@ -14,7 +14,7 @@ const drop = computed(() => props.drops[0] || null);
 <template>
   <article
     v-if="drop"
-    class="h-full w-full flex flex-col justify-between relative overflow-hidden group transition-all duration-1000 ease-in-out"
+    class="h-full w-full flex flex-col justify-between relative group"
   >
     <header class="relative p-4 bg-zinc-950/80">
       <h2
@@ -24,15 +24,11 @@ const drop = computed(() => props.drops[0] || null);
       </h2>
     </header>
 
-    <div
-      class="w-auto h-full flex gap-4 flex-col justify-start m-3 ml-6 overflow-hidden"
-    >
+    <div class="w-auto h-full flex gap-4 flex-col justify-start m-3 ml-6">
       <h3 class="text-lg font-bold text-zinc-200 uppercase">
         {{ drop.title }}
       </h3>
-      <p
-        class="w-full whitespace-pre-line text-sm max-h-8 overflow-hidden leading-relaxed text-zinc-300 min-h-inherit group-hover:max-h-128 group-[&.onView]:max-h-128 min-h-full transition-[max-height] duration-1000 delay-100 ease-in"
-      >
+      <p class="w-full text-sm leading-relaxed text-zinc-300">
         {{ drop.content }}
       </p>
     </div>

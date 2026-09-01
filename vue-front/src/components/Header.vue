@@ -1,40 +1,42 @@
+<script setup>
+import Icon from "./Icon.vue";
+</script>
 <template>
-  <header
-    class="relative w-full flex flex-col gap-[clamp(1.25rem,0.6667rem+2.9167vw,3rem)] justify-between items-start py-6 border-b-2 border-zinc-700 *:before:border-b-2"
-  >
-    <!-- <h1
-      class="font-title text-fluid-hero text-main-a my-2 lg:my-4 leading-none"
+  <article class="relative w-full h-auto flex flex-col gap-4">
+    <header
+      class="relative w-auto flex flex-row gap-4 justify-between items-center-safe py-6"
     >
-      <span
-        class="absolute left-0 top-0 drop-shadow-[0_12px_0_var(--color-main-b-strong),0_-12px_0_var(--color-main-b-strong),0_24px_0_var(--color-main-b-strong),0_-24px_0_var(--color-main-b-strong)] pcx-grunge-full"
-        >Atelier 667.</span
-      >
-      <span class="absolute top-0 left-0 text-main-a-strong">Atelier 667.</span>
-      <span class="pcx-grunge-md">Atelier 667.</span>
-    </h1> -->
-    <h1
-      class="font-title text-fluid-hero text-zinc-300 my-2 lg:my-4 leading-[0.75]"
-    >
-      <span
-        class="absolute left-0 top-0 drop-shadow-[7px_7px_3px_var(--color-main-a-strong),-7px_-7px_3px_var(--color-main-b-strong)]"
-        >Atelier 667<b class="font-sans">.</b></span
-      >
-      <span class="pcx-grunge-md">Atelier 667<b class="font-sans">.</b></span>
-    </h1>
-
-    <p
-      class="text-fluid-sm text-main-b font-mono ml-[clamp(1.25rem,0.3846rem+3.8462vw,5rem)]"
-    >
-      System // Active
-    </p>
+      <span class="flex flex-col gap-4 w-auto">
+        <h1
+          class="font-serif sm:whitespace-nowrap text-fluid-hero text-zinc-300 my-2 lg:my-4 leading-[0.75] drop-shadow-[5px_5px_0_var(--color-main-a-strong),-5px_-5px_0_var(--color-main-b-strong)]"
+        >
+          Atelier 667<b class="font-sans">.</b>
+        </h1>
+        <p
+          class="text-fluid-sm text-main-d-strong font-mono pl-6 border-l-[clamp(1.25rem,0.3846rem+3.8462vw,5rem)]"
+        >
+          Traçando códigos em matéria
+        </p>
+        <p class="font-title text-fluid-title text-zinc-200 pcx-grunge-min">
+          — OFICINA MAKER <br />
+          ONDE IDEIAS GANHAM FORMA. —
+        </p>
+      </span>
+      <figure class="relative h-full w-full rounded-lg shadow-lg">
+        <Icon
+          icon="maker"
+          class="pop_a h-full max-w-4/6 mx-auto aspect-square rotate-180"
+        />
+      </figure>
+    </header>
     <!-- Seu menu de navegação ou botão de menu entra aqui -->
     <nav
-      class="flex gap-4 font-mono text-fluid-sm ml-[clamp(2.5rem,0.7692rem+7.6923vw,10rem)]"
+      class="flex gap-4 py-8 my-8 text-fluid-sm text-main-d-strong font-mono pl-6 border-l-[clamp(1.25rem,0.3846rem+3.8462vw,5rem)]"
     >
-      <a href="#" class="hover:text-white transition-colors font-title"
+      <a href="#" class="hover:text-main-d transition-colors font-title"
         >/Drops</a
       >
-      <a href="#" class="hover:text-white transition-colors">/Lab</a>
+      <a href="#" class="hover:text-main-d transition-colors">/Lab</a>
     </nav>
-  </header>
+  </article>
 </template>

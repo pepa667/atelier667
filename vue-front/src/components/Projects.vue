@@ -1,8 +1,7 @@
 <script setup>
-import { ref } from "vue";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "../sanity.js";
-import GlitchTitle from "./GlitchTitle.vue";
+import { nextTick, onMounted, onBeforeUnmount, ref, watch } from "vue";
 
 const props = defineProps({
   projetos: {
@@ -12,6 +11,9 @@ const props = defineProps({
 });
 
 const builder = createImageUrlBuilder(sanityClient);
+const categoryRefs = ref({});
+const categoryContainerRefs = ref({});
+const overflowingCategories = ref({});
 
 const urlFor = (source) => {
   return source ? builder.image(source).auto("format").fit("max").url() : "";
@@ -19,129 +21,176 @@ const urlFor = (source) => {
 
 const getAsciiBar = (percent) => {
   const safePercent = percent || 0;
-  const maxBars = 10;
+  const maxBars = 20;
   const filled = Math.round((safePercent / 100) * maxBars);
   const empty = maxBars - filled;
   return `[${"█".repeat(filled)}${"░".repeat(empty)}] ${safePercent}%`;
 };
 
-/* 🎯 Medição via Elemento Fantasma sem interferência da imagem */
-const aspectMap = ref({});
+const getCategories = (proj) => {
+  const categories = proj?.categorias || [];
+  const projId = proj._id || proj.title_pt;
 
-const vAspect = {
-  mounted(el, binding) {
-    const key = binding.value;
-
-    const observer = new ResizeObserver((entries) => {
-      requestAnimationFrame(() => {
-        for (const entry of entries) {
-          const { width, height } = entry.contentRect;
-
-          if (width === 0 || height === 0) return;
-
-          // Se a altura for maior ou igual à largura, consideramos Portrait
-          aspectMap.value[key] = {
-            isPortrait: height >= width,
-            ready: true,
-          };
-        }
-      });
-    });
-
-    observer.observe(el);
-    el._observer = observer;
-  },
-  unmounted(el) {
-    if (el._observer) el._observer.disconnect();
-  },
+  return overflowingCategories.value[projId]
+    ? [...categories, ...categories]
+    : categories;
 };
+
+const initOverflow = async () => {
+  Object.keys(overflowingCategories.value).forEach((projId) => {
+    overflowingCategories.value[projId] = false;
+  });
+
+  await nextTick();
+
+  if (resizeObserver) {
+    Object.values(categoryContainerRefs.value).forEach((container) => {
+      if (container) resizeObserver.observe(container);
+    });
+  }
+
+  Object.entries(categoryRefs.value).forEach(([projId, list]) => {
+    if (!list) return;
+
+    const container = categoryContainerRefs.value[projId];
+    if (!container) return;
+
+    overflowingCategories.value[projId] =
+      list.scrollWidth > container.clientWidth + 1;
+  });
+};
+
+let resizeObserver;
+
+onMounted(() => {
+  initOverflow();
+
+  resizeObserver = new ResizeObserver(() => {
+    initOverflow();
+  });
+
+  Object.values(categoryContainerRefs.value).forEach((container) => {
+    resizeObserver.observe(container);
+  });
+
+  window.addEventListener("resize", initOverflow);
+});
+
+watch(
+  () => props.projetos,
+  () => {
+    initOverflow();
+  },
+  { deep: true, flush: "post" },
+);
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect();
+  window.removeEventListener("resize", initOverflow);
+});
+
+/* 🎯 Medição via Elemento Fantasma sem interferência da imagem */
+// const aspectMap = ref({});
+
+// const vAspect = {
+//   mounted(el, binding) {
+//     const key = binding.value;
+
+//     const observer = new ResizeObserver((entries) => {
+//       requestAnimationFrame(() => {
+//         for (const entry of entries) {
+//           const { width, height } = entry.contentRect;
+
+//           if (width === 0 || height === 0) return;
+
+//           // Se a altura for maior ou igual à largura, consideramos Portrait
+//           aspectMap.value[key] = {
+//             isPortrait: height >= width,
+//             ready: true,
+//           };
+//         }
+//       });
+//     });
+
+//     observer.observe(el);
+//     el._observer = observer;
+//   },
+//   unmounted(el) {
+//     if (el._observer) el._observer.disconnect();
+//   },
+// };
 </script>
 
 <template>
-  <!-- 🟢 Container único na raiz recebe as classes do App.vue e resolve o aviso -->
-  <div class="projects-wrapper w-full h-full">
-    <section
-      v-for="proj in projetos"
-      :key="proj._id || proj.title_pt"
-      class="relative w-full h-full z-2 group border border-zinc-800/50 flex flex-col justify-between"
+  <article
+    v-for="proj in projetos"
+    :key="proj._id || proj.title_pt"
+    class="relative w-full h-full group flex"
+  >
+    <figure
+      v-aspect="proj._id || proj.title_pt"
+      class="absolute top-0 right-0 h-full aspect-square"
     >
-      <!-- 👻 ELEMENTO FANTASMA -->
-      <div
-        v-aspect="proj._id || proj.title_pt"
-        class="absolute inset-0 w-full h-full pointer-events-none -z-50 visibility-hidden"
-      ></div>
-
-      <GlitchTitle class="size-fit">// PROJETOS_ATIVOS</GlitchTitle>
-
-      <!-- Bloco Conteúdo Textual -->
-      <article
-        class="p-4 relative overflow-hidden h-full flex flex-col justify-between"
+      <a
+        href=""
+        class="opacity-50 group-hover:opacity-100 group-[.onView]:opacity-100 transition-opacity duration-700"
       >
-        <header class="mb-4">
-          <h3 class="text-xl font-bold text-zinc-100 uppercase">
-            {{ proj.title_pt }}
-          </h3>
-          <p class="text-zinc-500 text-sm font-mono mt-1">
-            STATUS:
-            <span class="text-white"
-              >&lt;{{ proj.status || "STANDBY" }}&sol;&gt;</span
-            >
-          </p>
-        </header>
+        <img
+          :src="urlFor(proj.coverImage)"
+          :alt="proj.coverImage?.alt || proj.title_pt"
+          class="absolute object-cover w-full h-full inset-0"
+        />
+      </a>
+    </figure>
 
-        <!-- Barra Renderizada -->
-        <div class="font-mono text-green-500 mb-6">
+    <main
+      class="relative w-auto h-full flex flex-col overflow-hidden justify-between group-hover:opacity-50 group-[.onView]:opacity-50 group-hover:pointer-events-none group-[.onView]:pointer-events-none transition-opacity duration-700"
+    >
+      <header class="relative p-4 bg-zinc-950/80 flex-col">
+        <h2
+          class="text-sm font-bold text-main-b leading-loose inline-block bg-black tracking-wider uppercase"
+        >
+          //&nbsp;PROJETOS_ATIVOS
+        </h2>
+      </header>
+      <figure
+        class="relative m-4 p-6 w-fit h-full flex flex-col flex-wrap gap-6 justify-around bg-zinc-950/80"
+      >
+        <h3 class="text-xl font-bold text-zinc-100 uppercase">
+          {{ proj.title_pt }}
+        </h3>
+        <h4 class="text-lg font-mono">
+          STATUS:
+          <span class="text-main-d font-bold"
+            >&lt;{{ proj.status || "STANDBY" }}&sol;&gt;</span
+          >
+        </h4>
+        <div class="font-mono text-green-500">
           {{ getAsciiBar(proj.progresso) }}
         </div>
-
-        <!-- Categorias -->
-        <div class="ml-2 w-11/12 overflow-hidden self-baseline py-4">
-          <ul
-            v-if="proj.categorias && proj.categorias.length"
-            class="flex flex-row whitespace-nowrap list-none animate-marquee w-max uppercase tracking-wider font-light"
-          >
-            <li
-              v-for="cat in proj.categorias"
-              :key="cat"
-              class="text-xs bg-main-b/25 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
-            >
-              #{{ cat }}
-            </li>
-            <li
-              v-for="(cat, idx) in proj.categorias"
-              :key="`dup-${idx}`"
-              class="text-xs bg-main-b/10 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
-            >
-              #{{ cat }}
-            </li>
-          </ul>
-        </div>
-
-        <!-- 🖼️ Imagem posicionada de acordo com o cálculo do Fantasma -->
-        <div
-          v-if="proj.coverImage"
-          class="overflow-visible transition-all duration-300 -z-10"
-          :class="[
-            aspectMap[proj._id || proj.title_pt]?.ready
-              ? 'opacity-100'
-              : 'opacity-0',
-            aspectMap[proj._id || proj.title_pt]?.isPortrait
-              ? 'relative w-full mt-4 aspect-3/1 '
-              : 'absolute top-0 right-0 h-full w-1/2',
-          ]"
+      </figure>
+      <!-- Categorias -->
+      <footer
+        :ref="(el) => (categoryContainerRefs[proj._id || proj.title_pt] = el)"
+        class="flex items-center justify-between overflow-hidden p-4 bg-zinc-950/80"
+      >
+        <ul
+          v-if="proj.categorias && proj.categorias.length"
+          :ref="(el) => (categoryRefs[proj._id || proj.title_pt] = el)"
+          :class="{
+            'animate-marquee': overflowingCategories[proj._id || proj.title_pt],
+          }"
+          class="project-categories list-none whitespace-nowrap uppercase tracking-wider font-light"
         >
-          <img
-            :src="urlFor(proj.coverImage)"
-            :alt="proj.coverImage?.alt || proj.title_pt"
-            :class="[
-              aspectMap[proj._id || proj.title_pt]?.isPortrait
-                ? 'w-full h-auto top-0 group-hover:-translate-y-1/3'
-                : ' h-full max-w-prose left-0 group-hover:-left-full object-left',
-            ]"
-            class="absolute object-cover transition-all duration-500 group-hover:scale-105 group-hover:opacity-50 group-hover:blur-xs"
-          />
-        </div>
-      </article>
-    </section>
-  </div>
+          <li
+            v-for="(cat, index) in getCategories(proj)"
+            :key="`${proj._id || proj.title_pt}-${cat}-${index}`"
+            class="text-xs bg-main-b/25 text-main-b mx-2 my-1 py-2 px-3 border rounded border-main-b inline-block"
+          >
+            #{{ cat }}
+          </li>
+        </ul>
+      </footer>
+    </main>
+  </article>
 </template>
