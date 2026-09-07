@@ -91,11 +91,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    v-bind="attrs"
-    :class="['relative overflow-hidden aspect-square ', attrs.class]"
-    :style="containerStyle"
-  >
+  <!-- v-bind="attrs" -->
+  <div :class="['relative overflow-hidden aspect-square ', attrs.class]">
     <img
       :src="activeIcon"
       class="absolute max-w-none image-render-pixelated rendering-pixelated rendering-crisp crisp-edges"

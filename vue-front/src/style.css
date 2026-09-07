@@ -1,12 +1,12 @@
-@import url("./styles/sideBar.css");
-@import url("https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,20,600&family=Inter:opsz,wght@14,400&family=Roboto+Slab:wght@400&display=swap");
-@import "tailwindcss";
+@import url('./styles/sideBar.css');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10,700&family=Bodoni+Moda:ital,opsz,wght@1,20,600&family=Inter:opsz,wght@14,400&family=Roboto+Slab:wght@400&display=swap');
+@import 'tailwindcss';
 
 @theme {
-  --font-serif: "Bodoni Moda", serif;
-  --font-slab: "Roboto Slab", serif;
-  --font-sans: "Inter", sans-serif;
-  --font-title: "Big Shoulders", sans-serif;
+  --font-serif: 'Bodoni Moda', serif;
+  --font-slab: 'Roboto Slab', serif;
+  --font-sans: 'Inter', sans-serif;
+  --font-title: 'Big Shoulders', sans-serif;
 
   --breakpoint-3xl: 105rem;
 
@@ -37,7 +37,7 @@
 
   --animate-marquee: marquee 10s linear infinite;
   --animate-sideBar: sideMarquee 100s linear infinite;
-  --animate-cardGlich: card-glitch 0.05s linear infinite;
+  --animate-wiggleGlitch: wiggleGlitch 0.1s linear 8;
 
   --text-fluid-sm: clamp(0.75rem, 0.6346rem + 0.5128vw, 1.25rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
@@ -60,85 +60,91 @@
   --size-icon-5xl: clamp(5rem, -6.25rem + 23.4375vw, 12.5rem);
   --size-icon-6xl: clamp(6rem, -7.5rem + 28.125vw, 15rem);
 
-  --pcx-url-tb: url("./assets/images/textures/dither-tb.gif");
-  --pcx-url-bt: url("./assets/images/textures/dither-bt.gif");
-  --pcx-url-radial: url("./assets/images/textures/dither-radial.gif");
-  --pcx-url-tr: url("./assets/images/textures/dither-tr.gif");
-  --pcx-url-tl: url("./assets/images/textures/dither-tl.gif");
-  --pcx-url-br: url("./assets/images/textures/dither-br.gif");
-  --pcx-url-bl: url("./assets/images/textures/dither-bl.gif");
-  --pcx-url-grunge-min: url("./assets/images/textures/grunge-min.gif");
-  --pcx-url-grunge-md: url("./assets/images/textures/grunge-md.gif");
-  --pcx-url-grunge-full: url("./assets/images/textures/grunge-full.gif");
-  --pcx-url-grunge-lite: url("./assets/images/textures/grunge-lite.gif");
+  --pcx-url-tb: url('./assets/images/textures/dither-tb.gif');
+  --pcx-url-bt: url('./assets/images/textures/dither-bt.gif');
+  --pcx-url-radial: url('./assets/images/textures/dither-radial.gif');
+  --pcx-url-tr: url('./assets/images/textures/dither-tr.gif');
+  --pcx-url-tl: url('./assets/images/textures/dither-tl.gif');
+  --pcx-url-br: url('./assets/images/textures/dither-br.gif');
+  --pcx-url-bl: url('./assets/images/textures/dither-bl.gif');
+  --pcx-url-grunge-min: url('./assets/images/textures/grunge-min.gif');
+  --pcx-url-grunge-md: url('./assets/images/textures/grunge-md.gif');
+  --pcx-url-grunge-full: url('./assets/images/textures/grunge-full.gif');
+  --pcx-url-grunge-lite: url('./assets/images/textures/grunge-lite.gif');
 
   --spacing-card: clamp(220px, 165.4545px + 15.1515cqi, 420px);
 
-@keyframes sideMarquee {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-50%);
-  }
-}
-@keyframes wiggleGlitch {
-  0% {
-    -webkit-transform: skewX(24deg);
-  }
-  10% {
-    -webkit-transform: skewX(-8deg);
-  }
-  20% {
-    -webkit-transform: skewX(55deg);
-  }
-  30% {
-    -webkit-transform: skewX(-90deg);
-  }
-  40% {
-    -webkit-transform: skewX(29deg);
-  }
-  50% {
-    -webkit-transform: skewX(-90deg);
+  @keyframes sideMarquee {
+    from {
+      transform: translateY(0);
     }
-  60% {
-    -webkit-transform: skewX(3deg);
+
+    to {
+      transform: translateY(-50%);
+    }
   }
-  70% {
-    -webkit-transform: skewX(-2deg);
+  @keyframes wiggleGlitch {
+    0% {
+      -webkit-transform: skewX(24deg);
+    }
+    10% {
+      -webkit-transform: skewX(-8deg);
+    }
+    20% {
+      -webkit-transform: skewX(55deg);
+    }
+    30% {
+      -webkit-transform: skewX(-90deg);
+    }
+    40% {
+      -webkit-transform: skewX(29deg);
+    }
+    50% {
+      -webkit-transform: skewX(-90deg);
+    }
+    60% {
+      -webkit-transform: skewX(3deg);
+    }
+    70% {
+      -webkit-transform: skewX(-2deg);
+    }
+    80% {
+      -webkit-transform: skewX(1deg);
+    }
+    90% {
+      -webkit-transform: skewX(10deg);
+    }
+    100% {
+      -webkit-transform: skewX(0deg);
+    }
   }
-  80% {
-    -webkit-transform: skewX(1deg);
-  }
-  90% {
-    -webkit-transform: skewX(10deg);
-  }
-  100% {
-    -webkit-transform: skewX(0deg);
-  }
-}
 }
 
 .project-categories {
-display: flex;
-width: max-content;
-min-width: max-content;
-will-change: transform;
+  display: flex;
+  width: max-content;
+  min-width: max-content;
+  will-change: transform;
 }
 
 .project-categories.animate-marquee {
-animation: marquee 14s linear infinite;
+  animation: marquee 14s linear infinite;
 }
 
 @keyframes marquee {
-from {
-  transform: translateX(0);
-}
+  from {
+    transform: translateX(0);
+  }
 
-to {
-  transform: translateX(-50%);
+  to {
+    transform: translateX(-50%);
+  }
 }
+@utility pop-* {
+  --pop-color: --value(--hue-rotate-*);
+  /* Turn the shape into a solid white silhouette first */
+  filter: brightness(0) invert(1) /* Apply the tint */ sepia(100%)
+    saturate(10000%) hue-rotate(calc(var(--pop-color) * 1deg)); /* 120deg turns white into green */
 }
 
 @utility pcx-* {
@@ -168,24 +174,22 @@ to {
   image-rendering: crisp-edges;
 }
 @utility wiggle-glitch {
-  filter: drop-shadow(
-      2px 2px 0px var(--tw-drop-shadow-color, var(--color-main-a-strong))
-    )
-    drop-shadow(
-      -2px -2px 0px var(--tw-drop-shadow-color, var(--color-main-b-strong))
-    );
-  transition: filter 50ms;
+  filter: drop-shadow(1px 1px 0px #000)
+    drop-shadow(1px 1px 0px var(--color-main-b-strong))
+    drop-shadow(-1px -1px 0px #000)
+    drop-shadow(-1px -1px 0px var(--color-main-a-strong));
+  transition: filter 0.3s;
 
-  .onView &,
-  &:hover {
-    animation: wiggleGlitch 100ms 8;
-    filter: drop-shadow(
-        35px 27px 0px var(--tw-drop-shadow-color, var(--color-main-a-strong))
-      )
-      drop-shadow(
-        -47px -17px 0px var(--tw-drop-shadow-color, var(--color-main-b-strong))
-      );
-    transition: filter 700ms;
+  .group:hover &,
+  .onView & {
+    animation: var(--animate-wiggleGlitch);
+
+    /* filter: drop-shadow(8px 8px 0px var(--color-main-a-strong))
+    drop-shadow(-8px -8px 0px var(--color-main-b-strong)); */
+    filter: drop-shadow(8px 8px 0px #000)
+      drop-shadow(1px 1px 0px var(--color-main-b-strong))
+      drop-shadow(-8px -8px 0px #000)
+      drop-shadow(-1px -1px 0px var(--color-main-a-strong));
   }
 }
 
@@ -196,7 +200,7 @@ to {
 }
 
 body {
-  @apply relative overflow-x-hidden bg-black font-mono text-zinc-300 antialiased scroll-smooth;
+  @apply relative overflow-x-hidden scroll-smooth bg-black font-mono text-zinc-300 antialiased;
 }
 
 img {
@@ -205,8 +209,8 @@ img {
 }
 
 #app::before {
-  content: "";
-  @apply absolute inset-0 h-full bg-main-c-strong/15;
+  content: '';
+  @apply bg-main-c-strong/15 absolute inset-0 h-full;
 }
 
 main > header > * {
@@ -227,16 +231,20 @@ main > ol > li {
   @apply border-l-2 border-main-c-strong pl-1;
 } */
 .card-item h3 {
-  @apply text-main-c text-sm font-mono;
+  @apply text-main-c font-mono text-sm;
 }
 .card-item h4 {
-  @apply text-main-c text-xs font-mono;
+  @apply text-main-c font-mono text-xs;
 }
 /* Cards */
 
 .card-item {
-  @apply border-2 border-main-b  w-full sm:w-auto;
+  @apply border-main-b w-full border-2 sm:w-auto;
 }
+.card-projeto {
+  @apply relative aspect-video! min-w-0 lg:max-w-[33cqi]!;
+}
+
 .card-bump {
   @apply border-0;
 }

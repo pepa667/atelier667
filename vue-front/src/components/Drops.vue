@@ -1,30 +1,30 @@
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   drops: {
     type: Array,
-    default: () => [],
-  },
-});
+    default: () => []
+  }
+})
 
-const drop = computed(() => props.drops[0] || null);
+const drop = computed(() => props.drops[0] || null)
 </script>
 
 <template>
   <article
     v-if="drop"
-    class="h-full w-full flex flex-col justify-between relative group"
+    class="group relative flex h-auto w-full flex-col justify-between"
   >
-    <header class="relative p-4 bg-zinc-950/80">
+    <header class="relative bg-zinc-950/80 p-4">
       <h2
-        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
+        class="text-main-b bg-black text-sm leading-loose font-bold tracking-wider uppercase"
       >
         // DROPS_LOG
       </h2>
     </header>
 
-    <div class="w-auto h-full flex gap-4 flex-col justify-start m-3 ml-6">
+    <div class="m-3 ml-6 flex h-full w-auto flex-col justify-start gap-4">
       <h3 class="text-lg font-bold text-zinc-200 uppercase">
         {{ drop.title }}
       </h3>
@@ -32,12 +32,12 @@ const drop = computed(() => props.drops[0] || null);
         {{ drop.content }}
       </p>
     </div>
-    <footer class="flex items-center justify-between p-4 bg-zinc-950/80">
+    <footer class="flex bg-zinc-950/80 p-4">
       <span
         v-if="drop.timestamp"
-        class="text-[12px] leading-loose bg-black font-mono"
+        class="text-main-c-strong w-[stretch] text-right font-mono text-[12px] leading-loose"
       >
-        {{ drop.timestamp || "LOG_DATA" }}
+        {{ drop.timestamp || 'LOG_DATA' }}
       </span>
       <!-- Tags -->
       <!-- <div class="flex flex-wrap gap-1">

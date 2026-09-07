@@ -25,7 +25,7 @@ import Icon from "./Icon.vue";
       <figure class="relative h-full w-full rounded-lg shadow-lg">
         <Icon
           icon="maker"
-          class="pop_a h-full max-w-4/6 mx-auto aspect-square rotate-180"
+          class="pop_a h-full max-w-4/6 mx-auto aspect-square rotate-180 opacity-75"
         />
       </figure>
     </header>

@@ -1,19 +1,18 @@
 <script setup>
-import Icon from "./Icon.vue";
+import Icon from './Icon.vue'
 
 defineProps({
   bumps: {
     type: Array,
-    default: () => [],
-  },
-});
+    default: () => []
+  }
+})
 </script>
 
 <template>
-  <div
-    v-if="bumps && bumps[0]"
-    class="relative h-fit max-w-[50svw] border-0 wiggle-glitch"
-  >
-    <Icon icon="punk" class="pop_c" />
-  </div>
+  <article class="group relative max-w-[50svw] border-0">
+    <figure class="*>:pop_c wiggle-glitch">
+      <Icon icon="punk" class="pop_c h-full w-full" />
+    </figure>
+  </article>
 </template>

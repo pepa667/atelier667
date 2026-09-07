@@ -19,6 +19,10 @@ export const vMobileObserve = {
 
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
+        console.log(
+          "Elemento visível na tela:",
+          el.id || el.className || el.tagName,
+        );
         el.classList.add("onView");
         // Dispara o evento de glitch se houver callback passada
         if (typeof binding.value?.onIntersect === "function") {
