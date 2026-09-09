@@ -1,1 +1,0 @@
-import{c as e,h as t,o as n,r,u as i}from"./index-DGgty5mC.js";var a={class:`group relative max-w-[50svw] border-0`},o={class:`*>:pop_c wiggle-glitch`},s={__name:`BumpCard`,props:{bumps:{type:Array,default:()=>[]}},setup(s){return(s,c)=>(t(),e(`article`,a,[n(`figure`,o,[i(r,{icon:`punk`,class:`pop_c h-full w-full`})])]))}};export{s as default};
