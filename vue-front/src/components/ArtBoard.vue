@@ -100,7 +100,7 @@ const isPortrait = computed(() => {
       class="relative mt-3 flex items-center justify-between gap-8 bg-linear-to-r from-zinc-950/80 to-zinc-950/95 p-4 transition-opacity duration-700 group-hover:opacity-50 group-[.onView]:opacity-50"
     >
       <h2
-        class="text-main-b w-[stretch] max-w-max text-sm leading-loose font-bold tracking-wider uppercase"
+        class="text-main-d font-slab w-[stretch] max-w-max text-sm leading-loose font-bold tracking-wider uppercase"
       >
         {{ art.title || 'TITLE' }}
       </h2>

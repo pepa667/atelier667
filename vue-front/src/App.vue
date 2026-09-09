@@ -181,7 +181,7 @@ onMounted(async () => {
           v-for="item in feedUnificado"
           :key="item._id || item.title_pt || item.title"
           :class="[
-            'card-item group relative flex shrink-0 grow flex-col transition-[transform,flex-grow] duration-1000 ease-in-out lg:max-w-4/12',
+            'card-item group relative flex shrink-0 grow flex-col transition-[transform,flex-grow] duration-1000 ease-in-out [--borda:3px] lg:max-w-4/12',
             item.flexStyle,
             {
               'card-projeto': item._type === 'projeto',
@@ -193,6 +193,12 @@ onMounted(async () => {
             }
           ]"
         >
+          <span
+            class="deco-full border-main-b-strong pcx-mix-grunge-full/grunge-full absolute -inset-(--borda) mask-[100%_100%,auto]! [--pcx-mask-1:linear-gradient(to_bottom_right,#0004,#000f_35%,#000f_60%,#0004)]"
+          >
+            <span></span>
+          </span>
+          <!-- class="pcx-grunge-full border-main-b-strong absolute -inset-0.5 border-2" -->
           <!-- Wrapper com flex-col repassa h-full / flex-1 pro componente renderizado -->
 
           <!-- <div class="relative inset-0 w-full h-auto flex flex-col flex-1"> -->
@@ -217,26 +223,26 @@ onMounted(async () => {
                         ? { bumps: [item] }
                         : {}
             "
-            class="h-auto w-full flex-1"
+            class="h-auto w-full flex-1 border border-transparent"
           />
           <!-- </div> -->
 
           <!-- Glitch isolado apenas nos layers de fundo -->
 
           <span
-            class="deco-tr pcx-tr border-main-a pointer-events-none absolute -top-0.5 -right-0.5 h-4/7 w-2/3 rounded-md border-t-4 border-r-4 mask-size-[100%_100%] mask-no-repeat [--mask-pos:10px_-10px]"
+            class="deco-tr pcx-mix-tr/grunge-full border-main-a absolute -top-(--borda) -right-(--borda) h-4/7 w-2/3 mask-[top_right]"
             >&nbsp;</span
           >
           <span
-            class="deco-tr border-main-c-strong pointer-events-none absolute -top-0.5 -right-0.5 h-1/9 w-1/9 border-t-4 border-r-4 mask-[linear-gradient(to_bottom_left,#000a,#0000)] mix-blend-color"
+            class="deco-tr border-main-c-strong absolute -top-(--borda) -right-(--borda) h-1/9 w-1/9 mask-[linear-gradient(to_bottom_left,#000,#0000)]"
             >&nbsp;</span
           >
           <span
-            class="deco-bl pcx-bl border-main-a pointer-events-none absolute -bottom-0.5 -left-0.5 h-7/12 w-2/5 rounded-md border-b-4 border-l-4 mask-size-[100%_100%] mask-no-repeat [--mask-pos:-10px_10px]"
+            class="deco-bl pcx-mix-bl/bl border-main-a ] absolute -bottom-(--borda) -left-(--borda) h-7/12 w-2/5"
             >&nbsp;</span
           >
           <span
-            class="deco-bl border-main-c-strong pointer-events-none absolute -bottom-0.5 -left-0.5 h-1/9 w-1/9 border-b-4 border-l-4 mask-[linear-gradient(to_top_right,#000,#0000)] mix-blend-color"
+            class="deco-bl border-main-c-strong absolute -bottom-(--borda) -left-(--borda) h-1/9 w-1/9 mask-[linear-gradient(to_top_right,#000,#0000)]"
             >&nbsp;</span
           >
         </li>
@@ -254,7 +260,7 @@ onMounted(async () => {
     }"
   >
     <GlitchWrapper :trigger-probability="0.4" :trigger-duration="0.5">
-      <div class="pcx-bt pop_d absolute inset-0 bg-pink-700">:::</div>
+      <div class="pcx-bt bg-main-d-strong absolute inset-0">:::</div>
     </GlitchWrapper>
   </footer>
 </template>

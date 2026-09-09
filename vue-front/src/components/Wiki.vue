@@ -1,55 +1,53 @@
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue'
 
 const props = defineProps({
   documentos: {
     type: Array,
-    default: () => [],
-  },
-});
+    default: () => []
+  }
+})
 
-const doc = computed(() => props.documentos[0] || null);
+const doc = computed(() => props.documentos[0] || null)
 </script>
 
 <template>
   <article
     v-if="doc"
     :key="doc._id"
-    class="h-full w-full flex flex-col justify-between relative overflow-hidden group"
+    class="group relative flex h-full w-full flex-col justify-between overflow-hidden"
   >
     <header
-      class="mb-3 relative flex flex-col items-baseline justify-between p-4 bg-zinc-950/20"
+      class="relative mb-3 flex flex-col items-baseline justify-between bg-zinc-950/20 p-4"
     >
       <h2
-        class="text-sm font-bold text-main-b leading-loose bg-black tracking-wider uppercase"
+        class="text-main-b bg-black text-sm leading-loose font-bold tracking-wider uppercase"
       >
         // WIKI_DOCS
       </h2>
     </header>
 
     <div
-      class="relative w-auto h-full font-serif flex gap-4 flex-col justify-start m-3 ml-6 bg-zinc-950/20"
+      class="relative m-3 ml-6 flex h-full w-auto flex-col justify-start gap-4 bg-zinc-950/20 font-serif"
     >
-      <h3 class="text-md font-bold text-main-c uppercase">
+      <h3 class="text-md text-main-c font-bold uppercase">
         {{ doc.title }}
       </h3>
-      <h4 class="text-sm font-bold text-main-c uppercase">
+      <h4 class="text-main-c text-sm font-bold uppercase">
         {{ doc.subtitle }}
       </h4>
       <div
-        class="w-full hidden h-auto aspect-9/4 bg-amber-500 transition-[aspect-ratio] duration-1000 hover:aspect-square"
+        class="hidden aspect-9/4 h-auto w-full bg-amber-500 transition-[aspect-ratio] duration-1000 hover:aspect-square"
       >
         x
       </div>
     </div>
-    <footer
-      class="relative mt-3 flex items-center justify-between p-4 bg-zinc-950/20"
-    >
+    <footer class="flex bg-zinc-950/80 p-4">
       <span
         v-if="doc.timestamp"
-        class="text-[12px] leading-loose bg-black font-mono"
+        class="text-main-c-strong w-[stretch] text-right font-mono text-[12px] leading-loose"
       >
-        {{ doc.timestamp || "LOG_DATA" }}
+        {{ doc.timestamp || 'LOG_DATA' }}
       </span>
     </footer>
   </article>

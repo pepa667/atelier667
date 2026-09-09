@@ -37,7 +37,7 @@
 
   --animate-marquee: marquee 10s linear infinite;
   --animate-sideBar: sideMarquee 100s linear infinite;
-  --animate-wiggleGlitch: wiggleGlitch 0.1s linear 8;
+  --animate-wiggleGlitch: wiggleGlitch 0.15s linear 8;
 
   --text-fluid-sm: clamp(0.75rem, 0.6346rem + 0.5128vw, 1.25rem);
   --text-fluid-base: clamp(1rem, 0.888rem + 0.56vw, 1.3rem);
@@ -85,22 +85,22 @@
   }
   @keyframes wiggleGlitch {
     0% {
-      -webkit-transform: skewX(24deg);
+      -webkit-transform: skewX(74deg);
     }
     10% {
       -webkit-transform: skewX(-8deg);
     }
     20% {
-      -webkit-transform: skewX(55deg);
+      -webkit-transform: skewX(80deg);
     }
     30% {
-      -webkit-transform: skewX(-90deg);
+      -webkit-transform: skewX(-70deg);
     }
     40% {
       -webkit-transform: skewX(29deg);
     }
     50% {
-      -webkit-transform: skewX(-90deg);
+      -webkit-transform: skewX(-62deg);
     }
     60% {
       -webkit-transform: skewX(3deg);
@@ -217,12 +217,15 @@ main > header > * {
   @apply relative;
 }
 
-main > ol > li {
-  @apply border-x border-y p-0;
-}
+/* main > ol > li {
+    @apply border-x border-y p-0;
+  } */
 
 .card-item header h2 {
   @apply text-main-c-strong;
+}
+.card-item {
+  @apply max-sm:w-full max-sm:max-w-full;
 }
 /* .card-item article div {
   @apply border-l-4 border-main-c-strong pl-2 ml-4;
@@ -238,9 +241,6 @@ main > ol > li {
 }
 /* Cards */
 
-.card-item {
-  @apply border-main-b w-full border-2 sm:w-auto;
-}
 .card-projeto {
   @apply relative aspect-video! min-w-0 lg:max-w-[33cqi]!;
 }
@@ -248,11 +248,33 @@ main > ol > li {
 .card-bump {
   @apply border-0;
 }
+.card-bump .deco-full,
 .card-bump .deco-tr,
 .card-bump .deco-bl {
   @apply hidden;
 }
+.deco-full,
+.deco-tr,
+.deco-bl {
+  image-rendering: auto;
+  border-width: var(--borda);
+  border-radius: var(--borda);
+  mask-size: 100% 100%;
+  /* mask-composite: intersect;
+  -webkit-mask-composite: xor; */
+  isolation: isolate;
+  opacity: 70%;
+  pointer-events: none;
+}
 
+.deco-tr {
+  border-bottom: unset;
+  border-left: unset;
+}
+.deco-bl {
+  border-top: unset;
+  border-right: unset;
+}
 /* .card-artboard {
   border: 0;
 } */

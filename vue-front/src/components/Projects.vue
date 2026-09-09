@@ -23,10 +23,10 @@ const urlFor = (source) => {
 
 const getAsciiBar = (percent) => {
   const safePercent = percent || 0
-  const maxBars = 20
+  const maxBars = 19
   const filled = Math.round((safePercent / 100) * maxBars)
   const empty = maxBars - filled
-  return `[<span>${'█'.repeat(filled)}</span><span>${'░'.repeat(empty)}</span>] ${safePercent}%`
+  return `[<span>${'█'.repeat(filled)}</span><span class="relative" >░<span class="absolute inset-0 [animation:_pulse_0.5s_cubic-bezier(0,_0,_0.2,_1)_infinite] text-main-d-strong">█</span></span><span>${'░'.repeat(empty)}</span>] ${safePercent}%`
 }
 
 const getCategories = (entry) => {
@@ -136,16 +136,13 @@ onBeforeUnmount(() => {
   >
     <figure
       :key="proj._id || proj.title_pt"
-      class="pcx absolute top-0 right-0 aspect-square h-full"
+      class="pcx-grunge-md gr absolute top-0 right-0 z-0 h-full w-auto overflow-hidden mask-auto transition-all transition-discrete group-hover:z-10 group-hover:delay-500 group-[.onView]:z-100"
     >
-      <a
-        href=""
-        class="opacity-50 transition-opacity duration-700 group-hover:opacity-100 group-[.onView]:opacity-100"
-      >
+      <a href="" class="relative h-full w-auto overflow-hidden">
         <img
           :src="urlFor(proj.coverImage)"
           :alt="proj.coverImage?.alt || proj.title_pt"
-          class="absolute inset-0 h-full w-full object-cover"
+          class="aspect-square h-full w-auto object-cover opacity-30 transition-opacity duration-2000 group-hover:opacity-100 group-[.onView]:opacity-100"
         />
       </a>
     </figure>
@@ -163,7 +160,7 @@ onBeforeUnmount(() => {
       <figure
         class="relative flex h-max w-full flex-col flex-wrap justify-around gap-4 bg-zinc-950/80 p-6 pr-0"
       >
-        <header class="text-xl font-bold text-zinc-100 uppercase">
+        <header class="text-main-c text-xl font-bold uppercase">
           {{ proj.title_pt }}
         </header>
         <main>
@@ -188,7 +185,10 @@ onBeforeUnmount(() => {
       <!-- Categorias -->
       <footer
         :ref="(el) => (categoryContainerRefs[proj._id || proj.title_pt] = el)"
-        class="relative flex h-max min-h-min items-center justify-between overflow-x-hidden overflow-y-clip bg-zinc-950/80 py-4"
+        class="relative flex h-max min-h-min items-center justify-end overflow-x-hidden overflow-y-clip bg-zinc-950/80 py-4"
+        :class="{
+          'justify-between!': overflowingCategories[proj._id || proj.title_pt]
+        }"
       >
         <ul
           v-if="proj.categorias && proj.categorias.length"
@@ -201,7 +201,7 @@ onBeforeUnmount(() => {
           <li
             v-for="(cat, index) in getCategories(proj)"
             :key="`${proj._id || proj.title_pt}-${cat}-${index}`"
-            class="bg-main-b/25 text-main-b border-main-b relative mx-2 my-1 inline-block rounded border px-3 py-2 text-xs"
+            class="bg-main-d/25 text-main-d border-main-d relative mx-2 my-1 inline-block rounded border px-3 py-2 text-xs"
           >
             #{{ cat }}
           </li>
