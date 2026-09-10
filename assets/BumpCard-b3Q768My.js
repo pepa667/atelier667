@@ -1,0 +1,1 @@
+import{c as e,h as t,o as n,r,u as i}from"./index-C9exU1Ya.js";var a={class:`group relative max-w-[50svw] border-0`},o={class:`wiggle-glitch`},s={__name:`BumpCard`,props:{bumps:{type:Array,default:()=>[]}},setup(s){return(s,c)=>(t(),e(`article`,a,[n(`figure`,o,[i(r,{icon:`punk`,class:`h-full w-full`,color:`pop-amber`})])]))}};export{s as default};
